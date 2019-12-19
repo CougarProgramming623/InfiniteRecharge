@@ -63,7 +63,48 @@ Tags are used to define which portions of a project’s Git history is most impo
 `Upstream`
 While there is not necessarily a default “upstream” or “downstream” for Git projects, upstream can be considered where you push your Git changes — this is often the master branch of the project within the origin
 ### GitFlow
-The purpose of GitFlow is to streamline production of code. There are two main types of branches we use: Feature Branches and the Master Branch. Code is worked on each branch independently. All "features" of the robot such as modules and harware requirments will have their own branch. Once the code is completed and stable, it will be merged into `master`. All competition ready code will be tagged for use. 
+The purpose of GitFlow is to streamline production of code. There are two main types of branches we use: Feature Branches and the Master Branch. Code is worked on each branch independently. All "features" of the robot such as modules and harware requirments will have their own branch. Once the code is completed and stable, it will be merged into `master`. All competition ready code will be tagged for use.
+## Rules
+### General Rules
+1. Be respectful and friendly
+2. Complete assignments on time and attend meetings consistently 
+3. Communicate any questions and concerns with leads
+4. Have fun!
+5. Be safe 
+### Github Rules
+1. Use project board for outstanding tasks. If a new assignment comes up, add it to the project board under the correct category. All assignments, along with a timeline and priority, should appear on the board.
+2. Use issues page in order to track progress. All problems currently being worked on should have their own thread.
+3. Releases and tags should be used effectively. All working completed builds should have their own release (Deployable to Robot/ Test-Team), as well as any builds after substantial progress has been made.
+4. Request code merge to the _correct branch_
+5. When merging, gain the approval of at least one other software member before doing so. The code will then be sent to the lead for review automatically.
+6. When pulling code, pull from tagged or released versions, as to not be working with a version behind the rest of the team. 
+### Code Standards
+1. All header files should begin with the header guard  `#pragma once`
+2. Short functions (< 5 lines) should be marked as inline
+3. Includes should have a newline between different sets of similar files
+4. The `namespace ohs623` must  be used around any **LIBRARY CODE** and the `namespace frc2020` must be used around any code for **THIS YEAR**
+5. Local variables must be declared and assigned in the same line
+6. All primitive types should be passed to functions _by value_, everything else should be passed _by reference_
+7. Use a **struct** only for passive objects that carry data; everything else should be made a **class**
+8. **One** pointer type is allowed to be declared per line
+9. Use `0` for integers, `0.0` for reals, `nullptr` for pointers, and `'\0'` for chars
+10. Lower camel case is to be used when naming _variables_
+11. Upper camel case is to be used when naming _classes, files, methods, and functions_ 
+12. The class name should match with the file name
+13. Macros and const variables should be uppercase with underscores
+14. use `//` for comments **<= 2 lines** in series and `/*` for anything longer
+15. Indentation is **only** to be done with tabs with the exception of lining up numbers and such across multiple lines
+16. Opening curly brackets must be placed on the **same** line, with else and else if clauses on the **same** line as their curly brackets. However, starting and ending a pair of curly brackets on the same line is allowed _as long as nothing is inside_
+17. Member variables in classes should include the prefix m_ and always be private. This is not necessary while using structs
+18. In classes, a new visibility modifier (enter) is to be used to distinguish between methods and instance variables.
+19. Grouping of code will go as follows: Also the order of groupings of things inside classes will go as follows:
+   * Static variables (should be avoided)
+   * Static methods
+   * Public instance variables (should be not used in most cases (use getters and setters))
+   * Public methods
+   * Private methods
+   * Private instance variables
+20. Check with a lead if you are confused or need an example
 ## Sources
 * [Linux Academy](https://linuxacademy.com/blog/linux/git-terms-explained/)
 * [GitFlow](https://nvie.com/posts/a-successful-git-branching-model/) 
