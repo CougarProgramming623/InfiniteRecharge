@@ -1,7 +1,7 @@
 # InfiniteRecharge
 <p align="left">
     <a href="https://github.com/CougarProgramming623/InfiniteRecharge/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/CougarProgramming623/InfiniteRecharge?color=Burgundy&style=for-the-badge&logo=GitHub" /> <img src="https://img.shields.io/github/issues/CougarProgramming623/InfiniteRecharge?logo=GitHub&style=for-the-badge" /></a>
+        <img src="https://img.shields.io/github/contributors/CougarProgramming623/InfiniteRecharge?color=Burgundy&style=for-the-badge&logo=GitHub" /> <img src="https://img.shields.io/github/issues/CougarProgramming623/InfiniteRecharge?logo=GitHub&style=for-the-badge" /> <img src="https://img.shields.io/github/followers/CougarProgramming623?color=bright-green&logo=GitHub&style=for-the-badge" /> <img src="https://img.shields.io/github/watchers/CougarProgramming623/InfiniteRecharge?color=bright-green&logo=GitHub&style=for-the-badge" /> </a>
 
 ## Github Information
 Here you can find defintions for basic GitHub terminology as well as examples
