@@ -64,3 +64,7 @@ Tags are used to define which portions of a project’s Git history is most impo
 While there is not necessarily a default “upstream” or “downstream” for Git projects, upstream can be considered where you push your Git changes — this is often the master branch of the project within the origin
 ### GitFlow
 The purpose of GitFlow is to streamline production of code. There are two main types of branches we use: Feature Branches and the Master Branch. Code is worked on each branch independently. All "features" of the robot such as modules and harware requirments will have their own branch. Once the code is completed and stable, it will be merged into `master`. All competition ready code will be tagged for use. 
+## Sources
+* [Linux Academy](https://linuxacademy.com/blog/linux/git-terms-explained/)
+* [GitFlow](https://nvie.com/posts/a-successful-git-branching-model/) 
+
