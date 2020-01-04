@@ -1,5 +1,7 @@
 # so the wiki can be cloned and edited locally 
 wiki/
+# so workspace files can be stored locally
+*.code-workspace
 
 # everything below this line is generated
 # Created by https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode
