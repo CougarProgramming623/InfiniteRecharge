@@ -9,7 +9,7 @@ We maintain a wiki with helpful information [here](wiki/).
 
 ### General Rules
 1. Be respectful and friendly
-2. Be productive during meetingss, and attend meetings consistently 
+2. Be productive during meetings, and attend meetings consistently 
 3. Communicate any questions and concerns with leads
 4. Have fun!
 5. Be safe
