@@ -1,7 +1,7 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-
+#include <frc/WPILib.h>
 
 namespace ohs2020 {
 
@@ -13,6 +13,6 @@ public:
 private:
     
 
-}
+};
 
 }
