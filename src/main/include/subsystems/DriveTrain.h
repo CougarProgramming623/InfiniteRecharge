@@ -1,0 +1,28 @@
+#pragma once
+
+#include <frc2/command/SubsystemBase.h>
+#include <frc/WPILib.h>
+
+namespace ohs2020 {
+
+class DriveTrain : frc2::SubsystemBase {
+
+public:
+    
+    DriveTrain();
+
+    void CartesianDrive(double x, double y, double rotation, double angle);
+
+//end public section
+
+private:
+  
+    WPI_TalonSRX m_LeftFront, m_RightFront;
+    WPI_TalonSRX m_LeftRear, m_RightRear;
+
+//end private section
+
+};
+
+}//namespace
+  
