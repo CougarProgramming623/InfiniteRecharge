@@ -1,5 +1,7 @@
 #include "subsystems/DriveTrain.h"
+
 namespace ohs2020 {
+
 DriveTrain::DriveTrain() : m_LeftFront(0), m_RightFront(0), m_LeftBack(0), m_RightBack(0) {
 
 }
@@ -10,4 +12,3 @@ void DriveTrain::CartesianDrive(double x, double y, double rotation, double angl
     m_RightBack.Set(ControlMode::Velocity, 0);
 }
 }
-
