@@ -8,10 +8,10 @@ DriveTrain::DriveTrain() : m_LeftFront(0), m_RightFront(0), m_LeftBack(0), m_Rig
 }
 
 void DriveTrain::CartesianDrive(double x, double y, double rotation, double angle) { 
-	m_FrontLeft.Set(ControlMode::Velocity, 0);
-	m_FrontRight.Set(ControlMode::Velocity, 0);
-	m_BackLeft.Set(ControlMode::Velocity, 0);
-	m_BackRight.Set(ControlMode::Velocity, 0);
+	m_LeftFront.Set(ControlMode::Velocity, 0);
+	m_RightFront.Set(ControlMode::Velocity, 0);
+	m_LeftBack.Set(ControlMode::Velocity, 0);
+	m_RightBack.Set(ControlMode::Velocity, 0);
 }
 
 }//namespace

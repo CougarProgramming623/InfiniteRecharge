@@ -10,6 +10,8 @@
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
 
+namespace ohs2020 {
+
 
 class Robot : public frc::TimedRobot {
 public:
@@ -29,3 +31,5 @@ private:
 	frc2::Command* m_autonomousCommand = nullptr;
 
 };
+
+}//namespace

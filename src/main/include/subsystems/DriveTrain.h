@@ -1,8 +1,6 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <frc/WPILib.h>
-
 #include <ctre/Phoenix.h>
 
 namespace ohs2020 {
@@ -16,7 +14,7 @@ public:
 
 private:
 	WPI_TalonSRX m_LeftFront, m_RightFront;
-	WPI_TalonSRX m_LeftRear, m_RightRear;
+	WPI_TalonSRX m_LeftBack, m_RightBack;
 
 
 };
