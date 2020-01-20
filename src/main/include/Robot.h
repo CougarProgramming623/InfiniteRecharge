@@ -7,11 +7,15 @@
 
 #pragma once
 
+#include "OI.h"
+#include "subsystems/DriveTrain.h"
+
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
 
 
 class Robot : public frc::TimedRobot {
+<<<<<<< Updated upstream
  public:
   void RobotInit() override;
   void RobotPeriodic() override;
@@ -27,5 +31,36 @@ class Robot : public frc::TimedRobot {
   // Have it null by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.
   frc2::Command* m_autonomousCommand = nullptr;
+=======
+public:
+	Robot();
+
+	void RobotInit() override;
+	void RobotPeriodic() override;
+	void DisabledInit() override;
+	void DisabledPeriodic() override;
+	void AutonomousInit() override;
+	void AutonomousPeriodic() override;
+	void TeleopInit() override;
+	void TeleopPeriodic() override;
+	void TestPeriodic() override;
+
+public:
+
+	static Robot& Get() { return *s_Instance; } 
+	OI& GetOI() { return m_oi; }
+	DriveTrain& GetDriveTrain() { return m_DriveTrain; }
+
+private:
+	// Have it null by default so that if testing teleop it
+	// doesn't have undefined behavior and potentially crash.
+	frc2::Command* m_autonomousCommand = nullptr;
+>>>>>>> Stashed changes
+
+	OI m_oi;
+	DriveTrain m_DriveTrain;
+private:
+	static Robot* s_Instance;
+	
 
 };

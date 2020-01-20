@@ -16,9 +16,14 @@ public:
 
 
 private:
+<<<<<<< Updated upstream
     
     WPI_TalonSRX m_LeftFront, m_RightFront;
     WPI_TalonSRX m_LeftBack, m_RightBack;
+=======
+	WPI_TalonSRX m_LeftFront, m_RightFront;
+	WPI_TalonSRX m_LeftBack, m_RightBack;
+>>>>>>> Stashed changes
 
 };
 
