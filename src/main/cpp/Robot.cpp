@@ -9,10 +9,13 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
-
 #include "Cob.h"
 
 namespace ohs2020 {
+
+  Robot* Robot::s_Instance = nullptr;
+
+  Robot::Robot(){}
 
 void Robot::RobotInit() {
 	Cob::Init();
@@ -92,7 +95,6 @@ void Robot::TestPeriodic() {
 }//namespace
 
 
-int main()
-{
+int main() {
 	return frc::StartRobot<ohs2020::Robot>();
 }
