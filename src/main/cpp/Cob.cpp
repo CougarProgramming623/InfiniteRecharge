@@ -9,8 +9,8 @@ std::shared_ptr<nt::NetworkTable> Cob::s_Table;
 std::map<CobKey, nt::NetworkTableEntry> Cob::s_Map;
 
 void Cob::Init() {
-	nt::NetworkTableInstance instance = nt::NetworkTableInstance::GetDefault();
-	s_Table = instance.GetTable("cob");
+    nt::NetworkTableInstance instance = nt::NetworkTableInstance::GetDefault();
+    s_Table = instance.GetTable("cob");
 	//Clean up the old values in the table every time we init
 	//Consider changing once we test out persistent values
 	instance.DeleteAllEntries();
