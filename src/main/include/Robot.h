@@ -13,25 +13,10 @@
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
 
+namespace ohs2020{
+
 
 class Robot : public frc::TimedRobot {
-<<<<<<< Updated upstream
- public:
-  void RobotInit() override;
-  void RobotPeriodic() override;
-  void DisabledInit() override;
-  void DisabledPeriodic() override;
-  void AutonomousInit() override;
-  void AutonomousPeriodic() override;
-  void TeleopInit() override;
-  void TeleopPeriodic() override;
-  void TestPeriodic() override;
-
- private:
-  // Have it null by default so that if testing teleop it
-  // doesn't have undefined behavior and potentially crash.
-  frc2::Command* m_autonomousCommand = nullptr;
-=======
 public:
 	Robot();
 
@@ -55,7 +40,6 @@ private:
 	// Have it null by default so that if testing teleop it
 	// doesn't have undefined behavior and potentially crash.
 	frc2::Command* m_autonomousCommand = nullptr;
->>>>>>> Stashed changes
 
 	OI m_oi;
 	DriveTrain m_DriveTrain;
@@ -64,3 +48,4 @@ private:
 	
 
 };
+}

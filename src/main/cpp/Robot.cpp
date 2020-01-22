@@ -10,11 +10,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
-<<<<<<< Updated upstream
-void Robot::RobotInit() {}
-=======
-#include "Cob.h"
-
 namespace ohs2020 {
 
   Robot* Robot::s_Instance = nullptr;
@@ -22,10 +17,8 @@ namespace ohs2020 {
   Robot::Robot(){}
 
 void Robot::RobotInit() {
-	Cob::Init();
 
 }
->>>>>>> Stashed changes
 
 /**
  * This function is called every robot packet, no matter the mode. Use
@@ -77,6 +70,12 @@ void Robot::TeleopPeriodic() {}
  */
 void Robot::TestPeriodic() {}
 
-#ifndef RUNNING_FRC_TESTS
-int main() { return frc::StartRobot<Robot>(); }
-#endif
+}
+
+
+int main() { 
+
+  return frc::StartRobot<ohs2020::Robot>();
+
+}
+
