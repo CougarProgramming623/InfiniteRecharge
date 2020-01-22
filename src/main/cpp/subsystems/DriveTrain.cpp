@@ -20,16 +20,16 @@ void Normalize(wpi::MutableArrayRef<double> wheelSpeeds) {
 	double maxMagnitude = std::abs(wheelSpeeds[0]);
 
 	for (size_t i = 1; i < wheelSpeeds.size(); i++) {
-    	double temp = std::abs(wheelSpeeds[i]);
-    if (maxMagnitude < temp) {
-      maxMagnitude = temp;
-    }
-  }
-  if (maxMagnitude > 1) {
-    for (size_t i = 0; i < wheelSpeeds.size(); i++) {
-      wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
-    }
-  }
+		double temp = std::abs(wheelSpeeds[i]);
+		if (maxMagnitude < temp) {
+			maxMagnitude = temp;
+		}
+	}
+	if (maxMagnitude > 1) {
+		for (size_t i = 0; i < wheelSpeeds.size(); i++) {
+			wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
+		}
+	}
 } //Normalize()
 
 void DriveTrain::CartesianDrive(double y, double x, double rotation, double angle) {
@@ -42,7 +42,7 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 	wheelSpeeds[kFRONT_LEFT] = input.y + input.x + rotation;
 	wheelSpeeds[kFRONT_RIGHT] = input.y - input.x - rotation;
 	wheelSpeeds[kBACK_LEFT] = input.y - input.x + rotation;
-	wheelSpeeds[kBACK_RIGHT] = input.y + input.x  - rotation;
+	wheelSpeeds[kBACK_RIGHT] = input.y + input.x - rotation;
 
 	Normalize(wheelSpeeds);
 
