@@ -4,7 +4,7 @@
 #include <ctre/Phoenix.h>
 
 namespace ohs2020 {
-
+ 
 class DriveTrain : frc2::SubsystemBase {
 
 public:
@@ -15,7 +15,6 @@ public:
 private:
 	WPI_TalonSRX m_LeftFront, m_RightFront;
 	WPI_TalonSRX m_LeftBack, m_RightBack;
-
 
 };
 
