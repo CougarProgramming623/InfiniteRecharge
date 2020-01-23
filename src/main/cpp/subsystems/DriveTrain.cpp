@@ -1,9 +1,11 @@
 #include "subsystems/DriveTrain.h"
 #include "Robot.h"
-#include "commands/Drive.h"
+#include "commands/DriveWithJoysticks.h"
 
 #include <frc/drive/Vector2d.h>
 #include <frc2/command/button/JoystickButton.h>
+
+#include <algorithm>
 
 const int kMAX_VELOCITY = 643;
 
@@ -20,21 +22,13 @@ DriveTrain::DriveTrain() : m_LeftFront(6), m_RightFront(2), m_LeftBack(1), m_Rig
 	m_RightFront.SetInverted(true);
 	m_RightBack.SetInverted(true);
 
-	Drive drive;
-
-	SetDefaultCommand(drive); 
+	SetDefaultCommand(Drive()); 
 
 }
 
 void Normalize(wpi::MutableArrayRef<double> wheelSpeeds) {
-	double maxMagnitude = std::abs(wheelSpeeds[0]);
+	double maxMagnitude = *std::max_element(wheelSpeeds.begin(), wheelSpeeds.end());
 
-	for (size_t i = 1; i < wheelSpeeds.size(); i++) {
-		double temp = std::abs(wheelSpeeds[i]);
-		if (maxMagnitude < temp) {
-			maxMagnitude = temp;
-		}
-	}
 	if (maxMagnitude > 1) {
 		for (size_t i = 0; i < wheelSpeeds.size(); i++) {
 			wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
@@ -47,7 +41,7 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 	//same code found in CartesianDrive in the WPI Library but adapted for being used in Velocity Mode
 	frc::Vector2d input{x, y};
 	input.Rotate(angle);
-	double wheelSpeeds[4] ;
+	double wheelSpeeds[4];
 	
 	wheelSpeeds[kFRONT_LEFT] = input.y + input.x + rotation;
 	wheelSpeeds[kFRONT_RIGHT] = input.y - input.x - rotation;
@@ -56,18 +50,17 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 
 	Normalize(wheelSpeeds);
 
-	
 	if (Robot::Get().GetOI().GetVelocityMode()) {
 
 		m_LeftFront.Set(ControlMode::Velocity, wheelSpeeds[kFRONT_LEFT] * kMAX_VELOCITY);
-		m_LeftBack.Set(ControlMode::Velocity,wheelSpeeds[kBACK_LEFT] * kMAX_VELOCITY);
+		m_LeftBack.Set(ControlMode::Velocity, wheelSpeeds[kBACK_LEFT] * kMAX_VELOCITY);
 		m_RightFront.Set(ControlMode::Velocity, wheelSpeeds[kFRONT_RIGHT] * kMAX_VELOCITY);
 		m_RightBack.Set(ControlMode::Velocity, wheelSpeeds[kBACK_RIGHT] * kMAX_VELOCITY);
 
 	} else {
 		
 		m_LeftFront.Set(ControlMode::PercentOutput, wheelSpeeds[kFRONT_LEFT]);
-		m_LeftBack.Set(ControlMode::PercentOutput,wheelSpeeds[kBACK_LEFT]);
+		m_LeftBack.Set(ControlMode::PercentOutput, wheelSpeeds[kBACK_LEFT]);
 		m_RightFront.Set(ControlMode::PercentOutput, wheelSpeeds[kFRONT_RIGHT]);
 		m_RightBack.Set(ControlMode::PercentOutput, wheelSpeeds[kBACK_RIGHT]);
 
@@ -75,8 +68,5 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 
 } //CartesianDrive()
 
-std::unique_ptr<frc2::Command> DriveTrain::TransferOwnership() && {
-	return std::unique_ptr<frc2::Command>();
-}
 
 }//namespace

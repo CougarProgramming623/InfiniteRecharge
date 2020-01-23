@@ -6,15 +6,12 @@
 
 namespace ohs2020 {
  
-class DriveTrain : frc2::SubsystemBase {
+class DriveTrain : public frc2::SubsystemBase {
 
 public:
 	DriveTrain();
 
 	void CartesianDrive(double x, double y, double rotation, double angle);
-
-
-	virtual std::unique_ptr<frc2::Command> TransferOwnership() &&;
 
 private:
 	WPI_TalonSRX m_LeftFront, m_RightFront;

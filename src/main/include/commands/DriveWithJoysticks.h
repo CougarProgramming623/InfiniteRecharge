@@ -10,6 +10,8 @@ public:
 	Drive();
 	virtual void Execute() override;
 
+	virtual std::unique_ptr<Command> TransferOwnership() && override;
+
 };
 
 }//namespace
