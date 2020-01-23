@@ -17,8 +17,6 @@ namespace ohs2020 {
 
 DriveTrain::DriveTrain() : m_LeftFront(6), m_RightFront(2), m_LeftBack(1), m_RightBack(5) {
 
-
-
 	m_RightFront.SetInverted(true);
 	m_RightBack.SetInverted(true);
 
@@ -59,7 +57,7 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 	Normalize(wheelSpeeds);
 
 	
-	if(Robot::Get().GetOI().GetVelocityMode()) {
+	if (Robot::Get().GetOI().GetVelocityMode()) {
 
 		m_LeftFront.Set(ControlMode::Velocity, wheelSpeeds[kFRONT_LEFT] * kMAX_VELOCITY);
 		m_LeftBack.Set(ControlMode::Velocity,wheelSpeeds[kBACK_LEFT] * kMAX_VELOCITY);
@@ -78,9 +76,7 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 } //CartesianDrive()
 
 std::unique_ptr<frc2::Command> DriveTrain::TransferOwnership() && {
-
-	return std::unique_ptr<frc2::Command>(dynamic_cast<frc2::Command*>(this));
-
+	return std::unique_ptr<frc2::Command>();
 }
 
 }//namespace

@@ -7,8 +7,9 @@ namespace ohs2020 {
 class Drive : public frc2::CommandBase {
 
 public: 
-    Drive();
-    virtual void Execute() override;
+	Drive();
+	virtual void Execute() override;
 
 };
-}
+
+}//namespace

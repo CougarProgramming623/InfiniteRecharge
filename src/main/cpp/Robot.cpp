@@ -15,9 +15,9 @@ namespace ohs2020 {
 
 	Robot* Robot::s_Instance = nullptr;
 
-  Robot::Robot() {
+Robot::Robot() {
 
-    s_Instance = this;
+	s_Instance = this;
 
   }
 

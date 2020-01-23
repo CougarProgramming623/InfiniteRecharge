@@ -13,8 +13,7 @@
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
 
-namespace ohs2020{
-
+namespace ohs2020 {
 
 class Robot : public frc::TimedRobot {
 public:
@@ -48,4 +47,5 @@ private:
 	
 
 };
-}
+
+}//namespace

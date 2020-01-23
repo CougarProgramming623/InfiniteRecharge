@@ -2,7 +2,9 @@
 
 namespace ohs2020{
 
-OI::OI() : 
-m_DriverJoystick(0), m_ButtonBoard(1) {}
-
+OI::OI() :
+m_DriverJoystick(0), m_ButtonBoard(1) {
+		
 }
+
+}//namespace
