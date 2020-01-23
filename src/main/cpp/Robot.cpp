@@ -13,7 +13,7 @@
 
 namespace ohs2020 {
 
-  Robot* Robot::s_Instance = nullptr;
+	Robot* Robot::s_Instance = nullptr;
 
   Robot::Robot() {
 
@@ -69,14 +69,14 @@ void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopInit() {
-  // This makes sure that the autonomous stops running when
-  // teleop starts running. If you want the autonomous to
-  // continue until interrupted by another command, remove
-  // this line or comment it out.
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Cancel();
-    m_autonomousCommand = nullptr;
-  }
+	// This makes sure that the autonomous stops running when
+	// teleop starts running. If you want the autonomous to
+	// continue until interrupted by another command, remove
+	// this line or comment it out.
+	if (m_autonomousCommand != nullptr) {
+		m_autonomousCommand->Cancel();
+		m_autonomousCommand = nullptr;
+	}
 }
 
 /**
