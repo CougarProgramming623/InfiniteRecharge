@@ -1,5 +1,6 @@
 #include "subsystems/DriveTrain.h"
 #include "Robot.h"
+#include "commands/Drive.h"
 
 #include <frc/drive/Vector2d.h>
 #include <frc2/command/button/JoystickButton.h>
@@ -14,7 +15,18 @@ const int kBACK_RIGHT = 3;
 
 namespace ohs2020 {
 
-DriveTrain::DriveTrain() : m_LeftFront(0), m_RightFront(0), m_LeftBack(0), m_RightBack(0) {}
+DriveTrain::DriveTrain() : m_LeftFront(6), m_RightFront(2), m_LeftBack(1), m_RightBack(5) {
+
+
+
+	m_RightFront.SetInverted(true);
+	m_RightBack.SetInverted(true);
+
+	Drive drive;
+
+	SetDefaultCommand(drive); 
+
+}
 
 void Normalize(wpi::MutableArrayRef<double> wheelSpeeds) {
 	double maxMagnitude = std::abs(wheelSpeeds[0]);
@@ -64,4 +76,11 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 	}
 
 } //CartesianDrive()
+
+std::unique_ptr<frc2::Command> DriveTrain::TransferOwnership() && {
+
+	return std::unique_ptr<frc2::Command>(dynamic_cast<frc2::Command*>(this));
+
+}
+
 }//namespace
