@@ -13,6 +13,10 @@ public:
 
 	void CartesianDrive(double x, double y, double rotation, double angle);
 
+protected:
+	
+	virtual std::unique_ptr<frc2::Command> TransferOwnership() && override;
+
 private:
 	WPI_TalonSRX m_LeftFront, m_RightFront;
 	WPI_TalonSRX m_LeftBack, m_RightBack;
