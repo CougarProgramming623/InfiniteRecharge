@@ -1,6 +1,7 @@
 #include "subsystems/DriveTrain.h"
 #include "Robot.h"
 #include "commands/DriveWithJoysticks.h"
+#include "Util.h"
 
 #include <frc/drive/Vector2d.h>
 #include <frc2/command/button/JoystickButton.h>
@@ -21,10 +22,17 @@ DriveTrain::DriveTrain() : m_LeftFront(6), m_RightFront(2), m_LeftBack(1), m_Rig
 
 	m_RightFront.SetInverted(true);
 	m_RightBack.SetInverted(true);
-
-	SetDefaultCommand(Drive()); 
-
+	
 }
+
+void DriveTrain::Init(){
+	SetDefaultCommand(Drive()); 
+	DebugOutF("Set Default Command");
+}
+
+/*void DriveTrain::InitDefaultCommand(){
+
+}*/
 
 void Normalize(wpi::MutableArrayRef<double> wheelSpeeds) {
 	double maxMagnitude = *std::max_element(wheelSpeeds.begin(), wheelSpeeds.end());
@@ -64,6 +72,7 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 		m_RightFront.Set(ControlMode::PercentOutput, wheelSpeeds[kFRONT_RIGHT]);
 		m_RightBack.Set(ControlMode::PercentOutput, wheelSpeeds[kBACK_RIGHT]);
 
+		//DebugOutF(std::to_string(wheelSpeeds[kFRONT_LEFT]));
 	}
 
 } //CartesianDrive()

@@ -9,6 +9,8 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
+#include <frc2/command/PrintCommand.h>
+
 #include "Cob.h"
 
 namespace ohs2020 {
@@ -19,11 +21,22 @@ Robot::Robot() {
 
 	s_Instance = this;
 
-  }
+}
 
 void Robot::RobotInit() {
 	Cob::Init();
+	m_DriveTrain.Init();
 
+	try{
+		navx = new AHRS(SPI::Port::kMXP);
+	} catch (std::exception &ex){
+		std::string err = "Error instantiating navX MXP: ";
+		err += ex.what();
+		DebugOutF(err.c_str());
+		
+	}
+	frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand("Hello"));
+	navx->ZeroYaw();
 }
 
 /**
@@ -60,11 +73,10 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-
+	navx->ZeroYaw();
 }
 
 void Robot::AutonomousPeriodic() {
-
 
 }
 

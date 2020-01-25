@@ -4,18 +4,26 @@
 #include <ctre/Phoenix.h>
 #include <memory>
 
-namespace ohs2020 {
+
+namespace ohs2020 {	
  
 class DriveTrain : public frc2::SubsystemBase {
 
 public:
 	DriveTrain();
 
+
+	void Init();
+	//frc2::Command* GetDefaultCommand() const override;
+
 	void CartesianDrive(double x, double y, double rotation, double angle);
+
+	//virtual void InitDefaultCommand() override;  
+
 
 protected:
 	
-	virtual std::unique_ptr<frc2::Command> TransferOwnership() && override;
+	//virtual std::unique_ptr<frc2::Command> TransferOwnership() && override;
 
 private:
 	WPI_TalonSRX m_LeftFront, m_RightFront;
