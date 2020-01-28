@@ -26,6 +26,8 @@ Robot::Robot() {
 void Robot::RobotInit() {
 	Cob::Init();
 	m_DriveTrain.Init();
+    m_oi.Init();
+
 
 	try{
 		navx = new AHRS(SPI::Port::kMXP);
@@ -51,6 +53,9 @@ void Robot::RobotPeriodic() {
 	frc2::CommandScheduler::GetInstance().Run();
 
 	Cob::PushValue(CobKey::ROBOT_POSITION_X, 420.0);
+
+	DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
+
 }
 
 /**

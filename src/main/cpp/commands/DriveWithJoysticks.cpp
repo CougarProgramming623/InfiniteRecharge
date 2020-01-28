@@ -28,15 +28,13 @@ namespace ohs2020 {
 		double rot = Robot::Get().GetOI().GetDriverJoystick().GetZ();
 		double gyro = Robot::Get().GetNavX()->GetYaw();
 
-		DebugOutF(std::to_string(gyro));
-
 		x = abs(x) <= 0.05f ? 0 : x;
 		y = abs(y) <= 0.05f ? 0 : y;
 		rot = abs(rot) <= 0.025f ? 0 : rot;
 
 		ohs623::DefaultFormatter formatter;
 		formatter << "Drive values: stick: [" << x << ", " << y << ", " << rot << "] Is FOD " << Robot::Get().GetOI().IsFOD();
-		frc::DriverStation::ReportError(formatter.c_str());
+		//frc::DriverStation::ReportError(formatter.c_str());
 
 
 		if (Robot::Get().GetOI().IsFOD()) {
@@ -45,6 +43,8 @@ namespace ohs2020 {
 			Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, 0.0);
 		}
 	}
+
+	
 
 	std::unique_ptr<frc2::Command> Drive::TransferOwnership() && {
 		return std::unique_ptr<frc2::Command>(this);
