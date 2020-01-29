@@ -35,7 +35,7 @@ private:
 	static void RegisterKey(CobKey key, std::string name, bool persistent = false);
 
 private:
-	static std::shared_ptr<NetworkTable> s_Table;
+	static nt::NetworkTableInstance s_Table;
 	static std::map<CobKey, nt::NetworkTableEntry> s_Map;
 };
 

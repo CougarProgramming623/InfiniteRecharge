@@ -52,9 +52,10 @@ void Robot::RobotInit() {
 void Robot::RobotPeriodic() {
 	frc2::CommandScheduler::GetInstance().Run();
 
-	Cob::PushValue(CobKey::ROBOT_POSITION_X, 420.0);
+	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
+    //Cob::PushValue(CobKey::MODE, isFodMode());
 
-	DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
+	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 
 }
 
