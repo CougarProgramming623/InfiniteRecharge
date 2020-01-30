@@ -9,17 +9,37 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
+#include <frc2/command/PrintCommand.h>
+
 #include "Cob.h"
 
 namespace ohs2020 {
 
 	Robot* Robot::s_Instance = nullptr;
 
-	Robot::Robot(){}
+Robot::Robot() {
+
+	s_Instance = this;
+
+}
 
 void Robot::RobotInit() {
 	Cob::Init();
+	m_DriveTrain.Init();
+    m_oi.Init();
 
+
+
+	try{
+		navx = new AHRS(SPI::Port::kMXP);
+	} catch (std::exception &ex){
+		std::string err = "Error instantiating navX MXP: ";
+		err += ex.what();
+		DebugOutF(err.c_str());
+		
+	}
+	frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand("Hello"));
+	navx->ZeroYaw();
 }
 
 /**
@@ -31,9 +51,30 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
+
 	frc2::CommandScheduler::GetInstance().Run();
 
-	Cob::PushValue(CobKey::ROBOT_POSITION_X, 420.0);
+	DebugOutF("ID 1: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(1)));
+	DebugOutF("ID 2: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(2)));
+	DebugOutF("ID 3: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(3)));
+	DebugOutF("ID 4: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(4)));
+	DebugOutF("ID 5: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(5)));
+	DebugOutF("ID 6: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(6)));
+	DebugOutF("ID 6: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(7)));	
+
+	/*
+	if (m_oi.isFodToggle()) {
+		DebugOutF("Fod = true");
+	} else {
+		DebugOutF("Fod = false");
+	}
+	*/
+
+	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
+	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
+
+    //Cob::PushValue(CobKey::MODE, isFodMode());
+	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
 
 /**
@@ -56,11 +97,10 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-
+	navx->ZeroYaw();
 }
 
 void Robot::AutonomousPeriodic() {
-
 
 }
 

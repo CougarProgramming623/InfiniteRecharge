@@ -5,24 +5,24 @@
 
 namespace ohs2020 {
 
-std::shared_ptr<nt::NetworkTable> Cob::s_Table;
+nt::NetworkTableInstance Cob::s_Table;
 std::map<CobKey, nt::NetworkTableEntry> Cob::s_Map;
 
 void Cob::Init() {
-	nt::NetworkTableInstance instance = nt::NetworkTableInstance::GetDefault();
-	s_Table = instance.GetTable("cob");
+	s_Table = nt::NetworkTableInstance::GetDefault();
 	//Clean up the old values in the table every time we init
 	//Consider changing once we test out persistent values
-	instance.DeleteAllEntries();
+	s_Table.DeleteAllEntries();
 
-	RegisterKey(CobKey::ROBOT_POSITION_X, "robot/position/x");
-	RegisterKey(CobKey::ROBOT_POSITION_Y, "robot/position/y");
-	//...
-
+    RegisterKey(CobKey::ROTATION, "/cob/location/rotation");
+    RegisterKey(CobKey::TIME_LEFT, "/cob/fms/time-left");
+    RegisterKey(CobKey::IS_RED, "/FMSInfo/IsRedAlliance");
+    RegisterKey(CobKey::MODE, "/cob/mode");
+    RegisterKey(CobKey::GYRO_RESET, "/cob/actions/gyroReset");
 }
 
 void Cob::RegisterKey(CobKey key, std::string name, bool persistent) {
-	nt::NetworkTableEntry entry = s_Table->GetEntry(name);
+	nt::NetworkTableEntry entry = s_Table.GetEntry(name);
 	s_Map[key] = entry;
 	if (persistent)
 		entry.SetPersistent();

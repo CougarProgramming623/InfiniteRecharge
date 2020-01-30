@@ -6,9 +6,9 @@
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableEntry.h>
 #include <networktables/NetworkTableInstance.h>
+#include <frc2/Timer.h>
 
 #include "CobConstants.h"
-
 
 namespace ohs2020 {
 
@@ -29,13 +29,12 @@ public:
 		return s_Map[key].GetDouble(-1.0);
 	}
 
-
 private:
 	static bool EnsureExists(CobKey key);
 	static void RegisterKey(CobKey key, std::string name, bool persistent = false);
 
-private: 
-	static std::shared_ptr<NetworkTable> s_Table;
+private:
+	static nt::NetworkTableInstance s_Table;
 	static std::map<CobKey, nt::NetworkTableEntry> s_Map;
 };
 
