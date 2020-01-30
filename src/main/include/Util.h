@@ -1,7 +1,6 @@
 #pragma once
 
 #include <frc2/command/PrintCommand.h>
-
 #include <frc2/command/CommandScheduler.h>
 
 inline void DebugOutF(const wpi::Twine& message){
