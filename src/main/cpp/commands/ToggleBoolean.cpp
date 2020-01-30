@@ -8,16 +8,12 @@ ToggleBoolean::ToggleBoolean(bool* toggle, std::function<void(bool newValue)> on
 }
 
 void ToggleBoolean::Initialize() {
-	
-	*ptr = !ptr;
-	
+		
 	DebugOutF("Ran Initialize");
 
 	onFlip(*ptr);
 
-	DebugOutF(std::to_string(*ptr));
-
-
+	//DebugOutF(std::to_string(*ptr));
 }
 
 bool ToggleBoolean::IsFinished(){ 
@@ -27,9 +23,7 @@ bool ToggleBoolean::IsFinished(){
 
 void ToggleBoolean::End(bool interrupted) {}
 
-void ToggleBoolean::Execute(){
-
-}
+void ToggleBoolean::Execute(){}
 
 wpi::SmallSet<frc2::Subsystem*, 4> ToggleBoolean::GetRequirements() const{ 
 	wpi::SmallSet<frc2::Subsystem*, 4> set;

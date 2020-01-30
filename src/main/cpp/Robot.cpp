@@ -29,6 +29,7 @@ void Robot::RobotInit() {
     m_oi.Init();
 
 
+
 	try{
 		navx = new AHRS(SPI::Port::kMXP);
 	} catch (std::exception &ex){
@@ -50,7 +51,24 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
+
 	frc2::CommandScheduler::GetInstance().Run();
+
+	DebugOutF("ID 1: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(1)));
+	DebugOutF("ID 2: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(2)));
+	DebugOutF("ID 3: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(3)));
+	DebugOutF("ID 4: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(4)));
+	DebugOutF("ID 5: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(5)));
+	DebugOutF("ID 6: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(6)));
+	DebugOutF("ID 6: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(7)));	
+
+	/*
+	if (m_oi.isFodToggle()) {
+		DebugOutF("Fod = true");
+	} else {
+		DebugOutF("Fod = false");
+	}
+	*/
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
