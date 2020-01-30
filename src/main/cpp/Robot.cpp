@@ -53,10 +53,10 @@ void Robot::RobotPeriodic() {
 	frc2::CommandScheduler::GetInstance().Run();
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
+	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
+
     //Cob::PushValue(CobKey::MODE, isFodMode());
-
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
-
 }
 
 /**

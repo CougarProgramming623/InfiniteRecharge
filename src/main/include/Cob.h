@@ -6,9 +6,9 @@
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableEntry.h>
 #include <networktables/NetworkTableInstance.h>
+#include <frc2/Timer.h>
 
 #include "CobConstants.h"
-
 
 namespace ohs2020 {
 
@@ -28,7 +28,6 @@ public:
 		//Default values dont matter here because if the key doesnt exist in the map c++ will throw an exception
 		return s_Map[key].GetDouble(-1.0);
 	}
-
 
 private:
 	static bool EnsureExists(CobKey key);
