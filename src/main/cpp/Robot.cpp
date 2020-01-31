@@ -10,7 +10,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 #include <frc2/command/PrintCommand.h>
-
+#include <frc/DriverStation.h>
 #include "Cob.h"
 #include "ohs/RobotID.h"
 
@@ -30,6 +30,7 @@ void Robot::RobotInit() {
     m_oi.Init();
 
 	frc::DriverStation::ReportError("Back left is: " + std::to_string(ohs623::RobotID::GetID(ohs623::Motor::BACK_LEFT)));
+
 
 
 	try {
@@ -59,25 +60,27 @@ void Robot::RobotPeriodic() {
 
 	frc2::CommandScheduler::GetInstance().Run();
 
-	/*DebugOutF("ID 1: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(1)));
-	DebugOutF("ID 2: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(2)));
-	DebugOutF("ID 3: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(3)));
-	DebugOutF("ID 4: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(4)));
-	DebugOutF("ID 5: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(5)));
-	DebugOutF("ID 6: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(6)));
-	DebugOutF("ID 6: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(7)));	
-*/
-	/*
-	if (m_oi.isFodToggle()) {
-		DebugOutF("Fod = true");
-	} else {
-		DebugOutF("Fod = false");
-	}
-	*/
-
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
-
+	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
+		Cob::PushValue(CobKey::IS_RED, true);
+	}else{
+		Cob::PushValue(CobKey::IS_RED, false);
+	}
+	
+	if (frc::DriverStation::GetInstance().IsDisabled()){
+		Cob::PushValue(CobKey::MODE, 5);
+		DebugOutF("set to 5");
+	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
+		Cob::PushValue(CobKey::MODE, 2);
+		DebugOutF("set to 2");
+	}else if (m_oi.IsFOD()){
+		Cob::PushValue(CobKey::MODE, 0);
+		DebugOutF("set to 0");
+	}else {
+		Cob::PushValue(CobKey::MODE, 1);
+		DebugOutF("set to 1");
+	}
     //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }

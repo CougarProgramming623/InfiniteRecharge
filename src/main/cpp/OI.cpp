@@ -3,29 +3,29 @@
 
 namespace ohs2020{
 
-OI::OI() : m_FodToggle(&m_DriverJoystick, 1), b1(&m_ButtonBoard, 2), b2(&m_ButtonBoard, 3), b3(&m_ButtonBoard, 4),
-		b4(&m_ButtonBoard, 5), b5(&m_ButtonBoard, 6), b6(&m_ButtonBoard, 7), b7(&m_ButtonBoard, 8) {
-	
+OI::OI() : 
+
+m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}){
 
 }
 
+
 void OI::Init(){
 
-    m_FodToggle.WhenPressed(new frc2::PrintCommand(std::to_string(isFodToggle())), false);
+	m_FodToggle.WhenPressed(frc2::InstantCommand([&] { 
+		m_Fod = !m_Fod;
+		DebugOutF("Flipped FOD");
+	}, {} ));
 
-	b1.WhenPressed(new frc2::PrintCommand(std::to_string(isFodToggle())), false);
-	b2.WhenPressed(new frc2::PrintCommand(std::to_string(isFodToggle())), false);
-	b3.WhenPressed(new frc2::PrintCommand(std::to_string(isFodToggle())), false);
-	b4.WhenPressed(new frc2::PrintCommand(std::to_string(isFodToggle())), false);
-	b5.WhenPressed(new frc2::PrintCommand(std::to_string(isFodToggle())), false);
-	b6.WhenPressed(new frc2::PrintCommand(std::to_string(isFodToggle())), false);
-	b7.WhenPressed(new frc2::PrintCommand(std::to_string(isFodToggle())), false);
-	
+}
 
 
-	DebugOutF("Ran OI Init");
+void OI::FlipFOD(){
 
-	//m_FodToggle.WhenPressed(new ToggleBoolean(&m_Fod, [](bool newValue){DebugOutF("Current Driver Orientation State: " + newValue ? "true" : "false");}), false);
+	m_Fod = !m_Fod;
+
+	DebugOutF("Flipped FOD to: " + std::to_string(m_Fod));
+
 }
 
 }//namespace

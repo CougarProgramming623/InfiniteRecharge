@@ -53,6 +53,7 @@ private:
 	AHRS* navx;
 
 	bool m_Init = false;
+
 private:
 	static Robot* s_Instance;
 };
