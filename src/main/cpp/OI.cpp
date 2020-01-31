@@ -1,5 +1,6 @@
 #include "OI.h"
 #include "Util.h"
+#include "Cob.h"
 
 namespace ohs2020{
 
@@ -14,6 +15,7 @@ void OI::Init(){
 
 	m_FodToggle.WhenPressed(frc2::InstantCommand([&] { 
 		m_Fod = !m_Fod;
+		Cob::SendMessage(CobMessageOut::PING, "Is Field Oriented");
 		DebugOutF("Flipped FOD");
 	}, {} ));
 

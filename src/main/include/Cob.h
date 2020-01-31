@@ -17,6 +17,11 @@ public:
 	//Sets up the internal state needed to handle communications with the COB
 	//Should be called exactly once on application startup
 	static void Init();
+	
+	static void SendMessage(CobMessageOut key, std::string value){
+		if (EnsureExists(key)) s_OutMap[key].SetString(value);
+	}
+
 
 	template<typename T>
 	static void PushValue(CobKey key, T value) {
@@ -31,11 +36,14 @@ public:
 
 private:
 	static bool EnsureExists(CobKey key);
+	static bool EnsureExists(CobMessageOut key);
 	static void RegisterKey(CobKey key, std::string name, bool persistent = false);
+	static void RegisterMessageOut(CobMessageOut key, std::string name);
 
 private:
 	static nt::NetworkTableInstance s_Table;
 	static std::map<CobKey, nt::NetworkTableEntry> s_Map;
+	static std::map<CobMessageOut, nt::NetworkTableEntry> s_OutMap;
 };
 
 }//frc2019
