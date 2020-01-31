@@ -56,13 +56,6 @@ void Robot::RobotPeriodic() {
 
 	frc2::CommandScheduler::GetInstance().Run();
 
-	/*
-	if (m_oi.isFodToggle()) {
-		DebugOutF("Fod = true");
-	} else {
-		DebugOutF("Fod = false");
-	}
-	*/
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
