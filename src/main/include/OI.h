@@ -34,25 +34,6 @@ private:
 	bool m_VelocityMode = false;
 
 	
-
-	// frc2::Button b1;
-	// frc2::Button b2;
-	// frc2::Button b2;
-	// frc2::Button b2;
-	// frc2::Button b2;
-	// frc2::Button b2;
-	// frc2::Button b2;
-	// frc2::Button b2;
-	// frc2::Button b2;
-	// frc2::Button b2;
-	// frc2::Button b2;
-	// frc2::Button b3;
-	// frc2::Button b4;
-	// frc2::Button b5;
-	// frc2::Button b6;
-	// frc2::Button b7;
-	// frc2::Button b8;
-	// frc2::Button b9;
 };
 
 }//namespace
