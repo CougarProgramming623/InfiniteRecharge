@@ -12,6 +12,7 @@
 #include <frc2/command/PrintCommand.h>
 
 #include "Cob.h"
+#include "ohs/RobotID.h"
 
 namespace ohs2020 {
 
@@ -28,9 +29,10 @@ void Robot::RobotInit() {
 	m_DriveTrain.Init();
     m_oi.Init();
 
+	frc::DriverStation::ReportError("Back left is: " + std::to_string(ohs623::RobotID::GetID(ohs623::Motor::BACK_LEFT)));
 
 
-	try{
+	try {
 		navx = new AHRS(SPI::Port::kMXP);
 	} catch (std::exception &ex){
 		std::string err = "Error instantiating navX MXP: ";
@@ -40,6 +42,8 @@ void Robot::RobotInit() {
 	}
 	frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand("Hello"));
 	navx->ZeroYaw();
+
+	m_Init = true;
 }
 
 /**
@@ -52,16 +56,17 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
 
+
 	frc2::CommandScheduler::GetInstance().Run();
 
-	DebugOutF("ID 1: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(1)));
+	/*DebugOutF("ID 1: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(1)));
 	DebugOutF("ID 2: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(2)));
 	DebugOutF("ID 3: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(3)));
 	DebugOutF("ID 4: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(4)));
 	DebugOutF("ID 5: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(5)));
 	DebugOutF("ID 6: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(6)));
 	DebugOutF("ID 6: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(7)));	
-
+*/
 	/*
 	if (m_oi.isFodToggle()) {
 		DebugOutF("Fod = true");
@@ -137,4 +142,8 @@ void Robot::TestPeriodic() {
 
 int main() {
 	return frc::StartRobot<ohs2020::Robot>();
+}
+
+bool CanAssertionsQuit() {
+	return true;//Maybe disable during competitions
 }

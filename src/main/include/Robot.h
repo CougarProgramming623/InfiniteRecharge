@@ -11,6 +11,8 @@
 #include "subsystems/DriveTrain.h"
 #include "Util.h"
 
+#include "ohs/Assert.h"
+
 #include <AHRS.h>
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
@@ -33,10 +35,13 @@ public:
 
 public:
 
-	static Robot& Get() { return *s_Instance; } 
-	OI& GetOI() { return m_oi; }
-	DriveTrain& GetDriveTrain() { return m_DriveTrain; }
-	AHRS* GetNavX() { return navx; }
+	inline static Robot& Get() { return *s_Instance; } 
+
+	inline OI& GetOI() { return m_oi; }
+	inline DriveTrain& GetDriveTrain() { return m_DriveTrain; }
+	inline AHRS* GetNavX() const { return navx; }
+	inline bool IsInitComplete() const { return m_Init; }
+
 
 private:
 	// Have it null by default so that if testing teleop it
@@ -46,6 +51,8 @@ private:
 	OI m_oi;
 	DriveTrain m_DriveTrain;
 	AHRS* navx;
+
+	bool m_Init = false;
 private:
 	static Robot* s_Instance;
 };
