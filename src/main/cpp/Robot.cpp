@@ -28,7 +28,7 @@ void Robot::RobotInit() {
 	m_DriveTrain.Init();
     m_oi.Init();
 
-	m_oi.m_FodToggle.WhenPressed(frc2::InstantCommand([&] { m_oi.FlipFOD(); }, {} ));
+	
 
 
 

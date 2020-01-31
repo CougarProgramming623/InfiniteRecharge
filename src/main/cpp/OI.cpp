@@ -12,13 +12,13 @@ m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}){
 
 void OI::Init(){
 
+	m_FodToggle.WhenPressed(frc2::InstantCommand([&] { 
+		m_Fod = !m_Fod;
+		DebugOutF("Flipped FOD");
+	}, {} ));
+
 }
 
-inline void OI::FlipFOD(){
-
-	m_Fod = !m_Fod;
-
-}
 
 void OI::FlipFOD(){
 
