@@ -38,7 +38,7 @@ namespace ohs2020 {
 
 
 		if (Robot::Get().GetOI().IsFOD()) {
-			Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, gyro);//Add in gryo later once the navax code is in
+			Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, gyro);//Add in gyro later once the navax code is in
 		} else {
 			Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, 0.0);
 		}
