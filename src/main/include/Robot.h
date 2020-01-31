@@ -46,6 +46,7 @@ private:
 	OI m_oi;
 	DriveTrain m_DriveTrain;
 	AHRS* navx;
+	
 private:
 	static Robot* s_Instance;
 };
