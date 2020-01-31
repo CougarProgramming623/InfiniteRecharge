@@ -6,13 +6,13 @@
 #include <frc/PIDController.h>
 #include <frc2/command/PIDCommand.h>
 
-namespace oh623{
+namespace ohs623{
 
 class Turn : public frc2::PIDCommand, public frc::PIDOutput {
 
 public:
 
-	Turn(double angle);//constructor
+	Turn(double);//constructor
 
 	void Initialize() override;
 
