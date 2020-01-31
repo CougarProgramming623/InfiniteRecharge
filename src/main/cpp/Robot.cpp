@@ -56,15 +56,6 @@ void Robot::RobotPeriodic() {
 
 	frc2::CommandScheduler::GetInstance().Run();
 
-	for(int i = 1; i < 8; i++){
-		if(m_oi.GetButtonBoard().GetRawButton(i)){
-			
-			DebugOutF("Pressed: " + std::to_string(i));
-
-		}
-	}
-
-
 	/*
 	if (m_oi.isFodToggle()) {
 		DebugOutF("Fod = true");
