@@ -28,6 +28,8 @@ void Robot::RobotInit() {
 	m_DriveTrain.Init();
     m_oi.Init();
 
+	m_oi.m_FodToggle.WhenPressed(frc2::InstantCommand([&] { m_oi.FlipFOD(); }, {} ));
+
 
 
 	try{
@@ -54,13 +56,14 @@ void Robot::RobotPeriodic() {
 
 	frc2::CommandScheduler::GetInstance().Run();
 
-	DebugOutF("ID 1: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(1)));
-	DebugOutF("ID 2: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(2)));
-	DebugOutF("ID 3: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(3)));
-	DebugOutF("ID 4: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(4)));
-	DebugOutF("ID 5: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(5)));
-	DebugOutF("ID 6: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(6)));
-	DebugOutF("ID 6: " + std::to_string(m_oi.GetButtonBoard().GetRawButton(7)));	
+	for(int i = 1; i < 8; i++){
+		if(m_oi.GetButtonBoard().GetRawButton(i)){
+			
+			DebugOutF("Pressed: " + std::to_string(i));
+
+		}
+	}
+
 
 	/*
 	if (m_oi.isFodToggle()) {
