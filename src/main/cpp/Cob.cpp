@@ -48,6 +48,11 @@ void Cob::PushValue<bool>(CobKey key, bool value) {
 }
 
 template<>
+void Cob::PushValue<int>(CobKey key, int value) {
+	if (EnsureExists(key)) s_Map[key].SetDouble(value);
+}
+
+template<>
 void Cob::PushValue<std::string>(CobKey key, std::string value) {
 	if (EnsureExists(key)) s_Map[key].SetString(value);
 }
