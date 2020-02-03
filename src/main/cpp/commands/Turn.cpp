@@ -7,8 +7,8 @@
 
 namespace ohs623 {
 
-Turn::Turn(double angle){
-	AddRequirements( wpi::ArrayRef<frc2::Subsystem*>(&ohs2020::Robot.Get().GetDriveTrain()) );
+Turn::Turn(double angle) : frc2::PIDCommand(m_TurnController, nullptr, m_Angle, nullptr, wpi::ArrayRef<frc2::Subsystem*>(&ohs2020::Robot::Get().GetDriveTrain())), frc::PIDOutput() {
+	//AddRequirements(wpi::ArrayRef<frc2::Subsystem*>(&ohs2020::Robot::Get().GetDriveTrain()));
 
 	m_RotToAngleRate = 0.5;
 	m_Angle = angle;
@@ -19,26 +19,26 @@ Turn::Turn(double angle){
 	m_KD = 0.00;
 	//(!) adjust later
 
-	frc2::Command.WithTimeout(2);
+	//frc2::Command.WithTimeout(2);
 	//frc::Command.SetTimeout(2);
 
 }//constructor
 
 void Turn::Initialize() {
-	m_TurnController = new PIDController( m_KP, m_KI, m_KD, ohs2020::Robot.Get().GetDriveTrain(), this, 0.05);
+	m_TurnController = new frc2::PIDController( m_KP, m_KI, m_KD, units::second_t(20_ms) ); //ohs2020::Robot::Get().GetDriveTrain(), this,
 
 	//set of sets
 	m_TurnController->SetIntegratorRange(-180.0f,180.0f);
 	m_TurnController->EnableContinuousInput(-1.0,1.0); 
 	m_TurnController->SetTolerance( 2.0, std::numeric_limits< double >::infinity() );
-	m_TurnController->SetSetPoint(m_Angle);
+	//m_TurnController->SetSetPoint(m_Angle);
 	//
 
 }//initialization method
 
 void Turn::Execute() {
-	DebugOutF( std::to_string( ohs2020::Robot.Get().GetNavX() ) );
-	ohs2020::Robot.Get().GetDriveTrain().CartesianDrive(0, 0, m_RotToAngleRate / 2, ohs2020::Robot.Get().GetNavX()->GetYaw());
+	//DebugOutF( std::to_string(ohs2020::Robot::Get().GetNavX().GetYaw() ));
+	ohs2020::Robot::Get().GetDriveTrain().CartesianDrive(0, 0, m_RotToAngleRate / 2, ohs2020::Robot::Get().GetNavX()->GetYaw());
 	
 }//execute method
 
@@ -54,7 +54,7 @@ void Turn::End(bool interrupted) {
 }//tell finish end
 
 void Turn::PIDWrite(double output) {
-	m_RotToAngleRate = ouptut;
+	m_RotToAngleRate = output;
 }
 
 }//end namespace

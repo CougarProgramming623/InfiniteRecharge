@@ -3,10 +3,9 @@
 #include "Robot.h"
 
 #include <frc/PIDOutput.h>
-#include <frc/PIDController.h>
 #include <frc2/command/PIDCommand.h>
 
-namespace ohs623{
+namespace ohs623 {
 
 class Turn : public frc2::PIDCommand, public frc::PIDOutput {
 
@@ -26,7 +25,7 @@ public:
 
 private:
 
-	frc::PIDController* m_TurnController;
+	frc2::PIDController* m_TurnController;
 
 	double m_Angle, m_RotToAngleRate, m_KP, m_KI, m_KD;	
 
