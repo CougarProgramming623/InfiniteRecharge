@@ -12,6 +12,7 @@
 #include <frc2/command/PrintCommand.h>
 #include <frc/DriverStation.h>
 #include "Cob.h"
+#include "ohs/RobotID.h"
 
 namespace ohs2020 {
 
@@ -28,11 +29,11 @@ void Robot::RobotInit() {
 	m_DriveTrain.Init();
     m_oi.Init();
 
-	
+	frc::DriverStation::ReportError("Back left is: " + std::to_string(ohs623::RobotID::GetID(ohs623::Motor::BACK_LEFT)));
 
 
 
-	try{
+	try {
 		navx = new AHRS(SPI::Port::kMXP);
 	} catch (std::exception &ex){
 		std::string err = "Error instantiating navX MXP: ";
@@ -42,6 +43,8 @@ void Robot::RobotInit() {
 	}
 	frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand("Hello"));
 	navx->ZeroYaw();
+
+	m_Init = true;
 }
 
 /**
@@ -54,8 +57,8 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
 
-	frc2::CommandScheduler::GetInstance().Run();
 
+	frc2::CommandScheduler::GetInstance().Run();
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
@@ -142,4 +145,8 @@ void Robot::TestPeriodic() {
 
 int main() {
 	return frc::StartRobot<ohs2020::Robot>();
+}
+
+bool CanAssertionsQuit() {
+	return true;//Maybe disable during competitions
 }
