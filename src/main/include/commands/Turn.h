@@ -27,6 +27,9 @@ private:
 
 	frc2::PIDController* m_TurnController;
 
+	std::function<double()> measurement = []()->double{return (double)(ohs2020::Robot::Get().GetNavX()->GetYaw());};
+	std::function<void(double)> output = [this](double out){this->PIDWrite(out);};
+
 	double m_Angle, m_RotToAngleRate, m_KP, m_KI, m_KD;	
 
 };//end class
