@@ -12,7 +12,9 @@
 #include <frc2/command/PrintCommand.h>
 #include <frc/DriverStation.h>
 #include "Cob.h"
+
 #include "ohs/RobotID.h"
+#include "ohs/Log.h"
 
 namespace ohs2020 {
 
@@ -24,12 +26,24 @@ Robot::Robot() {
 
 }
 
+
 void Robot::RobotInit() {
 	Cob::Init();
 	m_DriveTrain.Init();
     m_oi.Init();
 
 	frc::DriverStation::ReportError("Back left is: " + std::to_string(ohs623::RobotID::GetID(ohs623::Motor::BACK_LEFT)));
+
+	ohs623::Log(ohs623::LogLevel::TRACE, [](auto f){ frc::DriverStation::ReportWarning("In prinbt"); f << "Test " << 5 << " askdjsa"; });
+	ohs623::Log(ohs623::LogLevel::DEBUG, [](ohs623::DefaultFormatter f){ f << "Test " << 8 << " askdjsa"; });
+	ohs623::Log(ohs623::LogLevel::INFO, [](ohs623::DefaultFormatter f){ f << "Test " << 2345324 << " askdjsa"; });
+	ohs623::Log(ohs623::LogLevel::WARN, [](ohs623::DefaultFormatter f){ f << "Test " << -1 << " askdjsa"; });
+	ohs623::Log(ohs623::LogLevel::ERROR, [](ohs623::DefaultFormatter f){ f << "Test " << 3845 << " askdjsa"; });
+
+/*	OHS_DEBUG([](ohs623::DefaultFormatter f){ f << "Test " << 5 << " askdjsa"; });
+	OHS_INFO(func);
+	OHS_WARN(func);
+	OHS_ERROR(func);*/
 
 
 
@@ -68,7 +82,7 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::IS_RED, false);
 	}
 	
-	if (frc::DriverStation::GetInstance().IsDisabled()){
+/*	if (frc::DriverStation::GetInstance().IsDisabled()){
 		Cob::PushValue(CobKey::MODE, 5);
 		DebugOutF("set to 5");
 	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
@@ -80,7 +94,7 @@ void Robot::RobotPeriodic() {
 	}else {
 		Cob::PushValue(CobKey::MODE, 1);
 		DebugOutF("set to 1");
-	}
+	}*/
     //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
