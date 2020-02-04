@@ -14,6 +14,7 @@
 #include "Cob.h"
 #include "ohs/RobotID.h"
 
+
 namespace ohs2020 {
 
 	Robot* Robot::s_Instance = nullptr;
@@ -26,8 +27,9 @@ Robot::Robot() {
 
 void Robot::RobotInit() {
 	Cob::Init();
-	m_DriveTrain.Init();
+	//m_DriveTrain.Init();
     m_oi.Init();
+	m_shooter.Init();
 
 	frc::DriverStation::ReportError("Back left is: " + std::to_string(ohs623::RobotID::GetID(ohs623::Motor::BACK_LEFT)));
 
@@ -70,16 +72,16 @@ void Robot::RobotPeriodic() {
 	
 	if (frc::DriverStation::GetInstance().IsDisabled()){
 		Cob::PushValue(CobKey::MODE, 5);
-		DebugOutF("set to 5");
+		//DebugOutF("set to 5");
 	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
 		Cob::PushValue(CobKey::MODE, 2);
-		DebugOutF("set to 2");
+		//DebugOutF("set to 2");
 	}else if (m_oi.IsFOD()){
 		Cob::PushValue(CobKey::MODE, 0);
-		DebugOutF("set to 0");
+		//DebugOutF("set to 0");
 	}else {
 		Cob::PushValue(CobKey::MODE, 1);
-		DebugOutF("set to 1");
+		//DebugOutF("set to 1");
 	}
     //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));

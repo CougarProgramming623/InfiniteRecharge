@@ -3,7 +3,10 @@
 #include <ctre/Phoenix.h>
 #include <frc2/command/button/Button.h>
 #include <frc2/command/InstantCommand.h>
+#include <frc2/command/RunCommand.h>
+#include <frc2/command/Command.h>
 
+#include "Util.h"
 #include "OI.h"
 
 namespace ohs2020{
@@ -21,13 +24,14 @@ public:
 	void FlyWheelTune();
 
 	bool FlyWheelMode = false;
-	double Tuner;
+	
+	OI m_OI;
 
 private:
 
-WPI_TalonFX FlyWheel;
-frc2::Button FlyWheelToggle;
-frc2::Button FlyWheelTuner;
+	WPI_TalonSRX FlyWheel;
+	frc2::Button FlyWheelToggle;
+	frc2::Button FlyWheelTuner;
 
 };
 
