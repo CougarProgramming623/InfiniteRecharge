@@ -4,6 +4,7 @@
 
 #include <frc/PIDOutput.h>
 #include <frc2/command/PIDCommand.h>
+#include <wpi/ArrayRef.h>
 
 namespace ohs623 {
 
