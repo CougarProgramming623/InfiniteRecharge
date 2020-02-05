@@ -1,14 +1,19 @@
 #include "subsystems/Shooter.h"
 
+#include <ctre/Phoenix.h>
+
+
 namespace ohs2020{
 
-const double DefaultShooterPower = .5;
+const double DefaultShooterPower = 0;
 
 Shooter::Shooter() : 
 
-FlyWheel(6), 
-FlyWheelToggle([&] { return m_OI.GetButtonBoard().GetRawButton(2); }),
-FlyWheelTuner([&] { return m_OI.GetDriverJoystick().GetRawButton(100); }) {
+FlyWheel(35), 
+FlyWheelToggle([&] { return m_OI.GetButtonBoard().GetRawButton(1); }),
+FlyWheelEncoder(35)
+
+{ //2 -- Green Button | 19 -- Cargo/Hatch Toggle | 1 -- Vacuum Toggle Switch
 
 }
 
@@ -20,20 +25,23 @@ void Shooter::Init() {
 
 void Shooter::SetFlyWheel() {
 
-FlyWheelToggle.WhenPressed(frc2::InstantCommand([&] {
+ FlyWheelToggle.WhileHeld(frc2::InstantCommand([&] {
 
-	DebugOutF("Pressed FlyWheel");
-	FlyWheelMode = !FlyWheelMode;
+	DebugOutF(std::to_string(FlyWheel.GetSelectedSensorVelocity() / 2048));
+	//DebugOutF(std::to_string(DefaultShooterPower + m_OI.GetButtonBoard().GetRawAxis(0) /* * .75 */ ));
+	FlyWheel.Set(ControlMode::PercentOutput, DefaultShooterPower + m_OI.GetButtonBoard().GetRawAxis(0) /* * .75 */);
+    
+ }, {} ));
 
-	if (!FlyWheelMode) 
-		FlyWheel.Set(ControlMode::PercentOutput, 0);
+ FlyWheelToggle.WhenReleased(frc2::InstantCommand([&] {
 
-}, {} ));
+	FlyWheel.Set(ControlMode::PercentOutput, 0);
 
- FlyWheelToggle.WhenPressed(frc2::RunCommand([&] {
-	 
-	if(FlyWheelMode)
-		FlyWheel.Set(ControlMode::PercentOutput, DefaultShooterPower + m_OI.GetButtonBoard().GetRawAxis(0) * .75);
+ }, {} ));
+
+FlyWheelToggle.WhenReleased(frc2::RunCommand([&] {
+
+//DebugOutF(std::to_string(DefaultShooterPower + m_OI.GetButtonBoard().GetRawAxis(0) /* * .75 */ ));
 
  }, {} ));
 

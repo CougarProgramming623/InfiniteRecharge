@@ -68,4 +68,4 @@ std::string Cob::GetValue(CobKey key) {
 	return s_Map[key].GetString("");
 }
 
-}//namesapce
+}//namespace

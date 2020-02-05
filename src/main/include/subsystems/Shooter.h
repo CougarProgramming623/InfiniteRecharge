@@ -33,6 +33,8 @@ private:
 	frc2::Button FlyWheelToggle;
 	frc2::Button FlyWheelTuner;
 
+	CANCoder FlyWheelEncoder;
+
 };
 
 }//namespace
