@@ -41,7 +41,7 @@ void Robot::RobotInit() {
 		
 	}
 	frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand("Hello"));
-	navx->ZeroYaw();
+	// navx->ZeroYaw();
 }
 
 /**
@@ -58,6 +58,7 @@ void Robot::RobotPeriodic() {
 
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
+	DebugOutF("rot:" + std::to_string(navx->GetYaw()));
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
 		Cob::PushValue(CobKey::IS_RED, true);
@@ -67,16 +68,12 @@ void Robot::RobotPeriodic() {
 	
 	if (frc::DriverStation::GetInstance().IsDisabled()){
 		Cob::PushValue(CobKey::MODE, 5);
-		DebugOutF("set to 5");
 	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
 		Cob::PushValue(CobKey::MODE, 2);
-		DebugOutF("set to 2");
 	}else if (m_oi.IsFOD()){
 		Cob::PushValue(CobKey::MODE, 0);
-		DebugOutF("set to 0");
 	}else {
 		Cob::PushValue(CobKey::MODE, 1);
-		DebugOutF("set to 1");
 	}
     //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
@@ -102,7 +99,7 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-	navx->ZeroYaw();
+	// navx->ZeroYaw();
 }
 
 void Robot::AutonomousPeriodic() {

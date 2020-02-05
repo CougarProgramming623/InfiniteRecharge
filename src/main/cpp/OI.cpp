@@ -20,7 +20,7 @@ void OI::Init(){
 		DebugOutF("Flipped FOD");
 	}, {} ));
 
-	m_Turn.WhenPressed(new ohs623::Turn(90), false);
+	m_Turn.WhenPressed(Robot::Get().GetDriveTrain().TurnToPos(90), false);
 
 }
 

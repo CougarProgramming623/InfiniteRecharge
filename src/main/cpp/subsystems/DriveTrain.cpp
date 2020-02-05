@@ -1,7 +1,7 @@
 #include "subsystems/DriveTrain.h"
-#include "Robot.h"
 #include "commands/DriveWithJoysticks.h"
 #include "Util.h"
+#include "Robot.h"
 
 #include <frc/drive/Vector2d.h>
 #include <frc2/command/button/JoystickButton.h>
@@ -18,7 +18,7 @@ const int kBACK_RIGHT = 3;
 
 namespace ohs2020 {
 
-DriveTrain::DriveTrain() : m_LeftFront(31), m_RightFront(32), m_LeftBack(34), m_RightBack(33) {
+DriveTrain::DriveTrain() : m_LeftFront(6), m_RightFront(2), m_LeftBack(1), m_RightBack(5) {
 
 	m_RightFront.SetInverted(true);
 	m_RightBack.SetInverted(true);
@@ -77,5 +77,22 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 
 } //CartesianDrive()
 
+frc2::PIDCommand DriveTrain::TurnToPos(double angle) {
 
+	std::function<double()> measurement = []()->double{return (double)(Robot::Get().GetNavX()->GetYaw());};
+	std::function<void(double)> output = [this](double measure){ 
+		CartesianDrive(0, 0, measure, Robot::Get().GetNavX()->GetYaw());
+		DebugOutF(std::to_string(measure)); 
+	};
+
+	m_TurnController = new frc2::PIDController( 0.01, 0.0, 0.0, units::second_t(20_ms) ); 
+
+	// m_TurnController->SetIntegratorRange(-180.0f , 180.0f);
+	m_TurnController->SetTolerance( 2.0, std::numeric_limits< double >::infinity() );
+	m_TurnController->SetSetpoint(angle);
+	// m_TurnController->EnableContinuousInput(-180.0,180.0);
+
+	frc2::PIDCommand turnCmd = frc2::PIDCommand(*m_TurnController, measurement, angle, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
+	return turnCmd;
+}
 }//namespace
