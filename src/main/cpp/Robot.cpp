@@ -27,7 +27,7 @@ Robot::Robot() {
 
 void Robot::RobotInit() {
 	Cob::Init();
-	//m_DriveTrain.Init();
+	m_DriveTrain.Init();
     m_oi.Init();
 	m_shooter.Init();
 
