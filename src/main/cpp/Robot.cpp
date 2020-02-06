@@ -9,9 +9,13 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
+
 #include <frc2/command/PrintCommand.h>
 #include <frc/DriverStation.h>
 #include "Cob.h"
+
+#include "ohs/RobotID.h"
+#include "ohs/Log.h"
 
 namespace ohs2020 {
 
@@ -23,16 +27,18 @@ Robot::Robot() {
 
 }
 
+
 void Robot::RobotInit() {
 	Cob::Init();
 	m_DriveTrain.Init();
     m_oi.Init();
 
-	
+	OHS_DEBUG([](auto& f){ f << "Test " << 5 << " askdjsa"; });
+	OHS_INFO([](auto& f){ f << "Test2 " << -1 << " askdjsa"; });
+	OHS_WARN([](auto& f){ f << "Test3 " << 69 << " askdjsa" << 23894.2478234; });
+	OHS_ERROR([](auto& f){ f << "Test4 " << 5.1237 << " askdjsa" << 'c'; });
 
-
-
-	try{
+	try {
 		navx = new AHRS(SPI::Port::kMXP);
 	} catch (std::exception &ex){
 		std::string err = "Error instantiating navX MXP: ";
@@ -42,6 +48,8 @@ void Robot::RobotInit() {
 	}
 	frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand("Hello"));
 	navx->ZeroYaw();
+
+	m_Init = true;
 }
 
 /**
@@ -56,7 +64,6 @@ void Robot::RobotPeriodic() {
 
 	frc2::CommandScheduler::GetInstance().Run();
 
-
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
@@ -65,7 +72,7 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::IS_RED, false);
 	}
 	
-	if (frc::DriverStation::GetInstance().IsDisabled()){
+/*	if (frc::DriverStation::GetInstance().IsDisabled()){
 		Cob::PushValue(CobKey::MODE, 5);
 	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
 		Cob::PushValue(CobKey::MODE, 2);
@@ -73,7 +80,7 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::MODE, 0);
 	}else {
 		Cob::PushValue(CobKey::MODE, 1);
-	}
+
     //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
@@ -138,4 +145,8 @@ void Robot::TestPeriodic() {
 
 int main() {
 	return frc::StartRobot<ohs2020::Robot>();
+}
+
+bool CanAssertionsQuit() {
+	return true;//Maybe disable during competitions
 }
