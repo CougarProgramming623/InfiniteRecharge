@@ -76,7 +76,7 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::IS_RED, false);
 	}
 	
-/*	if (frc::DriverStation::GetInstance().IsDisabled()){
+	if (frc::DriverStation::GetInstance().IsDisabled()){
 		Cob::PushValue(CobKey::MODE, 5);
 	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
 		Cob::PushValue(CobKey::MODE, 2);
@@ -86,7 +86,8 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::MODE, 1);
 
     //Cob::PushValue(CobKey::MODE, isFodMode());
-	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));*/
+	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
+	}
 }
 
 /**

@@ -5,7 +5,6 @@ namespace ohs2020 {
 Climb::Climb() : 
 
 climbMotor(0),
-/*deployer([&] { return getOI().GetButtonBoard().GetRawButton(); }),*/
 climbUp([&] { return getOI().GetButtonBoard().GetRawButton(2); }),
 climbDown([&] { return getOI().GetButtonBoard().GetRawButton(3); }),
 endgameOverride([&] { return getOI().GetButtonBoard().GetRawButton(4); }) {}
@@ -20,9 +19,7 @@ BigClimb();
 void Climb::Deploy() {
 
 deployer.WhenPressed(frc2::InstantCommand([&] {
-
 	climbMotor.Set(ControlMode::PercentOutput, -0);
-
 }, {} ));
 
 }

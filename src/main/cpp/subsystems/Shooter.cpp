@@ -44,13 +44,6 @@ void Shooter::SetFlyWheel() {
 	FlyWheel.Set(ControlMode::PercentOutput, 0);
 
  }, {} ));
-
-FlyWheelToggle.WhenReleased(frc2::RunCommand([&] {
-
-//DebugOutF(std::to_string(DefaultShooterPower + m_OI.GetButtonBoard().GetRawAxis(0) /* * .75 */ ));
-
- }, {} ));
-
 }
 
 }//namespace
