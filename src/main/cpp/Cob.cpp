@@ -32,9 +32,8 @@ void Cob::Init() {
     RegisterKey(CobKey::MODE, "/cob/mode");
 	RegisterMessageOut(CobMessageOut::PING, "ping");
 	RegisterMessageIn(CobMessageIn::GNIP, "gnip", x);
-
-	s_InMap[CobMessageIn::GNIP].SetString("bobert");
-	
+	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
+	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
 }
 
 void Cob::RegisterKey(CobKey key, std::string name, bool persistent) {
@@ -52,7 +51,12 @@ void Cob::RegisterMessageOut(CobMessageOut key, std::string name) {
 void Cob::RegisterMessageIn(CobMessageIn key, std::string name, const std::function<void(const nt::EntryNotification&)>& handler) {
 	nt::NetworkTableEntry entry = s_Table.GetEntry("/cob/messages/roborio/" + name);
 	s_InMap[key] = entry;
-	entry.AddListener(handler, NT_NOTIFY_NEW | NT_NOTIFY_UPDATE);
+	entry.AddListener([&handler, &entry](auto f){
+		handler(f);
+		entry.Delete();
+		return;
+	}, NT_NOTIFY_NEW | NT_NOTIFY_UPDATE);
+	
 }
 
 bool Cob::EnsureExists(CobKey key) {

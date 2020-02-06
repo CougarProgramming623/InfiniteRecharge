@@ -56,7 +56,7 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
-	
+
 	frc2::CommandScheduler::GetInstance().Run();
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
@@ -67,19 +67,20 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::IS_RED, false);
 	}
 	
-	/*if (frc::DriverStation::GetInstance().IsDisabled()){
+	if (frc::DriverStation::GetInstance().IsDisabled()){
 		Cob::PushValue(CobKey::MODE, 5);
-		DebugOutF("set to 5");
+		//DebugOutF("set to 5");
 	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
 		Cob::PushValue(CobKey::MODE, 2);
-		DebugOutF("set to 2");
+		//DebugOutF("set to 2");
 	}else if (m_oi.IsFOD()){
 		Cob::PushValue(CobKey::MODE, 0);
-		DebugOutF("set to 0");
+		//DebugOutF("set to 0");
 	}else {
 		Cob::PushValue(CobKey::MODE, 1);
-		DebugOutF("set to 1");
-	}*/
+		//DebugOutF("set to 1");
+	}
+
     //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 
