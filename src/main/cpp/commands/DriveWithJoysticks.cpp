@@ -19,7 +19,7 @@ namespace ohs2020 {
 
     void Drive::Initialize(){
 		DebugOutF("IN INIT");
-		// Robot::Get().GetNavX()->ZeroYaw();
+		Robot::Get().GetNavX()->ZeroYaw();
 	}
 	
 	void Drive::Execute() {

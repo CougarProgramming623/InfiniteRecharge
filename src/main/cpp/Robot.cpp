@@ -41,7 +41,7 @@ void Robot::RobotInit() {
 		
 	}
 	frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand("Hello"));
-	// navx->ZeroYaw();
+	navx->ZeroYaw();
 }
 
 /**
@@ -58,7 +58,6 @@ void Robot::RobotPeriodic() {
 
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
-	DebugOutF("rot:" + std::to_string(navx->GetYaw()));
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
 		Cob::PushValue(CobKey::IS_RED, true);
@@ -99,7 +98,7 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-	// navx->ZeroYaw();
+	navx->ZeroYaw();
 }
 
 void Robot::AutonomousPeriodic() {
