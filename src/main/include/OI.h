@@ -25,6 +25,8 @@ public:
 	bool isFodToggle() const { return m_FodToggle.Get(); }
 	
 	frc2::Button m_FodToggle;
+	frc2::Button m_Turn;
+
 	bool m_Fod = true;
 
 private:
