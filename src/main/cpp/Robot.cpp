@@ -30,6 +30,7 @@ void Robot::RobotInit() {
 	m_DriveTrain.Init();
     m_oi.Init();
 	m_shooter.Init();
+	m_climb.Init();
 
 	frc::DriverStation::ReportError("Back left is: " + std::to_string(ohs623::RobotID::GetID(ohs623::Motor::BACK_LEFT)));
 
@@ -59,10 +60,10 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
 
-
 	frc2::CommandScheduler::GetInstance().Run();
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
+	Cob::PushValue(CobKey::FLYWHEEL_WU, m_shooter.GetWU());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
 		Cob::PushValue(CobKey::IS_RED, true);

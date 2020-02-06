@@ -19,6 +19,7 @@ void Cob::Init() {
     RegisterKey(CobKey::IS_RED, "/FMSInfo/IsRedAlliance");
     RegisterKey(CobKey::MODE, "/cob/mode");
     RegisterKey(CobKey::GYRO_RESET, "/cob/actions/gyroReset");
+	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 }
 
 void Cob::RegisterKey(CobKey key, std::string name, bool persistent) {
