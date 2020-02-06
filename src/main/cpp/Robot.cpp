@@ -9,6 +9,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
+
 #include <frc2/command/PrintCommand.h>
 #include <frc/DriverStation.h>
 #include "Cob.h"
@@ -73,17 +74,13 @@ void Robot::RobotPeriodic() {
 	
 /*	if (frc::DriverStation::GetInstance().IsDisabled()){
 		Cob::PushValue(CobKey::MODE, 5);
-		DebugOutF("set to 5");
 	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
 		Cob::PushValue(CobKey::MODE, 2);
-		DebugOutF("set to 2");
 	}else if (m_oi.IsFOD()){
 		Cob::PushValue(CobKey::MODE, 0);
-		DebugOutF("set to 0");
 	}else {
 		Cob::PushValue(CobKey::MODE, 1);
-		DebugOutF("set to 1");
-	}*/
+
     //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }

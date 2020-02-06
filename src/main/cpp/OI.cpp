@@ -1,11 +1,14 @@
 #include "OI.h"
 #include "Util.h"
+#include "Robot.h"
 
 namespace ohs2020{
 
 OI::OI() : 
 
-m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}){
+m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}),
+m_Turn([&] { return m_ButtonBoard.GetRawButton(2);})
+{
 
 }
 
@@ -17,6 +20,7 @@ void OI::Init(){
 		DebugOutF("Flipped FOD");
 	}, {} ));
 
+	m_Turn.WhenPressed(Robot::Get().GetDriveTrain().TurnToPos(90));
 }
 
 

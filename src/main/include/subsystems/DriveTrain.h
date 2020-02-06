@@ -1,6 +1,7 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/PIDCommand.h>
 #include <ctre/Phoenix.h>
 #include <memory>
 
@@ -20,6 +21,8 @@ public:
 
 	//virtual void InitDefaultCommand() override;  
 
+	frc2::PIDCommand TurnToPos(double angle);
+
 
 protected:
 	
@@ -28,6 +31,8 @@ protected:
 private:
 	WPI_TalonSRX m_LeftFront, m_RightFront;
 	WPI_TalonSRX m_LeftBack, m_RightBack;
+
+	frc2::PIDController* m_TurnController;
 
 };
 
