@@ -16,7 +16,7 @@ namespace ohs623 {
 	int IDs [BotType::BOT_TYPE_COUNT][Motor::MOTOR_COUNT];
 
 	const uint8_t SABER_MAC_ADDRESS[6] = { 0x00, 0x80, 0x2F, 0x27, 0x20, 0x48 };
-	const uint8_t MARK_MAC_ADDRESS [6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };//FIXME
+	const uint8_t MARK_MAC_ADDRESS [6] = { 0x00, 0x80, 0x2F, 0x17, 0xEE, 0xE9 };
 
 	bool AreMacAddressEqual(const uint8_t (&a)[6], const uint8_t (&b)[6]) {
 		static_assert(sizeof(a) == sizeof(b));

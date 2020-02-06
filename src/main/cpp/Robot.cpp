@@ -12,7 +12,9 @@
 #include <frc2/command/PrintCommand.h>
 #include <frc/DriverStation.h>
 #include "Cob.h"
+
 #include "ohs/RobotID.h"
+#include "ohs/Log.h"
 
 namespace ohs2020 {
 
@@ -24,14 +26,16 @@ Robot::Robot() {
 
 }
 
+
 void Robot::RobotInit() {
 	Cob::Init();
 	m_DriveTrain.Init();
     m_oi.Init();
 
-	frc::DriverStation::ReportError("Back left is: " + std::to_string(ohs623::RobotID::GetID(ohs623::Motor::BACK_LEFT)));
-
-
+	OHS_DEBUG([](auto& f){ f << "Test " << 5 << " askdjsa"; });
+	OHS_INFO([](auto& f){ f << "Test2 " << -1 << " askdjsa"; });
+	OHS_WARN([](auto& f){ f << "Test3 " << 69 << " askdjsa" << 23894.2478234; });
+	OHS_ERROR([](auto& f){ f << "Test4 " << 5.1237 << " askdjsa" << 'c'; });
 
 	try {
 		navx = new AHRS(SPI::Port::kMXP);
@@ -57,7 +61,6 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
 
-
 	frc2::CommandScheduler::GetInstance().Run();
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
@@ -68,7 +71,7 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::IS_RED, false);
 	}
 	
-	if (frc::DriverStation::GetInstance().IsDisabled()){
+/*	if (frc::DriverStation::GetInstance().IsDisabled()){
 		Cob::PushValue(CobKey::MODE, 5);
 		DebugOutF("set to 5");
 	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
@@ -80,7 +83,7 @@ void Robot::RobotPeriodic() {
 	}else {
 		Cob::PushValue(CobKey::MODE, 1);
 		DebugOutF("set to 1");
-	}
+	}*/
     //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
