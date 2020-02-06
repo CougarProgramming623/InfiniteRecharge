@@ -2,6 +2,8 @@
 
 #include <frc/DriverStation.h>
 
+#include "ohs/Log.h"
+
 namespace ohs623 {
 
 	const char Formatter::UPPER_DIGITS[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
@@ -182,7 +184,8 @@ namespace ohs623 {
 			//flush the current data and then print the string directly
 			Flush();
 			std::size_t bytesWritten = fwrite(m_Buf, 1, m_Wrapper.Size(), m_File);
-			//ES_ASSERT(bytesWritten == length, "Failed to write to STDOut");
+			OHS_WARN([&](auto& f) { f << "fwrite failed to write all data! Expected a write of " 
+				<< m_Wrapper.Size() << " bytes, but got " << bytesWritten << " bytes instead!"; });
 			Flush();//fsync
 		}
 		else
@@ -200,7 +203,8 @@ namespace ohs623 {
 			if (m_Wrapper.Size())
 			{
 				std::size_t bytesWritten = fwrite(m_Buf, 1, m_Wrapper.Size(), m_File);
-				//ES_ASSERT(bytesWritten == m_Wrapper.Size(), "Failed to write to STDOut");
+				OHS_WARN([&](auto& f) { f << "fwrite failed to write all data! Expected a write of " 
+					<< m_Wrapper.Size() << " bytes, but got " << bytesWritten << " bytes instead!"; });
 				m_Wrapper.Clear();
 			}
 			
