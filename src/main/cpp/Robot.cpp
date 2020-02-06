@@ -86,7 +86,7 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::MODE, 1);
 
     //Cob::PushValue(CobKey::MODE, isFodMode());
-	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
+	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));*/
 }
 
 /**
