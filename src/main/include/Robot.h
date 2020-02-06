@@ -9,6 +9,7 @@
 
 #include "OI.h"
 #include "subsystems/DriveTrain.h"
+#include "subsystems/Shooter.h"
 #include "Util.h"
 
 #include "ohs/Assert.h"
@@ -37,6 +38,7 @@ public:
 
 	inline static Robot& Get() { return *s_Instance; } 
 
+	inline Shooter& GetShooter() { return m_shooter; }
 	inline OI& GetOI() { return m_oi; }
 	inline DriveTrain& GetDriveTrain() { return m_DriveTrain; }
 	inline AHRS* GetNavX() const { return navx; }
@@ -51,6 +53,7 @@ private:
 	OI m_oi;
 	DriveTrain m_DriveTrain;
 	AHRS* navx;
+	Shooter m_shooter;
 
 	bool m_Init = false;
 

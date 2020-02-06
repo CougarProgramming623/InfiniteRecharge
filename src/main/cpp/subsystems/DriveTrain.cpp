@@ -27,7 +27,6 @@ DriveTrain::DriveTrain() : m_LeftFront(6), m_RightFront(2), m_LeftBack(1), m_Rig
 
 void DriveTrain::Init(){
 	SetDefaultCommand(Drive()); 
-	DebugOutF("Set Default Command");
 }
 
 /*void DriveTrain::InitDefaultCommand(){
