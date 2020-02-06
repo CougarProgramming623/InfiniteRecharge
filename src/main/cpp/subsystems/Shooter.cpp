@@ -27,13 +27,19 @@ void Shooter::SetFlyWheel() {
 
  FlyWheelToggle.WhileHeld(frc2::InstantCommand([&] {
 
-	DebugOutF(std::to_string(FlyWheel.GetSelectedSensorVelocity() / 2048));
-	//DebugOutF(std::to_string(DefaultShooterPower + m_OI.GetButtonBoard().GetRawAxis(0) /* * .75 */ ));
+	isFlywheelOn = true;
+	flywheelWU = FlyWheel.GetSelectedSensorVelocity() / 2048;
+
+	DebugOutF(std::to_string(flywheelWU));
+
 	FlyWheel.Set(ControlMode::PercentOutput, DefaultShooterPower + m_OI.GetButtonBoard().GetRawAxis(0) /* * .75 */);
     
  }, {} ));
 
  FlyWheelToggle.WhenReleased(frc2::InstantCommand([&] {
+
+	isFlywheelOn = false;
+	flywheelWU = 0;
 
 	FlyWheel.Set(ControlMode::PercentOutput, 0);
 

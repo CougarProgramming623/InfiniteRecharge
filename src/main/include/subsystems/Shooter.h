@@ -27,7 +27,13 @@ public:
 	
 	OI m_OI;
 
+	bool GetFlywheelState() { return isFlywheelOn; }
+	double GetFlywheelWU() { return flywheelWU; }
+
 private:
+
+	bool isFlywheelOn;
+	double flywheelWU;
 
 	WPI_TalonSRX FlyWheel;
 	frc2::Button FlyWheelToggle;
