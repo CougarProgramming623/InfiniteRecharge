@@ -9,12 +9,14 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
+
 #include <frc2/command/PrintCommand.h>
 #include <frc/DriverStation.h>
 #include "Cob.h"
 
 #include "ohs/RobotID.h"
 #include "ohs/Log.h"
+
 
 namespace ohs2020 {
 
@@ -31,6 +33,8 @@ void Robot::RobotInit() {
 	Cob::Init();
 	m_DriveTrain.Init();
     m_oi.Init();
+	m_shooter.Init();
+	m_climb.Init();
 
 	OHS_DEBUG([](auto& f){ f << "Test " << 5 << " askdjsa"; });
 	OHS_INFO([](auto& f){ f << "Test2 " << -1 << " askdjsa"; });
@@ -64,6 +68,7 @@ void Robot::RobotPeriodic() {
 	frc2::CommandScheduler::GetInstance().Run();
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
+	Cob::PushValue(CobKey::FLYWHEEL_WU, m_shooter.GetFlywheelWU());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
 		Cob::PushValue(CobKey::IS_RED, true);
@@ -73,19 +78,15 @@ void Robot::RobotPeriodic() {
 	
 /*	if (frc::DriverStation::GetInstance().IsDisabled()){
 		Cob::PushValue(CobKey::MODE, 5);
-		DebugOutF("set to 5");
 	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
 		Cob::PushValue(CobKey::MODE, 2);
-		DebugOutF("set to 2");
 	}else if (m_oi.IsFOD()){
 		Cob::PushValue(CobKey::MODE, 0);
-		DebugOutF("set to 0");
 	}else {
 		Cob::PushValue(CobKey::MODE, 1);
-		DebugOutF("set to 1");
-	}*/
+
     //Cob::PushValue(CobKey::MODE, isFodMode());
-	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
+	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));*/
 }
 
 /**
