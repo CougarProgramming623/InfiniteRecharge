@@ -2,6 +2,7 @@
 #include "commands/DriveWithJoysticks.h"
 #include "Util.h"
 #include "Robot.h"
+#include "ohs/RobotID.h"
 
 #include <frc/drive/Vector2d.h>
 #include <frc2/command/button/JoystickButton.h>
@@ -18,7 +19,9 @@ const int kBACK_RIGHT = 3;
 
 namespace ohs2020 {
 
-DriveTrain::DriveTrain() : m_LeftFront(6), m_RightFront(2), m_LeftBack(1), m_RightBack(5) {
+using namespace ohs623;
+
+DriveTrain::DriveTrain() : m_LeftFront(RobotID::GetID(FRONT_LEFT)), m_RightFront(RobotID::GetID(FRONT_RIGHT)), m_LeftBack(RobotID::GetID(BACK_LEFT)), m_RightBack(RobotID::GetID(BACK_RIGHT)) {
 
 	m_RightFront.SetInverted(true);
 	m_RightBack.SetInverted(true);
@@ -81,7 +84,6 @@ frc2::PIDCommand DriveTrain::TurnToPos(double angle) {
 	std::function<double()> measurement = []()->double{return (double)(Robot::Get().GetNavX()->GetYaw());};
 	std::function<void(double)> output = [this](double measure) { 
 		CartesianDrive(0, 0, measure/2, Robot::Get().GetNavX()->GetYaw());
-		DebugOutF(std::to_string(measure/2)); 
 	};
 
 	/*
