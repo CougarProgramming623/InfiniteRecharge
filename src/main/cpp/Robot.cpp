@@ -32,20 +32,10 @@ void Robot::RobotInit() {
 	m_DriveTrain.Init();
     m_oi.Init();
 
-	frc::DriverStation::ReportError("Back left is: " + std::to_string(ohs623::RobotID::GetID(ohs623::Motor::BACK_LEFT)));
-
-	ohs623::Log(ohs623::LogLevel::TRACE, [](auto f){ frc::DriverStation::ReportWarning("In prinbt"); f << "Test " << 5 << " askdjsa"; });
-	ohs623::Log(ohs623::LogLevel::DEBUG, [](ohs623::DefaultFormatter f){ f << "Test " << 8 << " askdjsa"; });
-	ohs623::Log(ohs623::LogLevel::INFO, [](ohs623::DefaultFormatter f){ f << "Test " << 2345324 << " askdjsa"; });
-	ohs623::Log(ohs623::LogLevel::WARN, [](ohs623::DefaultFormatter f){ f << "Test " << -1 << " askdjsa"; });
-	ohs623::Log(ohs623::LogLevel::ERROR, [](ohs623::DefaultFormatter f){ f << "Test " << 3845 << " askdjsa"; });
-
-/*	OHS_DEBUG([](ohs623::DefaultFormatter f){ f << "Test " << 5 << " askdjsa"; });
-	OHS_INFO(func);
-	OHS_WARN(func);
-	OHS_ERROR(func);*/
-
-
+	OHS_DEBUG([](auto& f){ f << "Test " << 5 << " askdjsa"; });
+	OHS_INFO([](auto& f){ f << "Test2 " << -1 << " askdjsa"; });
+	OHS_WARN([](auto& f){ f << "Test3 " << 69 << " askdjsa" << 23894.2478234; });
+	OHS_ERROR([](auto& f){ f << "Test4 " << 5.1237 << " askdjsa" << 'c'; });
 
 	try {
 		navx = new AHRS(SPI::Port::kMXP);
@@ -70,7 +60,6 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
-
 
 	frc2::CommandScheduler::GetInstance().Run();
 
