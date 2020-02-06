@@ -34,6 +34,7 @@ void Robot::RobotInit() {
 	m_DriveTrain.Init();
     m_oi.Init();
 	m_shooter.Init();
+	m_climb.Init();
 
 	OHS_DEBUG([](auto& f){ f << "Test " << 5 << " askdjsa"; });
 	OHS_INFO([](auto& f){ f << "Test2 " << -1 << " askdjsa"; });
@@ -85,7 +86,7 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::MODE, 1);
 
     //Cob::PushValue(CobKey::MODE, isFodMode());
-	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
+	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));*/
 }
 
 /**

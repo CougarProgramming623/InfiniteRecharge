@@ -10,6 +10,7 @@
 #include "OI.h"
 #include "subsystems/DriveTrain.h"
 #include "subsystems/Shooter.h"
+#include "subsystems/Climb.h"
 #include "Util.h"
 
 #include "ohs/Assert.h"
@@ -54,6 +55,7 @@ private:
 	DriveTrain m_DriveTrain;
 	AHRS* navx;
 	Shooter m_shooter;
+	Climb m_climb;
 
 	bool m_Init = false;
 
