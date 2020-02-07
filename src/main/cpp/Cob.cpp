@@ -11,12 +11,11 @@ namespace ohs2020 {
 nt::NetworkTableInstance Cob::s_Table;
 std::map<CobKey, nt::NetworkTableEntry> Cob::s_Map;
 std::map<CobMessageOut, nt::NetworkTableEntry> Cob::s_OutMap;
-std::map<CobMessageIn, nt::NetworkTableEntry> Cob::s_InMap;
+std::map<CobMessageIn, std::pair <std::string, CobCallBack>> Cob::s_InMap;
 
 
-
-void x(const nt::EntryNotification& event) {
-	DebugOutF(event.value->GetString());
+void x(const nt::NetworkTableEntry& entry) {
+	DebugOutF(entry.GetString(""));
 }
 
 void Cob::Init() {
@@ -51,13 +50,15 @@ void Cob::RegisterMessageOut(CobMessageOut key, std::string name) {
 
 
 void Cob::RegisterMessageIn(CobMessageIn key, std::string name, CobCallBack handler) {
-	nt::NetworkTableEntry entry = s_Table.GetEntry("/cob/messages/roborio/" + name);
-	s_InMap[key] = entry;
-	entry.AddListener([&handler, &entry](auto f){
-		OHS_DEBUG([](auto& formatter){formatter << "Listener λ Ran" << static_cast();});
-		//handler(f);
-		//entry.Delete();
-	}, NT_NOTIFY_NEW | NT_NOTIFY_UPDATE);
+	s_InMap[key] = { "/cob/messages/roborio/" + name, handler };
+}
+
+void Cob::InMesUpdate(){
+	std::vector<nt::NetworkTableEntry> entries = s_Table.GetEntries("/cob/messages/roborio/", 0);
+	for (nt::NetworkTableEntry& e : entries){
+		OHS_DEBUG([e](auto& f){ f << "Got entries" << e.GetName(); });
+		e.Delete();
+	}
 }
 
 bool Cob::EnsureExists(CobKey key) {
