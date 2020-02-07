@@ -17,14 +17,17 @@ const double CPI = (COUNTS_PER_ROTATION * GEAR_RATIO) / (WHEEL_DIAMETER * (atan(
 const double HORIZONTAL_CALIBRATION = 1/1; //intended/actual, because mechanim wheels skid a variable to change how many ticks are needed for horizontal traverse
 	//end calculated variables
 
+const unsigned int COUNT_THRESHOLD = 10;//accuracy threshold of counts
 //end robot information variables
 
 class EncoderDrive : public frc2::Command {
 	
 public:
 	//constructors
-	EncoderDrive(int x, int y);//using ticks
-	EncoderDrive(double x, double y);//using inches
+	EncoderDrive(int x, int y, double a);//using ticks
+	EncoderDrive(double x, double y, double a);//using inches
+	EncoderDrive(int x, int y);//ticks w/o rot
+	EncoderDrive(double x, double y);//inches w/o rot
 	//end constructors
 
 	//overrides
@@ -33,10 +36,21 @@ public:
 	bool IsFinished() override;
 	void End(bool interrupted) override;
 	//end of overrides
+
+	//getters
+	int const getX() { return m_x; }
+	int const getY() { return m_y; }
+	double const getA() { return m_a; }
+	//end getters
+
+	//setters
+	void setX(int x) { m_x = x;}
+	//end setters
 private:
 
 	//movement variables
-	double m_x, m_y;//x and y traverse
+	int m_x, m_y;//x and y traverse (horizontal(x) & vertical(y)) in encoder ticks
+	double m_a;//angle(a)  
 	//end movement variables
 
 };//end class

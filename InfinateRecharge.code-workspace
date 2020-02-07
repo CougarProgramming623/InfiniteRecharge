@@ -35,7 +35,8 @@
 			"xtree": "cpp",
 			"xutility": "cpp",
 			"sstream": "cpp",
-			"*.tcc": "cpp"
+			"*.tcc": "cpp",
+			"cmath": "cpp"
 		},
 	}
 }
