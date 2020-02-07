@@ -25,12 +25,5 @@ void OI::Init(){
 }
 
 
-void OI::FlipFOD(){
-
-	m_Fod = !m_Fod;
-
-	DebugOutF("Flipped FOD to: " + std::to_string(m_Fod));
-
-}
 
 }//namespace

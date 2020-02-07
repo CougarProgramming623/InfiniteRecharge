@@ -13,7 +13,6 @@ public:
 	OI();
 		
     void Init();
-	void FlipFOD();
 
 	frc::Joystick& GetDriverJoystick() { return m_DriverJoystick; }
 	frc::Joystick& GetButtonBoard() { return m_ButtonBoard; }
