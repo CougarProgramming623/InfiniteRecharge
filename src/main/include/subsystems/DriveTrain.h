@@ -22,7 +22,12 @@ public:
 	//virtual void InitDefaultCommand() override;  
 
 	frc2::PIDCommand TurnToPos(double angle);
-
+	
+	//getters for direct access to motors
+	WPI_TalonSRX& GetLFront() {return m_LeftFront;}
+	WPI_TalonSRX& GetRFront() {return m_RightFront;}
+	WPI_TalonSRX& GetLBack() {return m_LeftBack;}
+	WPI_TalonSRX& GetRBack() {return m_RightBack;}
 
 protected:
 	
