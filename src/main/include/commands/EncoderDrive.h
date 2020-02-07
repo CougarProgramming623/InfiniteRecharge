@@ -56,3 +56,5 @@ private:
 };//end class
 
 }//end namespace
+
+//(!) WARN (!) change var names and method names to UPPER camel case via F2
