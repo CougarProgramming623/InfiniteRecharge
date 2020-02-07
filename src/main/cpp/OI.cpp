@@ -21,7 +21,7 @@ void OI::Init(){
 	}, {} ));
 
 
-	m_Turn.WhenPressed(Robot::Get().GetDriveTrain().TurnToPos(90));
+	m_Turn.WhenPressed(Robot::Get().GetDriveTrain().TurnToPos(10));
 }
 
 

@@ -87,14 +87,17 @@ frc2::PIDCommand DriveTrain::TurnToPos(double angle) {
 	};
 
 	/*
-	PID Values:
+	Mark PID Values:
 	90 : 0.0175, 0, 0
 	180 : 0.0835, 0.0, 0.01
 	roughly accurate for greater than 10 : 0.085, 0.0, 0.011
-	*/
-	m_TurnController = new frc2::PIDController( 0.085, 0.0, 0.011, units::second_t(20_ms) ); 
 
-	m_TurnController->SetTolerance( 1.0, std::numeric_limits< double >::infinity() );
+	Saber PID Values:
+
+	*/
+	m_TurnController = new frc2::PIDController( 0.01, 0.0, 0.00, units::second_t(20_ms) ); 
+
+	m_TurnController->SetTolerance( 2.0, std::numeric_limits< double >::infinity() );
 	m_TurnController->SetSetpoint(angle);
 	m_TurnController->EnableContinuousInput(-180.0,180.0);
 
