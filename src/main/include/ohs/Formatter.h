@@ -38,8 +38,8 @@ namespace ohs623 {
 	public:
 		inline Formatter(char* buf, std::size_t capacity) : m_Buf(buf), m_Capacity(capacity) {}
 
-		const char* c_str();
-		inline operator const char*() { return c_str(); }
+		const char* c_str() const;
+		inline operator const char*() const { return c_str(); }
 
 		inline std::size_t Capacity() const { return m_Capacity; }
 		inline std::size_t Size() const { return m_Offset; }
@@ -66,6 +66,8 @@ namespace ohs623 {
 		Formatter& operator<<(const char* value);
 		Formatter& operator<<(const std::string& value);
 		Formatter& operator<<(bool value);
+
+		Formatter& operator<<(const Formatter& other);
 
 		template<typename T>
 		Formatter& Base(T value, uint8_t base)
@@ -136,12 +138,12 @@ namespace ohs623 {
 			}
 			PrintUnsignedInteger(value, base);
 		}
-
 	
 	private:
-		char* m_Buf;
+		//Mutable to allow for c_str to be const
+		mutable char* m_Buf;
 		std::size_t m_Capacity;
-		std::size_t m_Offset = 0;
+		mutable std::size_t m_Offset = 0;
 
 	};
 

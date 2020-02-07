@@ -13,7 +13,7 @@ namespace ohs623 {
 	FormatFile Print::STDERR = stderr;
 
 
-	const char* Formatter::c_str()
+	const char* Formatter::c_str() const
 	{
 		if (m_Offset >= m_Capacity) frc::DriverStation::ReportError("Formatter has no space for the null termination character! "
 			"m_Offset should always save space for the null byte!");
@@ -117,6 +117,12 @@ namespace ohs623 {
 		*this << (value ? "true" : "false");
 		return *this;
 	}
+
+	Formatter& Formatter::operator<<(const Formatter& other)
+	{
+		*this << other.c_str();
+	}
+
 
 	FormatFile& FormatFile::WriteImpl(char value)
 	{
