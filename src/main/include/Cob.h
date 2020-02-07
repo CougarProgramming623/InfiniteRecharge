@@ -11,6 +11,7 @@
 #include "CobConstants.h"
 
 namespace ohs2020 {
+using CobCallBack = std::add_pointer<void (const nt::EntryNotification&)>::type;
 
 class Cob {
 public:
@@ -40,7 +41,7 @@ private:
 	static bool EnsureExists(CobMessageIn key);
 	static void RegisterKey(CobKey key, std::string name, bool persistent = false);
 	static void RegisterMessageOut(CobMessageOut key, std::string name);
-	static void RegisterMessageIn(CobMessageIn key, std::string name, const std::function<void(const nt::EntryNotification&)>& event);
+	static void RegisterMessageIn(CobMessageIn key, std::string name, CobCallBack callBack);
 
 
 private:

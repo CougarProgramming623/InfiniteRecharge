@@ -1,4 +1,5 @@
 #include "Cob.h"
+#include "ohs/Log.h"
 
 #include <frc/DriverStation.h>
 #include <sstream>
@@ -48,15 +49,15 @@ void Cob::RegisterMessageOut(CobMessageOut key, std::string name) {
 	s_OutMap[key] = entry;
 }
 
-void Cob::RegisterMessageIn(CobMessageIn key, std::string name, const std::function<void(const nt::EntryNotification&)>& handler) {
+
+void Cob::RegisterMessageIn(CobMessageIn key, std::string name, CobCallBack handler) {
 	nt::NetworkTableEntry entry = s_Table.GetEntry("/cob/messages/roborio/" + name);
 	s_InMap[key] = entry;
 	entry.AddListener([&handler, &entry](auto f){
-		handler(f);
-		entry.Delete();
-		return;
+		OHS_DEBUG([](auto& formatter){formatter << "Listener λ Ran" << static_cast();});
+		//handler(f);
+		//entry.Delete();
 	}, NT_NOTIFY_NEW | NT_NOTIFY_UPDATE);
-	
 }
 
 bool Cob::EnsureExists(CobKey key) {
