@@ -2,7 +2,7 @@
 
 #include <ctre/phoenix.h>
 #include <frc2/command/button/Button.h>
-#include <frc2/command/FunctionalCommand.h>
+#include <frc2/command/RunCommand.h>
 
 
 #include "OI.h"
@@ -16,7 +16,6 @@ public:
 	Intake();
 
 	void Init();
-	
 	void Spin();
 
 	OI& GetOI() { return m_oi; }
