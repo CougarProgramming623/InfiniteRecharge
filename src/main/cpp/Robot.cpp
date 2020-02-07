@@ -35,12 +35,13 @@ void Robot::RobotInit() {
     m_oi.Init();
 	m_shooter.Init();
 	m_climb.Init();
-
+	m_intake.Init();
+/*
 	OHS_DEBUG([](auto& f){ f << "Test " << 5 << " askdjsa"; });
 	OHS_INFO([](auto& f){ f << "Test2 " << -1 << " askdjsa"; });
 	OHS_WARN([](auto& f){ f << "Test3 " << 69 << " askdjsa" << 23894.2478234; });
 	OHS_ERROR([](auto& f){ f << "Test4 " << 5.1237 << " askdjsa" << 'c'; });
-
+*/
 	try {
 		navx = new AHRS(SPI::Port::kMXP);
 	} catch (std::exception &ex){

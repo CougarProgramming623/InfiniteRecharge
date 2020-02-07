@@ -11,6 +11,7 @@
 #include "subsystems/DriveTrain.h"
 #include "subsystems/Shooter.h"
 #include "subsystems/Climb.h"
+#include "subsystems/Intake.h"
 #include "Util.h"
 
 #include "ohs/Assert.h"
@@ -42,6 +43,7 @@ public:
 	inline Shooter& GetShooter() { return m_shooter; }
 	inline OI& GetOI() { return m_oi; }
 	inline DriveTrain& GetDriveTrain() { return m_DriveTrain; }
+	inline Intake& GetIntake() { return m_intake; }
 	inline AHRS* GetNavX() const { return navx; }
 	inline bool IsInitComplete() const { return m_Init; }
 
@@ -56,6 +58,7 @@ private:
 	AHRS* navx;
 	Shooter m_shooter;
 	Climb m_climb;
+	Intake m_intake;
 
 	bool m_Init = false;
 
