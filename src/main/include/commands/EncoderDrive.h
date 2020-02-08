@@ -3,17 +3,18 @@
 //includes
 #include <frc2/command/Command.h>
 #include <math.h>
-//end includes
+#include <wpi/SmallSet.h>
+//end includes 
 
 namespace ohs2020 {
 
 //robot information variables
 const unsigned short int COUNTS_PER_ROTATION = 2048; //encoder counts per rotation, falcon500 integrated = 2048CPR
 const float WHEEL_DIAMETER = 8.0f; //diameter in inches
-const double GEAR_RATIO = 1.0/1.0; //gear ratio of the bot
+const double GEAR_RATIO = 12.0/1.0; //gear ratio of the bot
 
 	//calculated variables
-const double CPI = (COUNTS_PER_ROTATION * GEAR_RATIO) / (WHEEL_DIAMETER * (atan(1)*4)/*PI*/ ); //counter per rotation of this wheel
+const double CPI = (COUNTS_PER_ROTATION * GEAR_RATIO) / ((WHEEL_DIAMETER * (atan(1)*4))/*PI*/ ); //counter per rotation of this wheel
 const double HORIZONTAL_CALIBRATION = 1/1; //intended/actual, because mechanim wheels skid a variable to change how many ticks are needed for horizontal traverse
 	//end calculated variables
 
@@ -35,22 +36,28 @@ public:
 	void Execute() override;
 	bool IsFinished() override;
 	void End(bool interrupted) override;
+	virtual wpi::SmallSet<frc2::Subsystem*, 4> GetRequirements() const override{
+		return wpi::SmallSet<frc2::Subsystem*, 4> (); 
+	}
+	virtual std::unique_ptr<frc2::Command> TransferOwnership() && override{
+		return std::unique_ptr<frc2::Command>(this);
+	}
 	//end of overrides
 
 	//getters
-	int const getX() { return m_x; }
-	int const getY() { return m_y; }
-	double const getA() { return m_a; }
+	int const GetX() { return m_X; }
+	int const GetY() { return m_Y; }
+	double const GetA() { return m_A; }
 	//end getters
 
 	//setters
-	void setX(int x) { m_x = x;}
+	void SetX(int x) { m_X = x;}
 	//end setters
 private:
 
 	//movement variables
-	int m_x, m_y;//x and y traverse (horizontal(x) & vertical(y)) in encoder ticks
-	double m_a;//angle(a)  
+	int m_X, m_Y;//x and y traverse (horizontal(x) & vertical(y)) in encoder ticks
+	double m_A;//angle(a)  
 	//end movement variables
 
 };//end class
