@@ -2,6 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/PIDCommand.h>
+//#include <frc2/command/MecanumControllerCommand.h>
 #include <ctre/Phoenix.h>
 #include <memory>
 
@@ -22,18 +23,24 @@ public:
 	//virtual void InitDefaultCommand() override;  
 
 	frc2::PIDCommand TurnToPos(double angle);
-
+	//frc2::MecanumControllerCommand AutoDrive(frc::Trajectory);
 
 protected:
 	
 	//virtual std::unique_ptr<frc2::Command> TransferOwnership() && override;
 
 private:
-	WPI_TalonFX m_LeftFront, m_RightFront;
-	WPI_TalonFX m_LeftBack, m_RightBack;
+	WPI_TalonSRX m_LeftFront, m_RightFront;
+	WPI_TalonSRX m_LeftBack, m_RightBack;
 
 	frc2::PIDController* m_TurnController;
+	/*
+	frc2::PIDController m_XController;
+	frc2::PIDController m_YController;
+	frc::ProfiledPIDController<units::radians> m_ThetaController;
 
+	frc::MecanumDriveKinematics kinematics;
+*/
 };
 
 }//namespace
