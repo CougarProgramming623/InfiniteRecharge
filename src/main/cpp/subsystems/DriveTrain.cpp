@@ -2,7 +2,6 @@
 #include "commands/DriveWithJoysticks.h"
 #include "Util.h"
 #include "Robot.h"
-#include "ohs/RobotID.h"
 
 #include <frc/drive/Vector2d.h>
 #include <frc2/command/button/JoystickButton.h>
@@ -19,9 +18,7 @@ const int kBACK_RIGHT = 3;
 
 namespace ohs2020 {
 
-using namespace ohs623;
-
-DriveTrain::DriveTrain() : m_LeftFront(RobotID::GetID(FRONT_LEFT)), m_RightFront(RobotID::GetID(FRONT_RIGHT)), m_LeftBack(RobotID::GetID(BACK_LEFT)), m_RightBack(RobotID::GetID(BACK_RIGHT)) {
+DriveTrain::DriveTrain() : m_LeftFront(6), m_RightFront(2), m_LeftBack(1), m_RightBack(5) {
 
 	m_RightFront.SetInverted(true);
 	m_RightBack.SetInverted(true);

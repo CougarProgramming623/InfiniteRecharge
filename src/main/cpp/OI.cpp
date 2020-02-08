@@ -1,15 +1,13 @@
 #include "OI.h"
 #include "Util.h"
 #include "Robot.h"
-#include "commands/EncoderDrive.h"
 
 namespace ohs2020{
 
 OI::OI() : 
 
 m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}),
-m_Turn([&] { return m_ButtonBoard.GetRawButton(19);}),
-m_EncoderDrive([&] {return m_ButtonBoard.GetRawButton(2);} )
+m_Turn([&] { return m_ButtonBoard.GetRawButton(2);})
 {
 
 }
@@ -23,10 +21,7 @@ void OI::Init(){
 	}, {} ));
 
 
-
 	m_Turn.WhenPressed(Robot::Get().GetDriveTrain().TurnToPos(90));
-
-	m_EncoderDrive.WhenPressed( new EncoderDrive(0,6000,0.0) );
 }
 
 
