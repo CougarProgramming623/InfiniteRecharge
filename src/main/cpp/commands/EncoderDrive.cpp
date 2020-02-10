@@ -6,6 +6,7 @@
 
 #include <math.h> //for math.abs
 #include <frc/drive/Vector2d.h>  //for mechanum calculations
+#include <wpi/ArrayRef.h>
 //end includes
 
 namespace ohs2020 {
@@ -17,6 +18,8 @@ EncoderDrive::EncoderDrive(int x, int y, double a){
 	m_X = x*HORIZONTAL_CALIBRATION;
 	m_Y = y;
 	m_A = a;
+	AddRequirements(wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
+
 } //base constructor
 
 EncoderDrive::EncoderDrive(double x, double y, double a) : EncoderDrive(static_cast <int> (x*CPI), static_cast <int> (y*CPI), 0.0) {} 
@@ -32,53 +35,25 @@ EncoderDrive::EncoderDrive(double x, double y) : EncoderDrive(x, y, 0.0) {}
 
 //override commands
 void EncoderDrive::Initialize() {
-		
-	DebugOutF("CPI: "+ std::to_string(CPI));
-	DebugOutF("Encoder Init Pos: "+ std::to_string( Robot::Get().GetDriveTrain().GetLFront()->GetSensorCollection().GetIntegratedSensorPosition() ) );
-	
-	//wheel calculations
-	frc::Vector2d input{EncoderDrive::GetX() , EncoderDrive::GetY()};
-	//input.Rotate(EncoderDrive::GetA()); NOTE: moved turn to end of command 
-	//calculates relative wheel speeds
-
-	//reduce number to -1-1
-	double divisor = static_cast <double>(abs(input.x)+abs(input.y));
-	double percentOut = (static_cast <double>(input.y) + static_cast <double>(input.x) ) / divisor;
-	//divisor is used to convert encoder ticks to numbers from -1-1
-
-	//sets wheel speeds
-	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, 1);
-	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, (static_cast <double>(input.y) - static_cast <double>(input.x) ) / divisor);
-	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput, (static_cast <double>(input.y) - static_cast <double>(input.x) ) / divisor);
-	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput, (static_cast <double>(input.y) + static_cast <double>(input.x) ) / divisor);
-	//end set wheel speeds
-	
-	DebugOutF("Calculations: " + std::to_string(percentOut));
-	DebugOutF("Calc2: " + std::to_string(input.y));
-	DebugOutF("Calc2.5: " + std::to_string(input.x));
-	DebugOutF("Calc3: " + std::to_string(divisor));
-	//
-
-	EncoderDrive::SetX( 
-		Robot::Get().GetDriveTrain().GetLFront()->GetSensorCollection().GetIntegratedSensorPosition() +
-		static_cast <int> ( (EncoderDrive::GetX()+EncoderDrive::GetY()) * percentOut )
-		);//modifies x by relative movement of fl wheel and adds it to current quadrature pos to find target quadrature pos
-
-	//uses top left wheel for encoder tracking
-	
-	DebugOutF("Target Encoder Pos: "+ std::to_string(EncoderDrive::GetX()));
-
+	m_InitialTicks = Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition();
 }//starts motor turn
 
 bool EncoderDrive::IsFinished() {
-	return abs( 
+	return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() > GetY() + m_InitialTicks; 
+	/*abs( 
 			abs(Robot::Get().GetDriveTrain().GetLFront()->GetSensorCollection().GetIntegratedSensorPosition()) 
 			- abs(EncoderDrive::GetX())  
-			) < COUNT_THRESHOLD;
+			) < COUNT_THRESHOLD;*/
 
 }//returns true when encoderTicks is equals to or greater than target
 
-void EncoderDrive::Execute() {DebugOutF(std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetMotorOutputPercent()));}//execute command (does nothing, waits)
+void EncoderDrive::Execute() {
+	
+	Robot::Get().GetDriveTrain().CartesianDrive(0.3, 0.0, 0.0, 0.0);
+
+	DebugOutF("Current Encoder Pos: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
+
+}//execute command (does nothing, waits)
 
 void EncoderDrive::End(bool interrupted) {
 

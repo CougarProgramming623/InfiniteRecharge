@@ -1,7 +1,8 @@
 #pragma once
 
 //includes
-#include <frc2/command/Command.h>
+#include <frc2/command/CommandBase.h>
+#include <frc2/command/CommandHelper.h>
 #include <math.h>
 #include <wpi/SmallSet.h>
 //end includes 
@@ -18,10 +19,10 @@ const double CPI = (COUNTS_PER_ROTATION * GEAR_RATIO) / ((WHEEL_DIAMETER * (atan
 const double HORIZONTAL_CALIBRATION = 1/1; //intended/actual, because mechanim wheels skid a variable to change how many ticks are needed for horizontal traverse
 	//end calculated variables
 
-const unsigned int COUNT_THRESHOLD = 10;//accuracy threshold of counts
+const unsigned int COUNT_THRESHOLD = 100;//accuracy threshold of counts
 //end robot information variables
 
-class EncoderDrive : public frc2::Command {
+class EncoderDrive : public frc2::Command, frc2::CommandHelper<frc2::CommandBase, EncoderDrive> {
 	
 public:
 	//constructors
@@ -58,6 +59,7 @@ private:
 	//movement variables
 	int m_X, m_Y;//x and y traverse (horizontal(x) & vertical(y)) in encoder ticks
 	double m_A;//angle(a)  
+	int m_InitialTicks;
 	//end movement variables
 
 };//end class

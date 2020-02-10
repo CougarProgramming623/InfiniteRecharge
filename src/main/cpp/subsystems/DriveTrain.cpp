@@ -30,6 +30,12 @@ DriveTrain::DriveTrain() : m_LeftFront(RobotID::GetID(FRONT_LEFT)), m_RightFront
 
 void DriveTrain::Init(){
 	SetDefaultCommand(Drive()); 
+
+	m_LeftFront.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	m_RightFront.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	m_LeftBack.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	m_RightBack.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+
 }
 
 /*void DriveTrain::InitDefaultCommand(){
