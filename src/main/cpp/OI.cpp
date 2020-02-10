@@ -1,12 +1,13 @@
 #include "OI.h"
 #include "Util.h"
+#include "Robot.h"
 
 namespace ohs2020{
 
 OI::OI() : 
 
 m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}),
-TESTBUTTONDELETE([&] { return m_ButtonBoard.GetRawButton(19);})
+m_Turn([&] { return m_ButtonBoard.GetRawButton(2);})
 {
 
 }
@@ -19,11 +20,8 @@ void OI::Init(){
 		DebugOutF("Flipped FOD");
 	}, {} ));
 
-	TESTBUTTONDELETE.WhenPressed(frc2::InstantCommand([&] { 
-		
-		DebugOutF("Pressed");
-	}, {} ));
 
+	m_Turn.WhenPressed(Robot::Get().GetDriveTrain().TurnToPos(90));
 }
 
 

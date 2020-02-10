@@ -29,6 +29,8 @@ public:
 	
 	bool m_Fod = true;
 
+	frc2::Button m_Turn;
+
 private:
 	frc::Joystick m_DriverJoystick = frc::Joystick(0);
 	frc::Joystick m_ButtonBoard = frc::Joystick(1);
