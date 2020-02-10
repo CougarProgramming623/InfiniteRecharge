@@ -24,18 +24,18 @@ public:
 	frc2::PIDCommand TurnToPos(double angle);
 	
 	//getters for direct access to motors
-	WPI_TalonFX* GetLFront() {return &m_LeftFront;}
-	WPI_TalonFX* GetRFront() {return &m_RightFront;}
-	WPI_TalonFX* GetLBack() {return &m_LeftBack;}
-	WPI_TalonFX* GetRBack() {return &m_RightBack;}
+	WPI_TalonSRX* GetLFront() {return &m_LeftFront;}
+	WPI_TalonSRX* GetRFront() {return &m_RightFront;}
+	WPI_TalonSRX* GetLBack() {return &m_LeftBack;}
+	WPI_TalonSRX* GetRBack() {return &m_RightBack;}
 
 protected:
 	
 	//virtual std::unique_ptr<frc2::Command> TransferOwnership() && override;
 
 private:
-	WPI_TalonFX m_LeftFront, m_RightFront;
-	WPI_TalonFX m_LeftBack, m_RightBack;
+	WPI_TalonSRX m_LeftFront, m_RightFront;
+	WPI_TalonSRX m_LeftBack, m_RightBack;
 
 	frc2::PIDController* m_TurnController;
 

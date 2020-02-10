@@ -39,7 +39,7 @@ void EncoderDrive::Initialize() {
 }//starts motor turn
 
 bool EncoderDrive::IsFinished() {
-	return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() > GetY() + m_InitialTicks; 
+	return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() > GetY() + m_InitialTicks && abs( abs( Robot::Get().GetNavX()->GetYaw()) - abs(EncoderDrive::GetA()) ) > 2; 
 	/*abs( 
 			abs(Robot::Get().GetDriveTrain().GetLFront()->GetSensorCollection().GetIntegratedSensorPosition()) 
 			- abs(EncoderDrive::GetX())  
@@ -51,13 +51,16 @@ void EncoderDrive::Execute() {
 	
 	double max = 1;
 
-	if(GetY() > GetX()){
+	if(GetY() > GetX()) {
 		max = GetY();
-	}else{
+	} else {
 		max = GetX();
 	}
 
-	Robot::Get().GetDriveTrain().CartesianDrive(GetY()/max*0.3, GetX()/max*0.3, 0.0, 0.0);
+	double dir = static_cast <double> (EncoderDrive::GetA()) / abs(EncoderDrive::GetA()) * 0.3;
+	DebugOutF("Turn Speed: " + std::to_string(dir));
+
+	Robot::Get().GetDriveTrain().CartesianDrive(GetY()/max*0.3, GetX()/max*0.3, dir, Robot::Get().GetNavX()->GetYaw());
 
 	DebugOutF("Current Encoder Pos: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
 
@@ -65,24 +68,15 @@ void EncoderDrive::Execute() {
 
 void EncoderDrive::End(bool interrupted) {
 
-	double dir = static_cast <double> (EncoderDrive::GetA()) / abs(EncoderDrive::GetA()) * 0.1;
 
 	DebugOutF("|STOP|");
-	
-	Robot::Get().GetDriveTrain().GetLFront()->Set(dir);
-	Robot::Get().GetDriveTrain().GetRFront()->Set(-dir);
-	Robot::Get().GetDriveTrain().GetLBack()->Set(dir);
-	Robot::Get().GetDriveTrain().GetRBack()->Set(-dir);
-	
+
+	//Robot::Get().GetDriveTrain().CartesianDrive(0.0, 0.0, dir, 0.0);
+
 	while( abs( abs( Robot::Get().GetNavX()->GetYaw()) - abs(EncoderDrive::GetA()) ) > 2){
 
 	}//waits for navx to return data
 
-	//stop motors
-	Robot::Get().GetDriveTrain().GetLFront()->Set(0);
-	Robot::Get().GetDriveTrain().GetRFront()->Set(0);
-	Robot::Get().GetDriveTrain().GetLBack()->Set(0);
-	Robot::Get().GetDriveTrain().GetRBack()->Set(0);
 }//stops motors and exits
 //end override commands
 

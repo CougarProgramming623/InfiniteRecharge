@@ -22,7 +22,7 @@ const double HORIZONTAL_CALIBRATION = 1/1; //intended/actual, because mechanim w
 const unsigned int COUNT_THRESHOLD = 100;//accuracy threshold of counts
 //end robot information variables
 
-class EncoderDrive : public frc2::Command, frc2::CommandHelper<frc2::CommandBase, EncoderDrive> {
+class EncoderDrive : public frc2::CommandHelper<frc2::CommandBase, EncoderDrive> /*frc2::CommandHelper<frc2::CommandBase, EncoderDrive> */{
 	
 public:
 	//constructors
@@ -40,15 +40,17 @@ public:
 	virtual wpi::SmallSet<frc2::Subsystem*, 4> GetRequirements() const override{
 		return wpi::SmallSet<frc2::Subsystem*, 4> (); 
 	}
+	
 	virtual std::unique_ptr<frc2::Command> TransferOwnership() && override{
 		return std::unique_ptr<frc2::Command>(this);
 	}
+	
 	//end of overrides
 
 	//getters
-	int const GetX() { return m_X; }
-	int const GetY() { return m_Y; }
-	double const GetA() { return m_A; }
+	int GetX() { return m_X; }
+	int GetY() { return m_Y; }
+	double GetA() { return m_A; }
 	//end getters
 
 	//setters
