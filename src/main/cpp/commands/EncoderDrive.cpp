@@ -49,7 +49,15 @@ bool EncoderDrive::IsFinished() {
 
 void EncoderDrive::Execute() {
 	
-	Robot::Get().GetDriveTrain().CartesianDrive(0.3, 0.0, 0.0, 0.0);
+	double max = 1;
+
+	if(GetY() > GetX()){
+		max = GetY();
+	}else{
+		max = GetX();
+	}
+
+	Robot::Get().GetDriveTrain().CartesianDrive(GetY()/max*0.3, GetX()/max*0.3, 0.0, 0.0);
 
 	DebugOutF("Current Encoder Pos: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
 
