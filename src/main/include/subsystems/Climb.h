@@ -2,7 +2,7 @@
 
 #include <frc2/command/button/Button.h>
 #include <ctre/Phoenix.h>
-#include <frc2/command/InstantCommand.h>
+#include <frc2/command/RunCommand.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/FunctionalCommand.h>
 
@@ -38,8 +38,10 @@ private:
 
 	frc2::Button climbUp;
 	frc2::Button climbDown;
+
 	frc2::Button climbLeft;
 	frc2::Button climbRight;
+
 	frc2::Button endgameOverride;
 };
 }//namespace
