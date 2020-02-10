@@ -9,8 +9,6 @@
 
 #include "OI.h"
 #include "subsystems/DriveTrain.h"
-#include "subsystems/Shooter.h"
-#include "subsystems/Climb.h"
 #include "subsystems/Intake.h"
 #include "Util.h"
 
@@ -40,7 +38,6 @@ public:
 
 	inline static Robot& Get() { return *s_Instance; } 
 
-	inline Shooter& GetShooter() { return m_shooter; }
 	inline OI& GetOI() { return m_oi; }
 	inline DriveTrain& GetDriveTrain() { return m_DriveTrain; }
 	inline Intake& GetIntake() { return m_intake; }
@@ -56,8 +53,6 @@ private:
 	OI m_oi;
 	DriveTrain m_DriveTrain;
 	AHRS* navx;
-	Shooter m_shooter;
-	Climb m_climb;
 	Intake m_intake;
 
 	bool m_Init = false;
