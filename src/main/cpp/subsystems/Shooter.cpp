@@ -25,7 +25,7 @@ void Shooter::Init() {
 
 void Shooter::SetFlyWheel() {
 
- FlyWheelToggle.WhileHeld(frc2::InstantCommand([&] {
+ FlyWheelToggle.WhileHeld(frc2::RunCommand([&] {
 
 	isFlywheelOn = true;
 	flywheelWU = FlyWheel.GetSelectedSensorVelocity() / 2048;
@@ -42,12 +42,6 @@ void Shooter::SetFlyWheel() {
 	flywheelWU = 0;
 
 	FlyWheel.Set(ControlMode::PercentOutput, 0);
-
- }, {} ));
-
-FlyWheelToggle.WhenReleased(frc2::RunCommand([&] {
-
-//DebugOutF(std::to_string(DefaultShooterPower + m_OI.GetButtonBoard().GetRawAxis(0) /* * .75 */ ));
 
  }, {} ));
 
