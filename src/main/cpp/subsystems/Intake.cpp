@@ -4,7 +4,7 @@ namespace ohs2020{
 
 Intake::Intake() :
 intakeMotor(0),
-intakeButton([&] { return GetOI().GetButtonBoard().GetRawButton(6); }) {
+intakeButton([&] { return GetOI().GetButtonBoard().GetRawButton(1); }) {
 
 }
 
