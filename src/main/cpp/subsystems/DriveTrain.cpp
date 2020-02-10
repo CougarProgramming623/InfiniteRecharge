@@ -18,15 +18,15 @@ const int kBACK_RIGHT = 3;
 
 namespace ohs2020 {
 
-DriveTrain::DriveTrain() : m_LeftFront(31), m_RightFront(32), m_LeftBack(34), m_RightBack(33) {
+DriveTrain::DriveTrain() : m_LeftFront(/*31*/6), m_RightFront(/*32*/2), m_LeftBack(/*34*/1), m_RightBack(/*33*/5) {
 
 	m_RightFront.SetInverted(true);
 	m_RightBack.SetInverted(true);
 	
 }
 
-void DriveTrain::Init(){
-	SetDefaultCommand(Drive()); 
+void DriveTrain::Init() {
+	SetDefaultCommand(Drive());
 }
 
 /*void DriveTrain::InitDefaultCommand(){
