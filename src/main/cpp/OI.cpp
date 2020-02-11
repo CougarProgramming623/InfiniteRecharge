@@ -26,7 +26,7 @@ void OI::Init(){
 
 	m_Turn.WhenPressed(Robot::Get().GetDriveTrain().TurnToPos(90));
 
-	m_EncoderDrive.WhenPressed( new EncoderDrive(0, 0, 10) );
+	m_EncoderDrive.WhenPressed( new EncoderDrive(0, 0, 4196) );
 }
 
 

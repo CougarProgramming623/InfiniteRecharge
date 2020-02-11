@@ -14,7 +14,7 @@ namespace ohs2020 {
 //EncoderDrive
 
 //constructors
-EncoderDrive::EncoderDrive(int x, int y, double a){
+EncoderDrive::EncoderDrive(int x, int y, int a){
 	m_X = x*HORIZONTAL_CALIBRATION;
 	m_Y = y;
 	m_A = a;
@@ -22,13 +22,13 @@ EncoderDrive::EncoderDrive(int x, int y, double a){
 
 } //base constructor
 
-EncoderDrive::EncoderDrive(double x, double y, double a) : EncoderDrive(static_cast <int> (x*CPI), static_cast <int> (y*CPI), 0.0) {} 
+EncoderDrive::EncoderDrive(double x, double y, int a) : EncoderDrive(static_cast <int> (x*CPI), static_cast <int> (y*CPI), 0) {} 
 //constructor for inches w/ angle
 
 EncoderDrive::EncoderDrive(int x, int y) : EncoderDrive(x, y, 0) {}
 //constructor for tick movement w/o angle
 
-EncoderDrive::EncoderDrive(double x, double y) : EncoderDrive(x, y, 0.0) {}
+EncoderDrive::EncoderDrive(double x, double y) : EncoderDrive(x, y, 0) {}
 //constructor for inch movement w/o angle
 
 //end constructors
@@ -36,10 +36,21 @@ EncoderDrive::EncoderDrive(double x, double y) : EncoderDrive(x, y, 0.0) {}
 //override commands
 void EncoderDrive::Initialize() {
 	m_InitialTicks = Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition();
+	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
+	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
+	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
+	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
 }//starts motor turn
 
 bool EncoderDrive::IsFinished() {
-	return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() > GetY() + m_InitialTicks && abs( abs( Robot::Get().GetNavX()->GetYaw()) - abs(EncoderDrive::GetA()) ) > 2; 
+	DebugOutF("DIFF:"+ std::to_string(m_Y+m_A+m_InitialTicks+m_X)+ "|"+std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) + "|" + std::to_string(abs((m_InitialTicks+m_X+m_Y+m_A) - Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) <= COUNT_THRESHOLD));
+	DebugOutF("MOTOR%: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetMotorOutputPercent()));
+
+	if( m_X + m_Y + m_A < 0 ){
+		return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() <= (m_Y+m_A+m_InitialTicks+m_X);
+	}else{
+		return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() >= (m_Y+m_A+m_InitialTicks+m_X);
+	}
 	/*abs( 
 			abs(Robot::Get().GetDriveTrain().GetLFront()->GetSensorCollection().GetIntegratedSensorPosition()) 
 			- abs(EncoderDrive::GetX())  
@@ -48,34 +59,31 @@ bool EncoderDrive::IsFinished() {
 }//returns true when encoderTicks is equals to or greater than target
 
 void EncoderDrive::Execute() {
-	
-	double max = 1;
 
-	if(GetY() > GetX()) {
-		max = GetY();
-	} else {
-		max = GetX();
+	int max = 1;
+	double maxSpeed = 0.4;
+
+	if(m_X > m_Y){
+		max = m_X+m_A;
+	}else{
+		max = m_Y+m_A;
 	}
 
-	double dir = static_cast <double> (EncoderDrive::GetA()) / abs(EncoderDrive::GetA()) * 0.3;
-	DebugOutF("Turn Speed: " + std::to_string(dir));
-
-	Robot::Get().GetDriveTrain().CartesianDrive(GetY()/max*0.3, GetX()/max*0.3, dir, Robot::Get().GetNavX()->GetYaw());
-
-	DebugOutF("Current Encoder Pos: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
-
+	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, (m_Y+m_X+m_A)/max*maxSpeed );
+	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, (m_Y-m_X-m_A)/max*maxSpeed );
+	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput, (m_Y-m_X+m_A)/max*maxSpeed );
+	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput, (m_Y+m_X-m_A)/max*maxSpeed );
 }//execute command (does nothing, waits)
 
 void EncoderDrive::End(bool interrupted) {
+	
+	DebugOutF("|STOP|"+std::to_string(interrupted));
+	DebugOutF("Final Pos: "+std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
 
-
-	DebugOutF("|STOP|");
-
-	//Robot::Get().GetDriveTrain().CartesianDrive(0.0, 0.0, dir, 0.0);
-
-	while( abs( abs( Robot::Get().GetNavX()->GetYaw()) - abs(EncoderDrive::GetA()) ) > 2){
-
-	}//waits for navx to return data
+	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 
 }//stops motors and exits
 //end override commands
