@@ -85,7 +85,7 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::MODE, 1);
 
     //Cob::PushValue(CobKey::MODE, isFodMode());
-	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
+	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));*/
 }
 
 /**
@@ -93,6 +93,7 @@ void Robot::RobotPeriodic() {
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
+
 void Robot::DisabledInit() {
 
 	
