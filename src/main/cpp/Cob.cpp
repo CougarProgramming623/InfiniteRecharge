@@ -5,17 +5,18 @@
 #include <sstream>
 #include <Util.h>
 #include <ntcore.h>
+#include <functional>
 
 namespace ohs2020 {
 
 nt::NetworkTableInstance Cob::s_Table;
 std::map<CobKey, nt::NetworkTableEntry> Cob::s_Map;
 std::map<CobMessageOut, nt::NetworkTableEntry> Cob::s_OutMap;
-std::map<CobMessageIn, std::pair <std::string, CobCallBack>> Cob::s_InMap;
+std::map<std::string, CobCallBack> Cob::s_InMap;
 
 
 void x(const nt::NetworkTableEntry& entry) {
-	DebugOutF(entry.GetString(""));
+	Cob::SendMessage(CobMessageOut::PING, "Hiya");
 }
 
 void Cob::Init() {
@@ -34,6 +35,7 @@ void Cob::Init() {
 	RegisterMessageIn(CobMessageIn::GNIP, "gnip", x);
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
+
 }
 
 void Cob::RegisterKey(CobKey key, std::string name, bool persistent) {
@@ -50,14 +52,27 @@ void Cob::RegisterMessageOut(CobMessageOut key, std::string name) {
 
 
 void Cob::RegisterMessageIn(CobMessageIn key, std::string name, CobCallBack handler) {
-	s_InMap[key] = { "/cob/messages/roborio/" + name, handler };
+	s_InMap["/cob/messages/roborio/" + name] = handler;
 }
 
-void Cob::InMesUpdate(){
+void Cob::InMesUpdate() {
 	std::vector<nt::NetworkTableEntry> entries = s_Table.GetEntries("/cob/messages/roborio/", 0);
 	for (nt::NetworkTableEntry& e : entries){
-		OHS_DEBUG([e](auto& f){ f << "Got entries" << e.GetName(); });
-		e.Delete();
+		std::string name = e.GetName();
+		if (s_InMap.find(name) != s_InMap.end()) {
+			CobCallBack& jeff = s_InMap[e.GetName()];
+			jeff(e);
+			e.Delete();
+
+		} else {
+			OHS_ERROR([&](auto& f) {
+				f << "Name not in map: " << name << "\nMap is: ";
+				for (std::map<std::string, CobCallBack>::iterator it = s_InMap.begin(); it != s_InMap.end(); it++) {
+					f << it->first << " = " << it->second.operator bool();
+				}
+			});
+		}
+		
 	}
 }
 
@@ -85,17 +100,6 @@ bool Cob::EnsureExists(CobMessageOut key) {
 	}
 }
 
-bool Cob::EnsureExists(CobMessageIn key) {
-	if (s_InMap.find(key) == s_InMap.end()) {
-		//The value doesnt exist in the map
-		std::stringstream ss;
-		ss << "Failed to find registered key for CobMessageOut value #" << static_cast<int>(key);
-		frc::DriverStation::ReportError(ss.str());
-		return false;
-	} else {
-		return true;//The value exists
-	}
-}
 
 //Explicit specialization for non numeric types
 template<>

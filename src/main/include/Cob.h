@@ -11,7 +11,7 @@
 #include "CobConstants.h"
 
 namespace ohs2020 {
-using CobCallBack = std::add_pointer<void (const nt::NetworkTableEntry&)>::type;
+using CobCallBack = std::function<void (const nt::NetworkTableEntry&)>;
 
 class Cob {
 public:
@@ -40,7 +40,6 @@ public:
 private:
 	static bool EnsureExists(CobKey key);
 	static bool EnsureExists(CobMessageOut key);
-	static bool EnsureExists(CobMessageIn key);
 	static void RegisterKey(CobKey key, std::string name, bool persistent = false);
 	static void RegisterMessageOut(CobMessageOut key, std::string name);
 	static void RegisterMessageIn(CobMessageIn key, std::string name, CobCallBack callBack);
@@ -50,7 +49,7 @@ private:
 	static nt::NetworkTableInstance s_Table;
 	static std::map<CobKey, nt::NetworkTableEntry> s_Map;
 	static std::map<CobMessageOut, nt::NetworkTableEntry> s_OutMap;
-	static std::map<CobMessageIn, std::pair <std::string, CobCallBack>> s_InMap;
+	static std::map<std::string, CobCallBack> s_InMap;
 };
 
 }//frc2019
