@@ -30,6 +30,12 @@ DriveTrain::DriveTrain() : m_LeftFront(RobotID::GetID(FRONT_LEFT)), m_RightFront
 
 void DriveTrain::Init(){
 	SetDefaultCommand(Drive()); 
+
+	m_LeftFront.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	m_RightFront.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	m_LeftBack.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	m_RightBack.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+
 }
 
 /*void DriveTrain::InitDefaultCommand(){
@@ -79,7 +85,7 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 
 } //CartesianDrive()
 
-frc2::PIDCommand DriveTrain::TurnToPos(double angle) {
+frc2::PIDCommand* DriveTrain::TurnToPos(double angle) {
 
 	std::function<double()> measurement = []()->double{return (double)(Robot::Get().GetNavX()->GetYaw());};
 	std::function<void(double)> output = [this](double measure) { 
@@ -87,18 +93,18 @@ frc2::PIDCommand DriveTrain::TurnToPos(double angle) {
 	};
 
 	/*
-	PID Values:
+	Mark PID Values:
 	90 : 0.0175, 0, 0
 	180 : 0.0835, 0.0, 0.01
 	roughly accurate for greater than 10 : 0.085, 0.0, 0.011
 	*/
-	m_TurnController = new frc2::PIDController( 0.085, 0.0, 0.011, units::second_t(20_ms) ); 
+	m_TurnController = new frc2::PIDController( 0.03, 0.0, 0.0, units::second_t(20_ms) ); 
 
 	m_TurnController->SetTolerance( 1.0, std::numeric_limits< double >::infinity() );
 	m_TurnController->SetSetpoint(angle);
 	m_TurnController->EnableContinuousInput(-180.0,180.0);
 
-	frc2::PIDCommand turnCmd = frc2::PIDCommand(*m_TurnController, measurement, angle, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
+	frc2::PIDCommand* turnCmd = new frc2::PIDCommand(*m_TurnController, measurement, angle, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
 	return turnCmd;
 }
 }//namespace

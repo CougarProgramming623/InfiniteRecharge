@@ -6,7 +6,7 @@ Climb::Climb() :
 
 climbMotor(0),
 /*deployer([&] { return getOI().GetButtonBoard().GetRawButton(); }),*/
-climbUp([&] { return getOI().GetButtonBoard().GetRawButton(2); }),
+climbUp([&] { return getOI().GetButtonBoard().GetRawButton(5); }),
 climbDown([&] { return getOI().GetButtonBoard().GetRawButton(3); }),
 endgameOverride([&] { return getOI().GetButtonBoard().GetRawButton(4); }) {}
 
