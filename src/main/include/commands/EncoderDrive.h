@@ -3,6 +3,7 @@
 //includes
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc2/command/SequentialCommandGroup.h>
 #include <math.h>
 #include <wpi/SmallSet.h>
 //end includes 
@@ -46,6 +47,8 @@ public:
 	}
 	
 	//end of overrides
+
+	static std::unique_ptr<frc2::Command> RotateTo(double);
 
 	//getters
 	int GetX() { return m_X; }
