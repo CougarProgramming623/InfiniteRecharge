@@ -1,11 +1,13 @@
 #include "Cob.h"
 #include "ohs/Log.h"
+#include "Robot.h"
 
 #include <frc/DriverStation.h>
 #include <sstream>
 #include <Util.h>
 #include <ntcore.h>
 #include <functional>
+
 
 namespace ohs2020 {
 
@@ -15,8 +17,15 @@ std::map<CobMessageOut, nt::NetworkTableEntry> Cob::s_OutMap;
 std::map<std::string, CobCallBack> Cob::s_InMap;
 
 
-void x(const nt::NetworkTableEntry& entry) {
-	Cob::SendMessage(CobMessageOut::PING, "Hiya");
+void handshake(const nt::NetworkTableEntry& entry) {
+	Cob::SendMessage(CobMessageOut::PING, "Confirmed");
+}
+
+void gyroResetConfirm(const nt::NetworkTableEntry& entry) {
+	//if (entry.GetBoolean(false) == true){
+		Robot::Get().GetNavX()->ZeroYaw();
+		Cob::SendMessage(CobMessageOut::GYRO_RESET_CONFIRM, "Reset the navx");
+	//}
 }
 
 void Cob::Init() {
@@ -32,7 +41,9 @@ void Cob::Init() {
     RegisterKey(CobKey::IS_RED, "/FMSInfo/IsRedAlliance");
     RegisterKey(CobKey::MODE, "/cob/mode");
 	RegisterMessageOut(CobMessageOut::PING, "ping");
-	RegisterMessageIn(CobMessageIn::GNIP, "gnip", x);
+	RegisterMessageIn(CobMessageIn::GNIP, "gnip", handshake);
+	RegisterMessageIn(CobMessageIn::GYRO_RESET, "gyroReset", gyroResetConfirm);
+	RegisterMessageOut(CobMessageOut::GYRO_RESET_CONFIRM, "gyroReset-ack");
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
 
@@ -59,18 +70,20 @@ void Cob::InMesUpdate() {
 	std::vector<nt::NetworkTableEntry> entries = s_Table.GetEntries("/cob/messages/roborio/", 0);
 	for (nt::NetworkTableEntry& e : entries){
 		std::string name = e.GetName();
-		if (s_InMap.find(name) != s_InMap.end()) {
-			CobCallBack& jeff = s_InMap[e.GetName()];
-			jeff(e);
-			e.Delete();
-
-		} else {
-			OHS_ERROR([&](auto& f) {
-				f << "Name not in map: " << name << "\nMap is: ";
-				for (std::map<std::string, CobCallBack>::iterator it = s_InMap.begin(); it != s_InMap.end(); it++) {
-					f << it->first << " = " << it->second.operator bool();
-				}
-			});
+		if(e.GetType() != nt::NetworkTableType::kString || e.GetString("--NOT-EXIST--") != "--DELETED--") {
+			if (s_InMap.find(name) != s_InMap.end()) {
+				CobCallBack& jeff = s_InMap[e.GetName()];
+				jeff(e);
+				// e.Delete();
+				e.SetString("--DELETED--");
+			} else {
+				OHS_ERROR([&](auto& f) {
+					f << "Name not in map: " << name << "\nMap is: ";
+					for (std::map<std::string, CobCallBack>::iterator it = s_InMap.begin(); it != s_InMap.end(); it++) {
+						f << it->first << " = " << it->second.operator bool();
+					}
+				});
+			}
 		}
 		
 	}

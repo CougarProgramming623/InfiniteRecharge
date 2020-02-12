@@ -7,11 +7,11 @@ enum class CobKey {
 };
 
 enum class CobMessageOut {
-    PING
+    PING, GYRO_RESET_CONFIRM
 };
 
 enum class CobMessageIn {
-    GNIP
+    GNIP, GYRO_RESET
 };
 
 }//namespace
