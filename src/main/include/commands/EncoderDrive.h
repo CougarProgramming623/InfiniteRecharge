@@ -20,7 +20,7 @@ const double CPI = (COUNTS_PER_ROTATION * GEAR_RATIO) / ((WHEEL_DIAMETER * (atan
 const double HORIZONTAL_CALIBRATION = 1/1; //intended/actual, because mechanim wheels skid a variable to change how many ticks are needed for horizontal traverse
 	//end calculated variables
 
-const unsigned int COUNT_THRESHOLD = 200;//accuracy threshold of counts
+const int COUNT_THRESHOLD = 200;//accuracy threshold of counts
 //end robot information variables
 
 class EncoderDrive : public frc2::CommandHelper<frc2::CommandBase, EncoderDrive> /*frc2::CommandHelper<frc2::CommandBase, EncoderDrive> */{
@@ -48,7 +48,7 @@ public:
 	
 	//end of overrides
 
-	static std::unique_ptr<frc2::Command> RotateTo(double);
+	static frc2::Command* RotateTo(double);
 
 	//getters
 	int GetX() { return m_X; }

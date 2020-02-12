@@ -85,7 +85,7 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 
 } //CartesianDrive()
 
-frc2::PIDCommand DriveTrain::TurnToPos(double angle) {
+frc2::PIDCommand* DriveTrain::TurnToPos(double angle) {
 
 	std::function<double()> measurement = []()->double{return (double)(Robot::Get().GetNavX()->GetYaw());};
 	std::function<void(double)> output = [this](double measure) { 
@@ -105,7 +105,7 @@ frc2::PIDCommand DriveTrain::TurnToPos(double angle) {
 	m_TurnController->SetSetpoint(angle);
 	m_TurnController->EnableContinuousInput(-180.0,180.0);
 
-	frc2::PIDCommand turnCmd = frc2::PIDCommand(*m_TurnController, measurement, angle, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
+	frc2::PIDCommand* turnCmd = new frc2::PIDCommand(*m_TurnController, measurement, angle, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
 	return turnCmd;
 }
 }//namespace

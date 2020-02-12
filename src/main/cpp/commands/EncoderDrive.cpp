@@ -90,13 +90,22 @@ void EncoderDrive::End(bool interrupted) {
 }//stops motors and exits
 //end override commands
 
-std::unique_ptr<frc2::Command> EncoderDrive::RotateTo(double angle){
+frc2::Command* EncoderDrive::RotateTo(double angle){
 	if (abs(angle) < 10){
 		std::vector<std::unique_ptr<frc2::Command>> vector;
-		// vector.push_back( std::make_unique<EncoderDrive>(0, 0, (-angle)/angle * 10));
-		return std::unique_ptr<frc2::Command>(new frc2::SequentialCommandGroup(std::move(vector)));
+		if (angle < 0){
+			vector.push_back( std::make_unique<EncoderDrive>(0, 0, 10));
+			vector.push_back( std::make_unique<EncoderDrive>(0, 0, angle - 10));
+		}
+		else {
+			vector.push_back( std::make_unique<EncoderDrive>(0, 0, -10));
+			vector.push_back( std::make_unique<EncoderDrive>(0, 0, angle + 10));
+		}
+		return new frc2::SequentialCommandGroup(std::move(vector));
+	} else if (abs(angle) < 40) {
+		return new EncoderDrive(0, 0, angle);
 	} else {
-		return std::unique_ptr<frc2::Command>(new EncoderDrive(0, 0, angle));
+		return Robot::Get().GetDriveTrain().TurnToPos(angle);
 	}
 }
 //end EncoderDrive
