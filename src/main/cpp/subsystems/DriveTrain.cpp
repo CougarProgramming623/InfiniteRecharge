@@ -18,15 +18,15 @@ const int kBACK_RIGHT = 3;
 
 namespace ohs2020 {
 
-DriveTrain::DriveTrain() : m_LeftFront(6), m_RightFront(2), m_LeftBack(1), m_RightBack(5) {
+DriveTrain::DriveTrain() : m_LeftFront(/*31*/6), m_RightFront(/*32*/2), m_LeftBack(/*34*/1), m_RightBack(/*33*/5) {
 
 	m_RightFront.SetInverted(true);
 	m_RightBack.SetInverted(true);
 	
 }
 
-void DriveTrain::Init(){
-	SetDefaultCommand(Drive()); 
+void DriveTrain::Init() {
+	SetDefaultCommand(Drive());
 }
 
 /*void DriveTrain::InitDefaultCommand(){
@@ -81,7 +81,7 @@ frc2::PIDCommand DriveTrain::TurnToPos(double angle) {
 	std::function<double()> measurement = []()->double{return (double)(Robot::Get().GetNavX()->GetYaw());};
 	std::function<void(double)> output = [this](double measure) { 
 		CartesianDrive(0, 0, measure/2, Robot::Get().GetNavX()->GetYaw());
-		DebugOutF(std::to_string(measure/2)); 
+		//DebugOutF(std::to_string(measure/2)); 
 	};
 
 	/*

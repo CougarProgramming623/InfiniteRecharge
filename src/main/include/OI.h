@@ -13,7 +13,6 @@ public:
 	OI();
 		
     void Init();
-	void FlipFOD();
 
 	frc::Joystick& GetDriverJoystick() { return m_DriverJoystick; }
 	frc::Joystick& GetButtonBoard() { return m_ButtonBoard; }
@@ -25,11 +24,9 @@ public:
 	bool isFodToggle() const { return m_FodToggle.Get(); }
 	
 	frc2::Button m_FodToggle;
-	frc2::Button TESTBUTTONDELETE;
-	
-	bool m_Fod = true;
-
 	frc2::Button m_Turn;
+
+	bool m_Fod = true;
 
 private:
 	frc::Joystick m_DriverJoystick = frc::Joystick(0);
