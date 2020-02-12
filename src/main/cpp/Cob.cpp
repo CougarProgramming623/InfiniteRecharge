@@ -17,11 +17,11 @@ std::map<CobMessageOut, nt::NetworkTableEntry> Cob::s_OutMap;
 std::map<std::string, CobCallBack> Cob::s_InMap;
 
 
-void handshake(const nt::NetworkTableEntry& entry) {
+void Handshake(const nt::NetworkTableEntry& entry) {
 	Cob::SendMessage(CobMessageOut::PING, "Confirmed");
 }
 
-void gyroResetConfirm(const nt::NetworkTableEntry& entry) {
+void GyroResetConfirm(const nt::NetworkTableEntry& entry) {
 	//if (entry.GetBoolean(false) == true){
 		Robot::Get().GetNavX()->ZeroYaw();
 		Cob::SendMessage(CobMessageOut::GYRO_RESET_CONFIRM, "Reset the navx");
@@ -41,8 +41,8 @@ void Cob::Init() {
     RegisterKey(CobKey::IS_RED, "/FMSInfo/IsRedAlliance");
     RegisterKey(CobKey::MODE, "/cob/mode");
 	RegisterMessageOut(CobMessageOut::PING, "ping");
-	RegisterMessageIn(CobMessageIn::GNIP, "gnip", handshake);
-	RegisterMessageIn(CobMessageIn::GYRO_RESET, "gyroReset", gyroResetConfirm);
+	RegisterMessageIn(CobMessageIn::GNIP, "gnip", Handshake);
+	RegisterMessageIn(CobMessageIn::GYRO_RESET, "gyroReset", GyroResetConfirm);
 	RegisterMessageOut(CobMessageOut::GYRO_RESET_CONFIRM, "gyroReset-ack");
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
