@@ -2,6 +2,7 @@
 #include "Util.h"
 #include "Cob.h"
 #include "Robot.h"
+#include "commands/EncoderDrive.h"
 
 namespace ohs2020{
 
@@ -22,8 +23,7 @@ void OI::Init(){
 		DebugOutF("Flipped FOD");
 	}, {} ));
 
-
-	m_Turn.WhenPressed(Robot::Get().GetDriveTrain().TurnToPos(90));
+	m_Turn.WhenPressed( EncoderDrive::RotateTo(30) );
 }
 
 
