@@ -36,11 +36,6 @@ void Robot::RobotInit() {
 	m_shooter.Init();
 	m_climb.Init();
 
-	OHS_DEBUG([](auto& f){ f << "Test " << 5 << " askdjsa"; });
-	OHS_INFO([](auto& f){ f << "Test2 " << -1 << " askdjsa"; });
-	OHS_WARN([](auto& f){ f << "Test3 " << 69 << " askdjsa" << 23894.2478234; });
-	OHS_ERROR([](auto& f){ f << "Test4 " << 5.1237 << " askdjsa" << 'c'; });
-
 	try {
 		navx = new AHRS(SPI::Port::kMXP);
 	} catch (std::exception &ex){
@@ -65,6 +60,8 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
 
+	Cob::InMesUpdate();
+
 	frc2::CommandScheduler::GetInstance().Run();
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
@@ -76,17 +73,22 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::IS_RED, false);
 	}
 	
-/*	if (frc::DriverStation::GetInstance().IsDisabled()){
+	if (frc::DriverStation::GetInstance().IsDisabled()){
 		Cob::PushValue(CobKey::MODE, 5);
+		//DebugOutF("set to 5");
 	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
 		Cob::PushValue(CobKey::MODE, 2);
+		//DebugOutF("set to 2");
 	}else if (m_oi.IsFOD()){
 		Cob::PushValue(CobKey::MODE, 0);
+		//DebugOutF("set to 0");
 	}else {
 		Cob::PushValue(CobKey::MODE, 1);
+		//DebugOutF("set to 1");
+	}
 
     //Cob::PushValue(CobKey::MODE, isFodMode());
-	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));*/
+	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
 
 /**
