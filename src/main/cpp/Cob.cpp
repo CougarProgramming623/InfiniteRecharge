@@ -18,7 +18,6 @@ void Cob::Init() {
     RegisterKey(CobKey::TIME_LEFT, "/cob/fms/time-left");
     RegisterKey(CobKey::IS_RED, "/FMSInfo/IsRedAlliance");
     RegisterKey(CobKey::MODE, "/cob/mode");
-    RegisterKey(CobKey::GYRO_RESET, "/cob/actions/gyroReset");
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
 }
