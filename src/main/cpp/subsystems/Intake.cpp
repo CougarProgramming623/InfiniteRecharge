@@ -4,7 +4,7 @@ namespace ohs2020{
 
 Intake::Intake() :
 intakeMotor(0),
-intakeButton([&] { return GetOI().GetButtonBoard().GetRawButton(1); }) {
+intakeButton([&] { return GetOI().GetButtonBoard().GetRawButton(7); }) { //Fork Override Button (yellow)
 
 }
 
@@ -18,7 +18,7 @@ void Intake::Spin() {
 
 intakeButton.WhileHeld( frc2::RunCommand( [&] {
 
-DebugOutF("Pressed");
+DebugOutF("Intaking");
 
 intakeMotor.Set(ControlMode::PercentOutput, 1);
 
@@ -27,7 +27,7 @@ intakeMotor.Set(ControlMode::PercentOutput, 1);
 
 intakeButton.WhenReleased( frc2::InstantCommand( [&] {
 
-DebugOutF("Released");
+DebugOutF("Not Intaking");
 
 intakeMotor.Set(ControlMode::PercentOutput, 0);
 

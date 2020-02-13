@@ -6,12 +6,11 @@ const double DefaultShooterPower = 0;
 
 Shooter::Shooter() : 
 
-Flywheel(34), //35 
-LemonAID(31),
-launcher( [&] { return m_OI.GetButtonBoard().GetRawButton(2); }),
-FlyWheelToggle([&] { return m_OI.GetButtonBoard().GetRawButton(1); }),
-FlyWheelEncoder(34), //35
-timer()
+Flywheel(0), //35 
+LemonAID(0),
+launcher( [&] { return m_OI.GetButtonBoard().GetRawButton(6); }), // Arm	 Override
+FlyWheelToggle([&] { return m_OI.GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
+FlyWheelEncoder(0) //35
 { //2 -- Green Button | 19 -- Cargo/Hatch Toggle | 1 -- Vacuum Toggle Switch
 
 }
@@ -19,18 +18,20 @@ timer()
 void Shooter::Init() {
 
 	SetFlyWheelCommands();
-
+	Shoot();
 }
 
 inline void Shooter::SetFlyWheelCommands() {
 
 	FlyWheelToggle.WhileHeld(frc2::RunCommand([&] { FlyWheelOn(); }, {} ));
-	FlyWheelToggle.WhenReleased(frc2::RunCommand([&] { FlyWheelOff(); }, {} ));
+	FlyWheelToggle.WhenReleased(frc2::InstantCommand([&] { FlyWheelOff(); }, {} ));
 
 }
 
 
 inline void Shooter::FlyWheelOn() {
+
+	DebugOutF("FlyWheel On");
 
 	isFlywheelOn = true;
 	flywheelWU = Flywheel.GetSelectedSensorVelocity() / 2048;
@@ -42,6 +43,8 @@ inline void Shooter::FlyWheelOn() {
 
 
 inline void Shooter::FlyWheelOff() {
+
+	DebugOutF("FlyWheel Off");
 
 	isFlywheelOn = false;
 	flywheelWU = 0;
@@ -56,10 +59,7 @@ void Shooter::LoadLemon() {
 
 		LemonAID.Set(ControlMode::PercentOutput, .1);
 
-		timer.Reset();
-		timer.Start();
-
-		Wait(timer, 2); //Amount of time to load a lemon into the launching chamber
+		Wait(2000); //Amount of time to load a lemon into the launching chamber
 
 		LemonAID.Set(ControlMode::PercentOutput, 0);
 
@@ -70,18 +70,12 @@ void Shooter::Shoot() {
 
 	launcher.WhileHeld(frc2::RunCommand([&] {
 
+		DebugOutF("Firing!");
+
 		LoadLemon();
 
-		Wait(timer, 3); //Amount of time needed for flywheel to reach required velocity again
+		Wait(3000); //Amount of time needed for flywheel to reach required velocity again
 
 	}, {} ));
 }
-
-void Shooter::Wait(frc2::Timer& timer, double time) {
-
-	while(static_cast <double> (timer.Get()) < time);
-
-}
-
-
 }//namespace

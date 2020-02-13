@@ -36,6 +36,7 @@ void Robot::RobotInit() {
     m_oi.Init();
 	m_climb.Init();
 	m_shooter.Init();
+	m_intake.Init();
 
 
 	try {

@@ -6,13 +6,9 @@
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/RunCommand.h>
 #include <frc2/command/Command.h>	
-#include <frc2/command/WaitCommand.h>
-#include <frc2/Timer.h>
 
 #include "Util.h"
 #include "OI.h"
-
-#include <chrono>
 
 namespace ohs2020{
 
@@ -33,8 +29,6 @@ public:
 	void LoadLemon();
 
 	void Shoot();
-
-	void Wait(frc2::Timer&, double);
 
 	bool FlyWheelMode = false;
 
@@ -59,9 +53,6 @@ private:
 	CANCoder FlyWheelEncoder;
 
 	OI m_OI;
-
-	frc2::Timer timer;
-
 };
 
 }//namespace

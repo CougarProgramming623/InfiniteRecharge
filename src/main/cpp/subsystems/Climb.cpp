@@ -8,8 +8,8 @@ int BASIC_CLIMB_SPEED;
 
 Climb::Climb() : 
 
-climbMotorLeft(0),
-climbMotorRight(0),
+climbMotorLeft(4),
+climbMotorRight(17),
 climbUp([&]         { return getOI().GetButtonBoard().GetRawButton(2);   }),
 climbDown([&]       { return getOI().GetButtonBoard().GetRawButton(3);   }),
 climbLeft([&]       { return getOI().GetButtonBoard().GetRawButton(100); }),
