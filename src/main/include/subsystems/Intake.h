@@ -1,6 +1,6 @@
 #pragma once //PRARMA ONCE
 
-#include <ctre/phoenix.h>
+#include <ctre/Phoenix.h>
 #include <frc2/command/button/Button.h>
 #include <frc2/command/RunCommand.h>
 
