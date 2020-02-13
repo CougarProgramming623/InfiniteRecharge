@@ -70,11 +70,18 @@ void Shooter::Shoot() {
 
 	launcher.WhileHeld(frc2::RunCommand([&] {
 
+		if(!FlyWheelToggle.Get()){
+
+		Flywheel.Set(ControlMode::PercentOutput, DefaultShooterPower);
+		
+			Wait(3000); //Time to reach target velocity
+		}
+
 		DebugOutF("Firing!");
 
 		LoadLemon();
 
-		Wait(3000); //Amount of time needed for flywheel to reach required velocity again
+		Wait(1000); //Amount of time needed for flywheel to reach required velocity again
 
 	}, {} ));
 }

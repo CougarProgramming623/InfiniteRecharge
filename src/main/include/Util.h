@@ -6,7 +6,6 @@
 
 #include <iostream>
 #include <chrono>
-#include <ratio>
 #include <thread>
 
 inline void DebugOutF(const wpi::Twine& message){
@@ -15,6 +14,6 @@ inline void DebugOutF(const wpi::Twine& message){
 
 inline void Wait(int ms) {
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+	frc2::CommandScheduler::GetInstance().Schedule(new frc2::WaitCommand(std::chrono::milliseconds(ms)));
 
 }
