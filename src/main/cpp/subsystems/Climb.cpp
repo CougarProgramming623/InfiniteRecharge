@@ -18,7 +18,7 @@ endgameOverride([&] { return getOI().GetButtonBoard().GetRawButton(4); }) {
 
 	climbMotorLeft.SetInverted(true);
 	climbMotorRight.SetInverted(false);
-
+  
 }
 
 void Climb::Init() {
