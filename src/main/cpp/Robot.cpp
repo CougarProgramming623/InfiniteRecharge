@@ -30,11 +30,13 @@ Robot::Robot() {
 
 
 void Robot::RobotInit() {
+
 	Cob::Init();
 	m_DriveTrain.Init();
     m_oi.Init();
-	m_shooter.Init();
 	m_climb.Init();
+	m_shooter.Init();
+	m_intake.Init();
 
 	try {
 		navx = new AHRS(SPI::Port::kMXP);
@@ -44,7 +46,6 @@ void Robot::RobotInit() {
 		DebugOutF(err.c_str());
 		
 	}
-	frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand("Hello"));
 	navx->ZeroYaw();
 
 	m_Init = true;
@@ -66,6 +67,7 @@ void Robot::RobotPeriodic() {
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
 	Cob::PushValue(CobKey::FLYWHEEL_WU, m_shooter.GetFlywheelWU());
+	//Cob::PushValue(CobKey::LOAD_STATUS, m_shooter.IsLoaded());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
 		Cob::PushValue(CobKey::IS_RED, true);
@@ -84,7 +86,7 @@ void Robot::RobotPeriodic() {
 		//DebugOutF("set to 0");
 	}else {
 		Cob::PushValue(CobKey::MODE, 1);
-		//DebugOutF("set to 1");
+
 	}
 
     //Cob::PushValue(CobKey::MODE, isFodMode());
@@ -96,6 +98,7 @@ void Robot::RobotPeriodic() {
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
+
 void Robot::DisabledInit() {
 
 	

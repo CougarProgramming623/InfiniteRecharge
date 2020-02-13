@@ -27,7 +27,7 @@ DriveTrain::DriveTrain() : m_LeftFront(RobotID::GetID(FRONT_LEFT)), m_RightFront
 	m_RightBack.SetInverted(true);
 	
 }
-
+  
 void DriveTrain::Init(){
 	SetDefaultCommand(Drive()); 
 
@@ -90,6 +90,7 @@ frc2::PIDCommand* DriveTrain::TurnToPos(double angle) {
 	std::function<double()> measurement = []()->double{return (double)(Robot::Get().GetNavX()->GetYaw());};
 	std::function<void(double)> output = [this](double measure) { 
 		CartesianDrive(0, 0, measure/2, Robot::Get().GetNavX()->GetYaw());
+		//DebugOutF(std::to_string(measure/2)); 
 	};
 
 	/*

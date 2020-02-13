@@ -40,10 +40,12 @@ void Cob::Init() {
     RegisterKey(CobKey::TIME_LEFT, "/cob/fms/time-left");
     RegisterKey(CobKey::IS_RED, "/FMSInfo/IsRedAlliance");
     RegisterKey(CobKey::MODE, "/cob/mode");
+
 	RegisterMessageOut(CobMessageOut::PING, "ping");
 	RegisterMessageIn(CobMessageIn::GNIP, "gnip", Handshake);
 	RegisterMessageIn(CobMessageIn::GYRO_RESET, "gyroReset", GyroResetConfirm);
 	RegisterMessageOut(CobMessageOut::GYRO_RESET_CONFIRM, "gyroReset-ack");
+
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
 
