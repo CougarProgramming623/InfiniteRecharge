@@ -16,6 +16,7 @@
 
 #include "ohs/RobotID.h"
 #include "ohs/Log.h"
+#include "ohs/Music.h"
 
 
 namespace ohs2020 {

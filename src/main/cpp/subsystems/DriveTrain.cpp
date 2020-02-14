@@ -35,7 +35,7 @@ DriveTrain::DriveTrain() {
 }
 
 void DriveTrain::Init(){
-	SetDefaultCommand(Drive()); 
+	SetDefaultCommand(Drive());
 
 	m_FrontLeft->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 	m_FrontRight->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);

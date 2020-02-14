@@ -29,10 +29,6 @@ public:
 	BaseTalon* GetLBack() { return m_BackLeft.get(); }
 	BaseTalon* GetRBack() { return m_BackRight.get(); }
 
-protected:
-	
-	//virtual std::unique_ptr<frc2::Command> TransferOwnership() && override;
-
 private:
 	std::unique_ptr<BaseTalon> m_FrontLeft, m_FrontRight;
 	std::unique_ptr<BaseTalon> m_BackLeft, m_BackRight;
