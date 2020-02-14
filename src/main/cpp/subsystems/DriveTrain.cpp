@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-const int kMAX_VELOCITY = 643;
+const int kMAX_VELOCITY = 300;
 
 const int kFRONT_LEFT = 0;
 const int kFRONT_RIGHT = 1;
@@ -31,10 +31,10 @@ DriveTrain::DriveTrain() : m_LeftFront(RobotID::GetID(FRONT_LEFT)), m_RightFront
 void DriveTrain::Init(){
 	SetDefaultCommand(Drive()); 
 
-	m_LeftFront.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	m_RightFront.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	m_LeftBack.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	m_RightBack.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	m_LeftFront.SetNeutralMode(Brake);
+	m_RightFront.SetNeutralMode(Brake);
+	m_LeftBack.SetNeutralMode(Brake);
+	m_RightBack.SetNeutralMode(Brake);
 
 }
 

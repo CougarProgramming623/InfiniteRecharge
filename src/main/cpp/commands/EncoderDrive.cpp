@@ -18,7 +18,10 @@ namespace ohs2020 {
 EncoderDrive::EncoderDrive(int x, int y, int a){
 	m_X = x*HORIZONTAL_CALIBRATION;
 	m_Y = y;
-	m_A = ( a-4 ) * 2000/7;
+	m_A = 0;
+	if (a != 0)
+		m_A = ( a-4 ) * 2000/7;
+	 
 	// angle calculation: ( degrees-4 ) * 2000/7
 	AddRequirements(wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
 
@@ -40,16 +43,16 @@ void EncoderDrive::Initialize() {
 
 	m_InitialTicks = Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition();
 
-	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
-	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
-	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
-	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
+	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(Coast);
+	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(Coast);
+	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(Coast);
+	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(Coast);
 
 }//starts motor turn
 
 bool EncoderDrive::IsFinished() {
 
-	DebugOutF("DIFF:"+ std::to_string(m_Y + m_A+m_InitialTicks + m_X) + "|" + std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) + "|" + std::to_string(abs((m_InitialTicks + m_X + m_Y + m_A) - Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) <= COUNT_THRESHOLD));
+	DebugOutF("DIFF:"+ std::to_string(m_Y + m_A + m_InitialTicks + m_X) + "|" + std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) + "|" + std::to_string(abs((m_InitialTicks + m_X + m_Y + m_A) - Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) <= COUNT_THRESHOLD));
 	DebugOutF("MOTOR%: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetMotorOutputPercent()));
 
 	if( m_X + m_Y + m_A < 0 ){
@@ -62,19 +65,14 @@ bool EncoderDrive::IsFinished() {
 
 void EncoderDrive::Execute() {
 	
-	int max = 1;
-	double maxSpeed = 0.4;
-
-	if(m_X > m_Y){
-		max = m_X+m_A;
-	}else{
-		max = m_Y+m_A;
-	}
+	int max = m_X + m_A + m_Y;
+	double maxSpeed = 0.3;
 
 	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, (m_Y + m_X + m_A)/max*maxSpeed );
 	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, (m_Y - m_X - m_A)/max*maxSpeed );
 	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput, (m_Y - m_X + m_A)/max*maxSpeed );
 	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput, (m_Y + m_X - m_A)/max*maxSpeed );
+
 }//execute command (does nothing, waits)
 
 void EncoderDrive::End(bool interrupted) {
@@ -83,10 +81,10 @@ void EncoderDrive::End(bool interrupted) {
 	DebugOutF("Final Pos: "+std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
 
 	
-	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(Brake);
+	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(Brake);
+	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(Brake);
+	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(Brake);
 }//stops motors and exits
 //end override commands
 

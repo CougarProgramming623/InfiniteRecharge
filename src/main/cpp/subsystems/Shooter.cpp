@@ -17,14 +17,14 @@ FlyWheelEncoder(0) //35
 
 void Shooter::Init() {
 
-	SetFlyWheelCommands();
-	Shoot();
+	//SetFlyWheelCommands();
+	//Shoot();
 }
 
 inline void Shooter::SetFlyWheelCommands() {
 
-	FlyWheelToggle.WhileHeld(frc2::RunCommand([&] { FlyWheelOn(); }, {} ));
-	FlyWheelToggle.WhenReleased(frc2::InstantCommand([&] { FlyWheelOff(); }, {} ));
+	//FlyWheelToggle.WhileHeld(frc2::RunCommand([&] { FlyWheelOn(); }, {} ));
+	//FlyWheelToggle.WhenReleased(frc2::InstantCommand([&] { FlyWheelOff(); }, {} ));
 
 }
 

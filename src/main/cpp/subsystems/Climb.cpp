@@ -10,7 +10,7 @@ Climb::Climb() :
 
 climbMotorLeft(4),
 climbMotorRight(17),
-climbUp([&]         { return getOI().GetButtonBoard().GetRawButton(2);   }),
+climbUp([&]         { return getOI().GetButtonBoard().GetRawButton(5);   }),
 climbDown([&]       { return getOI().GetButtonBoard().GetRawButton(3);   }),
 climbLeft([&]       { return getOI().GetButtonBoard().GetRawButton(100); }),
 climbRight([&]      { return getOI().GetButtonBoard().GetRawButton(100); }),
