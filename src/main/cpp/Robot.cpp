@@ -35,7 +35,7 @@ void Robot::RobotInit() {
 	m_AutoManager.AutoInit();
 	Cob::Init();
 	m_DriveTrain.Init();
-    m_oi.Init();
+	m_oi.Init();
 	m_climb.Init();
 	m_shooter.Init();
 	m_intake.Init();

@@ -24,12 +24,10 @@ frc2::Command* AutoManager::getAuto() {
     return m_AutoMap[m_InUse];
 }
 
-
 void AutoManager::RunAuto(){
     if (m_AutoMap.find(m_InUse) != m_AutoMap.end()) {
         frc2::CommandScheduler::GetInstance().Schedule(m_AutoMap[m_InUse]);
-    }else
-    {
+    } else {
         OHS_ERROR([&](auto& f) {
             f << "Name not in map: " << m_InUse << "\nMap is: ";
             for (std::map<std::string, frc2::Command*>::iterator it = m_AutoMap.begin(); it != m_AutoMap.end(); it++) {
