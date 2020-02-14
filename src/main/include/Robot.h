@@ -15,6 +15,7 @@
 #include "Util.h"
 
 #include "ohs/Assert.h"
+#include "AutoManager.h"
 
 #include <AHRS.h>
 #include <frc/TimedRobot.h>
@@ -47,12 +48,15 @@ public:
 	inline Climb& GetClimb() { return m_climb; }
 	inline AHRS* GetNavX() const { return navx; }
 	inline bool IsInitComplete() const { return m_Init; }
+	inline AutoManager& GetAutoMan() { return m_AutoManager; }
 
 
 private:
 	// Have it null by default so that if testing teleop it
 	// doesn't have undefined behavior and potentially crash.
 	frc2::Command* m_autonomousCommand = nullptr;
+
+	AutoManager m_AutoManager;
 
 	OI m_oi;
 	DriveTrain m_DriveTrain;
