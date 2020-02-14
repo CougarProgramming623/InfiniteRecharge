@@ -13,7 +13,6 @@ public:
 	OI();
 		
     void Init();
-	void FlipFOD();
 
 	frc::Joystick& GetDriverJoystick() { return m_DriverJoystick; }
 	frc::Joystick& GetButtonBoard() { return m_ButtonBoard; }
@@ -26,6 +25,7 @@ public:
 	
 	frc2::Button m_FodToggle;
 	frc2::Button m_Turn;
+	frc2::Button m_EncoderDrive;
 
 	bool m_Fod = true;
 
