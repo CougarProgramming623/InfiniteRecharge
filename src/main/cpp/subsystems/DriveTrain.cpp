@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-const int kMAX_VELOCITY = 300;
+const int kMAX_VELOCITY = 643;
 
 const int kFRONT_LEFT = 0;
 const int kFRONT_RIGHT = 1;
@@ -99,7 +99,7 @@ frc2::PIDCommand* DriveTrain::TurnToPos(double angle) {
 	180 : 0.0835, 0.0, 0.01
 	roughly accurate for greater than 10 : 0.085, 0.0, 0.011
 	*/
-	m_TurnController = new frc2::PIDController( 0.03, 0.0, 0.0, units::second_t(20_ms) ); 
+	m_TurnController = new frc2::PIDController( 0.085, 0.0, 0.011, units::second_t(20_ms) ); 
 
 	m_TurnController->SetTolerance( 1.0, std::numeric_limits< double >::infinity() );
 	m_TurnController->SetSetpoint(angle);

@@ -18,9 +18,10 @@ namespace ohs2020 {
 EncoderDrive::EncoderDrive(int x, int y, int a){
 	m_X = x*HORIZONTAL_CALIBRATION;
 	m_Y = y;
-	m_A = 0;
-	if (a != 0)
-		m_A = ( a-4 ) * 2000/7;
+	m_A = a;
+	//m_A = 0;
+	//if (a != 0)
+	//	m_A = ( a-4 ) * 2000/7;
 	 
 	// angle calculation: ( degrees-4 ) * 2000/7
 	AddRequirements(wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
@@ -55,29 +56,37 @@ bool EncoderDrive::IsFinished() {
 	DebugOutF("DIFF:"+ std::to_string(m_Y + m_A + m_InitialTicks + m_X) + "|" + std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) + "|" + std::to_string(abs((m_InitialTicks + m_X + m_Y + m_A) - Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) <= COUNT_THRESHOLD));
 	DebugOutF("MOTOR%: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetMotorOutputPercent()));
 
-	if( m_X + m_Y + m_A < 0 ){
-		return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() <= (m_Y + m_A + m_InitialTicks + m_X);
-	} else {
-		return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() >= (m_Y + m_A + m_InitialTicks + m_X);
-	}
+	//if( m_X + m_Y + m_A < 0 ){
+		return Robot::Get().GetDriveTrain().GetRFront()->GetSelectedSensorPosition() >= m_A + m_InitialTicks;
+				//&& abs(Robot::Get().GetDriveTrain().GetRFront()->GetSelectedSensorPosition()) >= abs(m_Y - m_A + m_InitialTicks - m_X)
+				//&& abs(Robot::Get().GetDriveTrain().GetLBack()->GetSelectedSensorPosition()) >= abs(m_Y + m_A + m_InitialTicks - m_X)
+				//&& abs(Robot::Get().GetDriveTrain().GetLBack()->GetSelectedSensorPosition()) >= abs(m_Y - m_A + m_InitialTicks + m_X);
+	//} else {
+		//return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() >= (m_Y + m_A + m_InitialTicks + m_X);
+	//}
 
 }//returns true when encoderTicks is equals to or greater than target
 
 void EncoderDrive::Execute() {
-	
+	DebugOutF("DIFF:"+ std::to_string(m_Y + m_A + m_InitialTicks + m_X) + "|" + std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) + "|" + std::to_string(abs((m_InitialTicks + m_X + m_Y + m_A) - Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) <= COUNT_THRESHOLD));
+	DebugOutF("MOTOR%: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetMotorOutputPercent()));
+
 	int max = m_X + m_A + m_Y;
+	if (max < abs(m_Y - m_X - m_A))
+		max = m_Y - m_X - m_A;
+	
 	double maxSpeed = 0.3;
 
-	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, (m_Y + m_X + m_A)/max*maxSpeed );
-	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, (m_Y - m_X - m_A)/max*maxSpeed );
-	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput, (m_Y - m_X + m_A)/max*maxSpeed );
-	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput, (m_Y + m_X - m_A)/max*maxSpeed );
+	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y + m_X + m_A)/max*maxSpeed*/ );
+	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y - m_X - m_A)/max*maxSpeed*/ );
+	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y - m_X + m_A)/max*maxSpeed*/ );
+	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y + m_X - m_A)/max*maxSpeed*/ );
 
 }//execute command (does nothing, waits)
 
 void EncoderDrive::End(bool interrupted) {
 	
-	DebugOutF("|STOP|"+std::to_string(interrupted));
+	DebugOutF("|STOP|");
 	DebugOutF("Final Pos: "+std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
 
 	
