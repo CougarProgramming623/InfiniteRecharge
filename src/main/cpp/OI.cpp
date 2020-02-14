@@ -19,8 +19,6 @@ void OI::Init(){
 
 	m_FodToggle.WhenPressed(frc2::InstantCommand([&] { 
 
-		Wait(2000);
-
 		m_Fod = !m_Fod;
 		
 		DebugOutF("Flipped FOD");

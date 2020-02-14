@@ -12,9 +12,3 @@
 inline void DebugOutF(const wpi::Twine& message){
 	frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand(message));
 }
-
-inline void Wait(int ms) {
-
-
-
-}
