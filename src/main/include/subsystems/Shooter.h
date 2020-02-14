@@ -3,39 +3,33 @@
 #include <ctre/Phoenix.h>
 #include <frc2/command/button/Button.h>
 
+#include <frc2/command/SubsystemBase.h>
+#include <frc2/command/Command.h>	
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/RunCommand.h>
-#include <frc2/command/Command.h>	
+
+#include <frc2/Timer.h>
 
 #include "Util.h"
-#include "OI.h"
 
 namespace ohs2020{
 
 const double FlyWheelDefaultSpeed = 0;
 
-class Shooter {
+class Shooter : public frc2::SubsystemBase {
 
 public:
 	Shooter();
 
 	void Init();
 
-	void SetFlyWheelCommands();
-	void FlyWheelOn();
-	void FlyWheelOff();
-
-	void FlyWheelTune();
-	void LoadLemon();
-
-	void Shoot();
+	void SetupShooterButtons();
 
 	bool FlyWheelMode = false;
 
 	bool GetFlywheelState() { return isFlywheelOn; }
-	double GetFlywheelWU() { return flywheelWU; }
 
-	bool GetLoadStatus() { return isLoaded; }
+	double GetFlywheelWU() { return flywheelWU; }
 
 private:
 
@@ -44,15 +38,15 @@ private:
 	double flywheelWU;
 
 	WPI_TalonSRX Flywheel;
-	WPI_TalonSRX LemonAID;
+	WPI_TalonSRX feeder;
 
-	frc2::Button FlyWheelToggle;
+	frc2::Button flyWheelToggle;
 	frc2::Button FlyWheelTuner;
 	frc2::Button launcher;
 
 	CANCoder FlyWheelEncoder;
 
-	OI m_OI;
+	frc2::Timer timer;
 };
 
 }//namespace

@@ -32,9 +32,8 @@ private:
 	frc::Joystick m_DriverJoystick = frc::Joystick(0);
 	frc::Joystick m_ButtonBoard = frc::Joystick(1);
 
-	bool m_VelocityMode = true;
+	bool m_VelocityMode = false;
 
-	
 };
 
 }//namespace

@@ -67,7 +67,7 @@ void Robot::RobotPeriodic() {
 
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
 	Cob::PushValue(CobKey::FLYWHEEL_WU, m_shooter.GetFlywheelWU());
-	//Cob::PushValue(CobKey::LOAD_STATUS, m_shooter.IsLoaded());
+	Cob::PushValue(CobKey::FLYWHEEL_STATUS, m_shooter.GetFlywheelState());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
 		Cob::PushValue(CobKey::IS_RED, true);
