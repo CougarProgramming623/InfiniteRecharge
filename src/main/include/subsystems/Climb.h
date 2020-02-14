@@ -7,7 +7,6 @@
 #include <frc2/command/FunctionalCommand.h>
 
 #include "Util.h"
-#include "OI.h"
 
 namespace ohs2020{
 
@@ -21,17 +20,13 @@ public:
 	void VerticalClimb();
 	void SideClimb();
 
-
-	OI& getOI() { return oi; }
-
 	bool isEndgame = false;
 
 private:
+
 	bool isClimbing = false;
 
 	int verticalDirection = 1;
-
-	OI oi;
 
 	WPI_TalonSRX climbMotorLeft;
 	WPI_TalonSRX climbMotorRight;
