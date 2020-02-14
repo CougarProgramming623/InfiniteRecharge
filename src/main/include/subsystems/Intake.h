@@ -2,9 +2,10 @@
 
 #include <ctre/Phoenix.h>
 #include <frc2/command/button/Button.h>
-#include <frc2/command/RunCommand.h>
 
 #include "Util.h"
+
+#include <frc2/Timer.h>
 
 namespace ohs2020{
 
@@ -14,12 +15,26 @@ public:
 	Intake();
 
 	void Init();
-	void Spin();
+
+	void IntakeToggleCommands();
+	void IntakePlacementCommands();
+
+	void IntakePlacementUp();
+	void IntakePlacementDown();
 
 private:
 
-	WPI_TalonSRX intakeMotor;
+	bool intakeOn = false;
 
-	frc2::Button intakeButton;
+	WPI_TalonSRX intakeMotor;
+	WPI_TalonSRX intakeLift;
+
+	frc2::Button intakeDownButton;
+	frc2::Button intakeUpButton;
+	frc2::Button intakeManualButton;
+	frc2::Button intakeOnButton;
+
+	frc2::Timer timer;
+
 };
 }//namespace
