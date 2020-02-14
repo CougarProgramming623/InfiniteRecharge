@@ -18,9 +18,13 @@ m_Turn([&] { return m_ButtonBoard.GetRawButton(100);})
 void OI::Init(){
 
 	m_FodToggle.WhenPressed(frc2::InstantCommand([&] { 
+
+		Wait(2000);
+
 		m_Fod = !m_Fod;
-		Cob::SendMessage(CobMessageOut::PING, "Is Field Oriented");
+		
 		DebugOutF("Flipped FOD");
+		
 	}, {} ));
 
 	m_Turn.WhenPressed( EncoderDrive::RotateTo(30) );

@@ -3,6 +3,7 @@
 #include <frc2/command/PrintCommand.h>
 #include <frc2/command/CommandScheduler.h>
 #include <frc2/command/WaitCommand.h>
+#include <frc2/command/SequentialCommandGroup.h>
 
 #include <iostream>
 #include <chrono>
@@ -14,6 +15,6 @@ inline void DebugOutF(const wpi::Twine& message){
 
 inline void Wait(int ms) {
 
-	frc2::CommandScheduler::GetInstance().Schedule(new frc2::WaitCommand(std::chrono::milliseconds(ms)));
+
 
 }

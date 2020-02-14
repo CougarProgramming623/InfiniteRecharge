@@ -4,8 +4,6 @@
 #include <frc2/command/button/Button.h>
 #include <frc2/command/RunCommand.h>
 
-
-#include "OI.h"
 #include "Util.h"
 
 namespace ohs2020{
@@ -18,10 +16,7 @@ public:
 	void Init();
 	void Spin();
 
-	OI& GetOI() { return m_oi; }
-
 private:
-	OI m_oi;
 
 	WPI_TalonSRX intakeMotor;
 

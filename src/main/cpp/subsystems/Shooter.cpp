@@ -1,88 +1,74 @@
 #include "subsystems/Shooter.h"
+#include "Robot.h"
+#include "ohs/Log.h"
+
+#include <frc/smartdashboard/SmartDashboard.h>
+
+#include "frc2/command/FunctionalCommand.h"
 
 namespace ohs2020{
 
-const double DefaultShooterPower = 0;
+const double DefaultShooterPower = 1;
 
 Shooter::Shooter() : 
 
-Flywheel(0), //35 
-LemonAID(0),
-launcher( [&] { return m_OI.GetButtonBoard().GetRawButton(6); }), // Arm	 Override
-FlyWheelToggle([&] { return m_OI.GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
-FlyWheelEncoder(0) //35
-{ //2 -- Green Button | 19 -- Cargo/Hatch Toggle | 1 -- Vacuum Toggle Switch
-
-}
+Flywheel(35),
+feeder(3),
+launcher( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6); }), // Arm Override
+flyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
+FlyWheelEncoder(35),
+timer()
+{}
 
 void Shooter::Init() {
 
-	SetFlyWheelCommands();
-	Shoot();
+	SetupShooterButtons();
 }
 
-inline void Shooter::SetFlyWheelCommands() {
+inline void Shooter::SetupShooterButtons() {
 
-	FlyWheelToggle.WhileHeld(frc2::RunCommand([&] { FlyWheelOn(); }, {} ));
-	FlyWheelToggle.WhenReleased(frc2::InstantCommand([&] { FlyWheelOff(); }, {} ));
+	flyWheelToggle.WhileHeld(frc2::FunctionalCommand([this]{}, [this] { //on execute
 
-}
+		isFlywheelOn = true;
+		flywheelWU = Flywheel.GetSelectedSensorVelocity() / 2048;
+		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
+
+		Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0));
+
+	}, [this] (bool f){//on end
+
+		isFlywheelOn = false;
+
+		Flywheel.Set(ControlMode::PercentOutput, 0);
+
+	}, [this] { return false; }, {}));
+
+	std::vector<std::unique_ptr<frc2::Command>> vector;
+	frc2::FunctionalCommand* shootBall = new frc2::FunctionalCommand([this] { //on init
+
+		timer.Reset();
+		timer.Start();
+		feeder.Set(ControlMode::PercentOutput, 1);
+		OHS_DEBUG([](auto& f){ f << "shooting init"; });
+
+	}, [this] {}, [this] (bool f) {// on end
+
+		feeder.Set(ControlMode::PercentOutput, 0);
+		OHS_DEBUG([](auto& f){ f << "shooting end"; });
 
 
-inline void Shooter::FlyWheelOn() {
-
-	DebugOutF("FlyWheel On");
-
-	isFlywheelOn = true;
-	flywheelWU = Flywheel.GetSelectedSensorVelocity() / 2048;
-
-	//DebugOutF(std::to_string(m_OI.GetButtonBoard().GetRawAxis(0)));
-
-	Flywheel.Set(ControlMode::PercentOutput, DefaultShooterPower + m_OI.GetButtonBoard().GetRawAxis(0) /* * .75 */);
-}
-
-
-inline void Shooter::FlyWheelOff() {
-
-	DebugOutF("FlyWheel Off");
-
-	isFlywheelOn = false;
-	flywheelWU = 0;
-
-	Flywheel.Set(ControlMode::PercentOutput, 0);
-}
-
-
-void Shooter::LoadLemon() {
-
-	if(FlyWheelToggle.Get()){
-
-		LemonAID.Set(ControlMode::PercentOutput, .1);
-
-		Wait(2000); //Amount of time to load a lemon into the launching chamber
-
-		LemonAID.Set(ControlMode::PercentOutput, 0);
-
-	}
-}
-
-void Shooter::Shoot() {
-
-	launcher.WhileHeld(frc2::RunCommand([&] {
-
-		if(!FlyWheelToggle.Get()){
-
-		Flywheel.Set(ControlMode::PercentOutput, DefaultShooterPower);
+	}, [this] { // is finished
 		
-			Wait(3000); //Time to reach target velocity
-		}
+		OHS_DEBUG([&](auto& f){ f << "shooter is finished? " << (timer.Get() > units::second_t(1)); })
+		return timer.Get() > units::second_t(2);
 
-		DebugOutF("Firing!");
 
-		LoadLemon();
+	}, {});
+	for(int i = 0; i < 10; i++){
+		vector.push_back(std::unique_ptr<frc2::Command>(shootBall));
+		vector.push_back(std::make_unique<frc2::WaitCommand>(units::second_t(1)));
+	}
+	launcher.WhenHeld(frc2::SequentialCommandGroup(std::move(vector)));
 
-		Wait(1000); //Amount of time needed for flywheel to reach required velocity again
-
-	}, {} ));
 }
 }//namespace

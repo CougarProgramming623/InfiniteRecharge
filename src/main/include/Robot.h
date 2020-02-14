@@ -43,6 +43,8 @@ public:
 	inline OI& GetOI() { return m_oi; }
 	inline DriveTrain& GetDriveTrain() { return m_DriveTrain; }
 	inline Intake& GetIntake() { return m_intake; }
+	inline Shooter& GetShooter() { return m_shooter; }
+	inline Climb& GetClimb() { return m_climb; }
 	inline AHRS* GetNavX() const { return navx; }
 	inline bool IsInitComplete() const { return m_Init; }
 
