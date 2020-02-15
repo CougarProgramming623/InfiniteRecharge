@@ -1,10 +1,13 @@
 #include "subsystems/Shooter.h"
 #include "Robot.h"
+#include "ohs/RobotID.h"
 #include "ohs/Log.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "frc2/command/FunctionalCommand.h"
+
+using namespace ohs623;
 
 namespace ohs2020{
 
@@ -12,11 +15,11 @@ const double DefaultShooterPower = 1;
 
 Shooter::Shooter() : 
 
-Flywheel(35),
-feeder(3),
+Flywheel(RobotID::GetID(FLYWHEEL)),
+feeder(RobotID::GetID(FEEDER)),
 launcher( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6); }), // Arm Override
 flyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
-FlyWheelEncoder(35),
+FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
 timer()
 {}
 
