@@ -3,6 +3,7 @@
 #include "Cob.h"
 #include "Robot.h"
 #include "commands/EncoderDrive.h"
+#include "commands/TurnToPosPID.h"
 
 namespace ohs2020{
 
@@ -24,7 +25,7 @@ void OI::Init(){
 		DebugOutF("Flipped FOD");
 	}, {} ));
 
-	m_Turn.WhenPressed( Robot::Get().GetDriveTrain().TurnToPos(90) );
+	m_Turn.WhenPressed( new TurnToPosPID(30) /*Robot::Get().GetDriveTrain().TurnToPos(90)*/ );
 
 	m_EncoderDrive.WhenPressed( new EncoderDrive(0, 0, 50));
 }

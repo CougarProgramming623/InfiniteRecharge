@@ -4,25 +4,28 @@
 #include "Robot.h"
 
 #include <frc2/command/PIDCommand.h>
-#include <frc2/command/CommandBase.h>
-#include <frc2/command/CommandHelper.h>
 
-namespace frc2020{
+namespace ohs2020 {
 
-class TurnToPosPID : public frc2::CommandHelper<frc2::PIDCommand, TurnToPosPID> {
+class TurnToPosPID : public frc2::PIDCommand {
 
 public: 
-    TurnToPosPID();
+    ~TurnToPosPID(){}
+
+    //TurnToPosPID();
     TurnToPosPID(double angle);
+
     void Initialize() override;
-	void Execute() override;
+    void Execute() override;
 	bool IsFinished() override;
 	void End(bool interrupted) override;
 
-    static frc2::PIDController CreateTurnController();
+    frc2::PIDController CreateTurnController();
+    double GetVisionAngle();
 
 private:
     frc2::PIDController* m_TurnController;
+    double m_Angle;
 };
 
 } // end namespace

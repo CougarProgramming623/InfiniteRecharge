@@ -12,8 +12,8 @@ climbMotorLeft(4),
 climbMotorRight(17),
 climbUp([&]         { return getOI().GetButtonBoard().GetRawButton(5);   }),
 climbDown([&]       { return getOI().GetButtonBoard().GetRawButton(3);   }),
-climbLeft([&]       { return getOI().GetButtonBoard().GetRawButton(100); }),
-climbRight([&]      { return getOI().GetButtonBoard().GetRawButton(100); }),
+climbLeft([&]       { return getOI().GetButtonBoard().GetRawButton(1); }),
+climbRight([&]      { return getOI().GetButtonBoard().GetRawButton(1); }),
 endgameOverride([&] { return getOI().GetButtonBoard().GetRawButton(4); }) {
 
 	climbMotorLeft.SetInverted(true);

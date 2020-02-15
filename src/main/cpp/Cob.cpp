@@ -49,6 +49,9 @@ void Cob::Init() {
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
 
+	RegisterKey(CobKey::VISION_ANGLE, "/vision/angle1");
+	RegisterKey(CobKey::VISION_X, "/vision/x");
+	RegisterKey(CobKey::VISION_Y, "/vision/y");
 }
 
 void Cob::RegisterKey(CobKey key, std::string name, bool persistent) {
