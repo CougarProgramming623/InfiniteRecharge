@@ -13,6 +13,7 @@
 #include "subsystems/Shooter.h"
 #include "subsystems/Intake.h"
 #include "Util.h"
+#include "ButtonIDs.h"
 
 #include "ohs/Assert.h"
 #include "AutoManager.h"

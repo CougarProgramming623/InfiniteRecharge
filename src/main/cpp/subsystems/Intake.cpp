@@ -1,4 +1,4 @@
-#include "subsystems/Intake.h"
+	#include "subsystems/Intake.h"
 #include "Robot.h"
 #include "ohs/RobotID.h"
 
@@ -13,11 +13,11 @@ Intake::Intake() :
 intakeMotor(RobotID::GetID(INTAKE)),
 intakeLift(RobotID::GetID(INTAKE_LIFTER)),
 
-intakeDownButton([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(9); }), // >
-intakeUpButton([&]		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(10); }), //  Arm/Wrist Dial
-intakeManualButton([&]	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11); }), // >
+intakeDownButton([&] 	{ return ButtonID INTAKE_DOWN_ID; }), // >
+intakeUpButton([&]		{ return ButtonID INTAKE_UP_ID; }), //  Arm/Wrist Dial
+intakeManualButton([&]	{ return ButtonID INTAKE_MANUAL_ID; }), // >
 
-intakeOnButton([&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(7); }), //Fork Override Yellow Button
+intakeOnButton([&] 		{ return ButtonID INTAKE_TOGGLE_ID; }), //Fork Override Yellow Button
 timer()
 {}
 

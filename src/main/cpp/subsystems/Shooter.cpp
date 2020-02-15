@@ -15,11 +15,11 @@ const double DefaultShooterPower = 1;
 
 Shooter::Shooter() : 
 
-Flywheel(RobotID::GetID(FLYWHEEL)),
-feeder(RobotID::GetID(FEEDER)),
-launcher( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6); }), // Arm Override
-flyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
-FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
+Flywheel				(RobotID::GetID(FLYWHEEL)),
+feeder					(RobotID::GetID(FEEDER)),
+launcher( [&] 			{return ButtonID LAUNCHER_ID;}), // Arm Override
+flyWheelToggle([&] 		{return ButtonID FLYWHEEL_TOGGLE_ID;}), //Vacuum Toggle Switch
+FlyWheelEncoder			(RobotID::GetID(FLYWHEEL)),
 timer()
 {}
 

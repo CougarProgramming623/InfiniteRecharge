@@ -12,14 +12,14 @@ double BASIC_CLIMB_SPEED = 1;
 
 Climb::Climb() : 
 
-climbMotorLeft(RobotID::GetID(CLIMB_LEFT)),
-climbMotorRight(RobotID::GetID(CLIMB_RIGHT)), 
-climbUp([&]         { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2);   }),
-climbDown([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(3);   }),
-//climbLeft([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(xx); }),
-//climbRight([&]      { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(xx); }),
-deployer([&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(5);   }), // Drive Override Nuke Switch *Temporarily*
-endgameOverride([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(4);   }),
+climbMotorLeft		(RobotID::GetID(CLIMB_LEFT)),
+climbMotorRight		(RobotID::GetID(CLIMB_RIGHT)), 
+climbUp([&]         {return ButtonID CLIMB_UP_ID;}),
+climbDown([&]       {return ButtonID CLIMB_DOWN_ID;}),
+climbLeft([&]   	{return ButtonID CLIMB_LEFT_ID;}),
+climbRight([&]  	{return ButtonID CLIMB_RIGHT_ID;}),
+deployer([&] 		{return ButtonID DEPLOYER_ID;}),
+endgameOverride([&] {return ButtonID ENDGAME_OVERRIDE_ID;}),
 timer()
 {
 
