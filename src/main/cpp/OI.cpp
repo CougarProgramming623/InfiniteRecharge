@@ -9,7 +9,8 @@ namespace ohs2020{
 OI::OI() : 
 
 m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}),
-m_Turn([&] { return m_ButtonBoard.GetRawButton(100);})
+m_Turn([&] { return m_ButtonBoard.GetRawButton(26);}),
+m_VModeToggle([&] { return m_ButtonBoard.GetRawButton(31);})
 {
 
 }
@@ -26,6 +27,8 @@ void OI::Init(){
 	}, {} ));
 
 	m_Turn.WhenPressed( EncoderDrive::RotateTo(30) );
+
+	m_VModeToggle.WhenPressed( []() {DebugOutF( "VMODE?: " + std::to_string( Robot::Get().GetOI().ToggleVMode()) ); } );
 }
 
 

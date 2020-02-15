@@ -22,10 +22,13 @@ public:
 	bool GetVelocityMode() const { return m_VelocityMode; } 
 
 	bool isFodToggle() const { return m_FodToggle.Get(); }
-	
+
+	bool ToggleVMode() {m_VelocityMode = !m_VelocityMode; return m_VelocityMode;}
+
 	frc2::Button m_FodToggle;
 	frc2::Button m_Turn;
-
+	frc2::Button m_VModeToggle;
+		
 	bool m_Fod = true;
 
 private:
