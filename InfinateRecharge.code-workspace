@@ -78,7 +78,9 @@
 			"streambuf": "cpp",
 			"thread": "cpp",
 			"cinttypes": "cpp",
-			"typeinfo": "cpp"
+			"typeinfo": "cpp",
+			"xhash": "cpp",
+			"xstring": "cpp"
 		},
 	}
 }
