@@ -6,8 +6,8 @@
 //climb	
 #define CLIMB_UP_ID				(2)	//Green Climb Button
 #define CLIMB_DOWN_ID			(3)	//Red Climb Button
-#define CLIMB_LEFT_ID			(-1)
-#define CLIMB_RIGHT_ID			(-1)
+#define CLIMB_LEFT_ID			(9)
+#define CLIMB_RIGHT_ID			(8)
 #define DEPLOYER_ID				(5) //Drive Override Switch
 #define ENDGAME_OVERRIDE_ID		(4) //Endgame Override Switch
 

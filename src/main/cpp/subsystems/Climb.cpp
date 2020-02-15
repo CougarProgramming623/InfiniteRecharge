@@ -146,4 +146,10 @@ void Climb::Deploy() {
 inline bool Climb::CanClimb() {
 	return (endgameOverride.Get() || (Timer::GetMatchTime() < 30)) && isDeployed;
 }
+
+bool Climb::IsShot() {
+
+double pastVelocity[10];
+
+}
 }//namespace

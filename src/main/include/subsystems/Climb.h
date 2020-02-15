@@ -23,6 +23,8 @@ public:
 	void SideClimb();
 	bool IsDeployed();
 
+	bool IsShot();
+
 private:
 
 	WPI_TalonSRX climbMotorLeft;
