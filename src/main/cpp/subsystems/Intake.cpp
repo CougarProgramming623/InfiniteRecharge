@@ -1,14 +1,17 @@
 #include "subsystems/Intake.h"
 #include "Robot.h"
+#include "ohs/RobotID.h"
 
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/FunctionalCommand.h>
 
+using namespace ohs623;
+
 namespace ohs2020{
 
 Intake::Intake() :
-intakeMotor(0),
-intakeLift(6),
+intakeMotor(RobotID::GetID(INTAKE)),
+intakeLift(RobotID::GetID(INTAKE_LIFTER)),
 
 intakeDownButton([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(9); }), // >
 intakeUpButton([&]		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(10); }), //  Arm/Wrist Dial
