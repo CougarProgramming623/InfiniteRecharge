@@ -1,7 +1,10 @@
 #include "subsystems/Climb.h"
 #include "Robot.h"
+#include "ohs/RobotID.h"
 
 #include <frc2/Timer.h>
+
+using namespace ohs623;
 
 namespace ohs2020 {
 
@@ -9,12 +12,12 @@ double BASIC_CLIMB_SPEED = 1;
 
 Climb::Climb() : 
 
-climbMotorLeft(1), //4
-climbMotorRight(6), //17
+climbMotorLeft(RobotID::GetID(CLIMB_LEFT)),
+climbMotorRight(RobotID::GetID(CLIMB_RIGHT)), 
 climbUp([&]         { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2);   }),
 climbDown([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(3);   }),
-//climbLeft([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(100); }),
-//climbRight([&]      { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(100); }),
+//climbLeft([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(xx); }),
+//climbRight([&]      { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(xx); }),
 deployer([&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(5);   }), // Drive Override Nuke Switch *Temporarily*
 endgameOverride([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(4);   }),
 timer()
