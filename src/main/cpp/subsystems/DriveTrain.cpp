@@ -116,14 +116,14 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 		m_FrontLeft->Set(ControlMode::Velocity, wheelSpeeds[kFRONT_LEFT] * kMAX_VELOCITY);
 		m_BackLeft->Set(ControlMode::Velocity, wheelSpeeds[kBACK_LEFT] * kMAX_VELOCITY);
 		m_FrontRight->Set(ControlMode::Velocity, wheelSpeeds[kFRONT_RIGHT] * kMAX_VELOCITY);
-		m_BackRight->Set(ControlMode::Velocity, wheelSpeeds[kFRONT_RIGHT] * kMAX_VELOCITY);
+		m_BackRight->Set(ControlMode::Velocity, wheelSpeeds[kBACK_RIGHT] * kMAX_VELOCITY);
 
 	} else {
 		
 		m_FrontLeft->Set(ControlMode::PercentOutput, wheelSpeeds[kFRONT_LEFT]);
 		m_BackLeft->Set(ControlMode::PercentOutput, wheelSpeeds[kBACK_LEFT]);
 		m_FrontRight->Set(ControlMode::PercentOutput, wheelSpeeds[kFRONT_RIGHT]);
-		m_BackRight->Set(ControlMode::PercentOutput, wheelSpeeds[kFRONT_RIGHT]);
+		m_BackRight->Set(ControlMode::PercentOutput, wheelSpeeds[kBACK_RIGHT]);
 
 		//DebugOutF(std::to_string(wheelSpeeds[kFRONT_LEFT]));
 	}
