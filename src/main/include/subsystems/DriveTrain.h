@@ -13,6 +13,9 @@ class DriveTrain : public frc2::SubsystemBase {
 public:
 	DriveTrain();
 
+	DriveTrain(const DriveTrain& other) = delete;
+	void operator=(const DriveTrain& other) = delete;
+
 
 	void Init();
 	//frc2::Command* GetDefaultCommand() const override;

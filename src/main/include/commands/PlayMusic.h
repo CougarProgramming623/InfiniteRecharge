@@ -11,6 +11,8 @@ public:
 	PlayMusic();
 	virtual void Execute() override;
 	virtual void Initialize() override;
+	virtual bool IsFinished() override;
+	virtual void End(bool interrupted) override;
 
 };
 

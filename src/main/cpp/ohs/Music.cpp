@@ -21,6 +21,10 @@ void Music::Init() {
 		OHS_WARN([](auto& f) {
 			f << "No Talon FX's avilable on robot to play music with!";
 		});
+	} else {
+		OHS_DEBUG([](auto& f) {
+			f << "Found Talon FX's to play music with!";
+		});
 	}
 
 
@@ -28,7 +32,9 @@ void Music::Init() {
 }
 
 void Music::Start() {
-
+	OHS_DEBUG([](auto& f) {
+		f << "Music::Start()";
+	});
 }
 
 void Music::Stop() {
