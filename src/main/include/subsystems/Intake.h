@@ -21,6 +21,7 @@ public:
 
 	void IntakePlacementUp();
 	void IntakePlacementDown();
+	void ManualModeCommands();
 
 private:
 

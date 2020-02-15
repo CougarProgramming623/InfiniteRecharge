@@ -8,11 +8,11 @@ namespace ohs2020{
 
 Intake::Intake() :
 intakeMotor(0),
-intakeLift(100),
+intakeLift(6),
 
-intakeDownButton([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(24); }), // >
-intakeUpButton([&]		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(25); }), //  Arm/Wrist Dial
-intakeManualButton([&]	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(26); }), // >
+intakeDownButton([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(9); }), // >
+intakeUpButton([&]		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(10); }), //  Arm/Wrist Dial
+intakeManualButton([&]	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11); }), // >
 
 intakeOnButton([&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(7); }), //Fork Override Yellow Button
 timer()
@@ -35,6 +35,7 @@ void Intake::IntakePlacementCommands() {
 	
 IntakePlacementUp();
 IntakePlacementDown();
+ManualModeCommands();
 
 }
 
@@ -56,7 +57,7 @@ void Intake::IntakePlacementUp() {
 
 	}, [this]{//is finished
 
-		return timer.Get() > units::second_t(2);
+		return timer.Get() > units::second_t(1);
 
 	}, {} ));
 
@@ -83,6 +84,17 @@ void Intake::IntakePlacementDown() {
 		return timer.Get() > units::second_t(1);
 
 	}, {} ));
-
 }
+
+void Intake::ManualModeCommands() {
+
+	intakeManualButton.WhenPressed(frc2::InstantCommand([&] { DebugOutF("Manual Mode"); }, {}));
+
+	intakeManualButton.WhenHeld(frc2::RunCommand([&] { 
+
+		intakeLift.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(1));
+
+	}, {}));
+}
+
 }//namespace
