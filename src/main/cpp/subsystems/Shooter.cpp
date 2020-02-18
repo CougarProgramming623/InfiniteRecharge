@@ -30,7 +30,7 @@ inline void Shooter::SetupShooterButtons() {
 	flyWheelToggle.WhileHeld(frc2::FunctionalCommand([this]{}, [this] { //on execute
 
 		isFlywheelOn = true;
-		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
+		flywheelWU = Flywheel.GetSelectedSensorVelocity() / 4;
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
 
 		Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0));

@@ -14,7 +14,7 @@ void AutoManager::AutoInit(){
     m_AutoMap["safe"] = new frc2::PrintCommand("Moved Forward");
 }
 
-void AutoManager::setInUse(std::string setAuto) {
+void AutoManager::SetInUse(std::string setAuto) {
     if (setAuto != "--DELETED--") {
         m_InUse = setAuto;
     }
