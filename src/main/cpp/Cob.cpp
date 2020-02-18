@@ -22,7 +22,7 @@ void Handshake(const nt::NetworkTableEntry& entry) {
 }
 
 void ReceiveAuto(const nt::NetworkTableEntry& entry) {
-		Robot::Get().GetAutoMan().setInUse(entry.GetValue()->GetString());
+		Robot::Get().GetAutoMan().SetInUse(entry.GetValue()->GetString());
 }
 
 void GyroResetConfirm(const nt::NetworkTableEntry& entry) {
@@ -146,6 +146,12 @@ template<>
 void Cob::PushValue<std::string>(CobKey key, std::string value) {
 	if (EnsureExists(key)) s_Map[key].SetString(value);
 }
+
+template<>
+void Cob::PushValue<const char*>(CobKey key, const char* value) {
+	if (EnsureExists(key)) s_Map[key].SetString(value);
+}
+
 template<>
 void Cob::PushValue<std::string&>(CobKey key, std::string& value) {
 	if (EnsureExists(key)) s_Map[key].SetString(value);

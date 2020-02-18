@@ -16,9 +16,9 @@
 #include "CobConstants.h"
 #include "Cob.h"
 
-namespace ohs2020{
+namespace ohs2020 {
 
-class AutoManager{
+class AutoManager {
 
 public:
     AutoManager();
@@ -29,7 +29,7 @@ public:
 
     inline std::string getInUse() {return m_InUse;}
     frc2::Command* getAuto();
-    void setInUse(std::string setAuto);
+    void SetInUse(std::string setAuto);
 
 private:
     std::map<std::string, frc2::Command*> m_AutoMap;
