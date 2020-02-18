@@ -93,7 +93,7 @@ void Normalize(wpi::MutableArrayRef<double> wheelSpeeds) {
 
 void DriveTrain::CartesianDrive(double y, double x, double rotation, double angle) {
 
-	DebugOutF("Mode: "+ std::to_string(m_FrontLeft->GetSelectedSensorVelocity()));
+	//DebugOutF("Mode: "+ std::to_string(m_FrontLeft->GetSelectedSensorVelocity()));
 	DebugOutF("VDiff: "+ std::to_string( m_FrontLeft->GetClosedLoopTarget() - m_FrontLeft->GetSelectedSensorVelocity()/4 ));
 
 	SmartDashboard::PutNumber("PIDVELOCITY", m_FrontLeft->GetSelectedSensorVelocity());
