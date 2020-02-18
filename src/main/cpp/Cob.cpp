@@ -146,6 +146,12 @@ template<>
 void Cob::PushValue<std::string>(CobKey key, std::string value) {
 	if (EnsureExists(key)) s_Map[key].SetString(value);
 }
+
+template<>
+void Cob::PushValue<const char* >(CobKey key, const char* value) {
+	if (EnsureExists(key)) s_Map[key].SetString(value);
+}
+
 template<>
 void Cob::PushValue<std::string&>(CobKey key, std::string& value) {
 	if (EnsureExists(key)) s_Map[key].SetString(value);
