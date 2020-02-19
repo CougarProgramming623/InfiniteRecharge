@@ -15,15 +15,15 @@ const double DefaultShooterPower = 1;
 
 Shooter::Shooter() : 
 
-Flywheel				(RobotID::GetID(FLYWHEEL)),
-feeder					(RobotID::GetID(FEEDER)),
-launcher( [&] 			{return ButtonID LAUNCHER_ID;}), // Arm Override
-flyWheelToggle([&] 		{return ButtonID FLYWHEEL_TOGGLE_ID;}), //Vacuum Toggle Switch
-FlyWheelEncoder			(RobotID::GetID(FLYWHEEL)),
-timer(){
+m_Flywheel				(RobotID::GetID(FLYWHEEL)),
+m_Feeder					(RobotID::GetID(FEEDER)),
+m_Launcher( [&] 			{return ButtonID LAUNCHER_ID;}), // Arm Override
+m_FlyWheelToggle([&] 		{return ButtonID FLYWHEEL_TOGGLE_ID;}), //Vacuum Toggle Switch
+m_FlyWheelEncoder			(RobotID::GetID(FLYWHEEL)),
+m_Timer(){
 
 //Flywheel.ConfigAllowableClosedloopError
-Flywheel.Config_kF(0, .25, 0);
+m_Flywheel.Config_kF(0, .25, 0);
 
 }
 
@@ -36,24 +36,24 @@ inline void Shooter::SetupShooterButtons() {
 
 	m_FlyWheelToggle.WhileHeld(frc2::FunctionalCommand([this]{}, [this] { //on execute
 
-		DebugOutF(std::to_string(flywheelWU));
-		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
+		DebugOutF(std::to_string(m_FlywheelWU));
+		m_FlywheelWU = (int)((double) m_Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
 		m_FlywheelWU = m_Flywheel.GetSelectedSensorVelocity() / 4;
 
-		Flywheel.Set(ControlMode::Velocity, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0) * 2000);
+		m_Flywheel.Set(ControlMode::Velocity, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0) * 2000);
 
 	}, [this] (bool f){//on end
 
 		m_IsFlywheelOn = false;
 
-		Flywheel.Set(ControlMode::Velocity, 0);
+		m_Flywheel.Set(ControlMode::Velocity, 0);
 
 	}, [this] { return false; }, {}));
 
-	flyWheelToggle.WhenReleased(frc2::RunCommand([&] {
+	m_FlyWheelToggle.WhenReleased(frc2::RunCommand([&] {
 
-		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
-		DebugOutF(std::to_string(flywheelWU));
+		m_FlywheelWU = (int)((double) m_Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
+		DebugOutF(std::to_string(m_FlywheelWU));
 
 	}, {}));
 
@@ -82,5 +82,7 @@ inline void Shooter::SetupShooterButtons() {
 		vector.push_back(std::unique_ptr<frc2::Command>(shootBall));
 		vector.push_back(std::make_unique<frc2::WaitCommand>(units::second_t(.5)));
 	}
+
+}
 
 }//namespace
