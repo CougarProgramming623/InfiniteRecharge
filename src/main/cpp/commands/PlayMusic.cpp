@@ -20,6 +20,9 @@ namespace ohs2020 {
 
     void PlayMusic::Initialize() {
 		ohs623::Music::Start();
+		OHS_DEBUG([](auto& f) {
+			f << "Initalized PlayMusic";
+		});
 	}
 	
 	void PlayMusic::Execute() {
