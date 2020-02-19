@@ -22,9 +22,13 @@ public:
 	bool GetVelocityMode() const { return m_VelocityMode; } 
 
 	bool isFodToggle() const { return m_FodToggle.Get(); }
-	
+
+	bool ToggleVMode() {m_VelocityMode = !m_VelocityMode; return m_VelocityMode;}
+
 	frc2::Button m_FodToggle;
 	frc2::Button m_Turn;
+	frc2::Button m_VModeToggle;
+		
 	frc2::Button m_Music;
 
 	bool m_Fod = true;
@@ -33,9 +37,8 @@ private:
 	frc::Joystick m_DriverJoystick = frc::Joystick(0);
 	frc::Joystick m_ButtonBoard = frc::Joystick(1);
 
-	bool m_VelocityMode = true;
+	bool m_VelocityMode = false;
 
-	
 };
 
 }//namespace
