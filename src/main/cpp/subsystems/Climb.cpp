@@ -9,18 +9,19 @@ double BASIC_CLIMB_SPEED = 1;
 Climb::Climb() : 
 
 climbMotorLeft(4),
-climbMotorRight(17),
-climbUp([&]         { return getOI().GetButtonBoard().GetRawButton(5);   }),
-climbDown([&]       { return getOI().GetButtonBoard().GetRawButton(3);   }),
-climbLeft([&]       { return getOI().GetButtonBoard().GetRawButton(1); }),
-climbRight([&]      { return getOI().GetButtonBoard().GetRawButton(1); }),
-endgameOverride([&] { return getOI().GetButtonBoard().GetRawButton(4); }) {
+climbMotorRight(17)
+//climbUp([&]         { return Robot::GetOI().GetButtonBoard().GetRawButton(5);   }),
+//climbDown([&]       { return getOI().GetButtonBoard().GetRawButton(3);   }),
+//climbLeft([&]       { return getOI().GetButtonBoard().GetRawButton(1); }),
+//climbRight([&]      { return getOI().GetButtonBoard().GetRawButton(1); }),
+//endgameOverride([&] { return getOI().GetButtonBoard().GetRawButton(4); }) 
+{
 
-	climbMotorLeft.SetInverted(true);
-	climbMotorRight.SetInverted(false);
+	//climbMotorLeft.SetInverted(true);
+	//climbMotorRight.SetInverted(false);
 
-	climbMotorLeft.SetNeutralMode(Brake);
-	climbMotorRight.SetNeutralMode(Brake);
+	//climbMotorLeft.SetNeutralMode(Brake);
+	//climbMotorRight.SetNeutralMode(Brake);
   
 }
 
