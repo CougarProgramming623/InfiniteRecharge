@@ -36,11 +36,12 @@ inline void Shooter::SetupShooterButtons() {
 
 	m_FlyWheelToggle.WhileHeld(frc2::FunctionalCommand([this]{}, [this] { //on execute
 
+		m_IsFlywheelOn = true;
+		m_FlywheelWU = m_Flywheel.GetSelectedSensorVelocity();
 		DebugOutF(std::to_string(m_FlywheelWU));
-		m_FlywheelWU = (int)((double) m_Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
-		m_FlywheelWU = m_Flywheel.GetSelectedSensorVelocity() / 4;
+		frc::SmartDashboard::PutNumber("Flywheel Speed", m_FlywheelWU);
 
-		m_Flywheel.Set(ControlMode::Velocity, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0) * 2000);
+		m_Flywheel.Set(ControlMode::Velocity, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0) * 22000);
 
 	}, [this] (bool f){//on end
 
@@ -52,7 +53,7 @@ inline void Shooter::SetupShooterButtons() {
 
 	m_FlyWheelToggle.WhenReleased(frc2::RunCommand([&] {
 
-		m_FlywheelWU = (int)((double) m_Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
+		m_FlywheelWU = m_Flywheel.GetSelectedSensorVelocity();
 		DebugOutF(std::to_string(m_FlywheelWU));
 
 	}, {}));
