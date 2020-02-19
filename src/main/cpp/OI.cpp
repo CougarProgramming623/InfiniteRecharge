@@ -25,7 +25,7 @@ void OI::Init(){
 		DebugOutF("Flipped FOD");
 	}, {} ));
 
-	m_Turn.WhenPressed( new TurnToPosPID(30) /*Robot::Get().GetDriveTrain().TurnToPos(90)*/ );
+	m_Turn.WhenPressed( new TurnToPosPID(30) );
 
 	m_EncoderDrive.WhenPressed( new EncoderDrive(0, 0, 50));
 }

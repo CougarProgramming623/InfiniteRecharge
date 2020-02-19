@@ -111,27 +111,4 @@ frc2::PIDCommand* DriveTrain::TurnToPos(double angle) {
 	frc2::PIDCommand* turnCmd = new frc2::PIDCommand(*m_TurnController, measurement, angle, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
 	return turnCmd;
 }
-/*
-frc2::MecanumControllerCommand DriveTrain::AutoDrive(frc::Trajectory trajectory) {
-
-	std::function<frc::Pose2d()> measurement = [trajectory]()->frc::Pose2d{return trajectory.InitialPose();};
-
-	m_XController = frc2::PIDController( 0.0, 0.0, 0.0, units::second_t(20_ms) ); 
-	m_XController.SetTolerance( 1.0, std::numeric_limits< double >::infinity() );
-	m_XController.EnableContinuousInput(-1.0, 1.0);
-
-	m_YController = frc2::PIDController( 0.0, 0.0, 0.0, units::second_t(20_ms) ); 
-	m_YController.SetTolerance( 1.0, std::numeric_limits< double >::infinity() );
-	m_YController.EnableContinuousInput(-1.0, 1.0);
-	
-	
-
-	frc::TrapezoidProfile<units::unit_t<units::meters_per_second>>::Constraints constraints{units::unit_t<units::meters_per_second> 0.0, 1.0};
-
-	m_ThetaController = new frc::ProfiledPIDController( 0.085, 0.0, 0.011, , units::second_t(20_ms) ); 
-	m_ThetaController.EnableContinuousInput(-1.0, 1.0);
-
-
-}
-*/
 }//namespace
