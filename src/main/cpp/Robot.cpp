@@ -17,6 +17,7 @@
 
 #include "ohs/RobotID.h"
 #include "ohs/Log.h"
+#include "ohs/Music.h"
 
 
 namespace ohs2020 {
@@ -34,6 +35,7 @@ void Robot::RobotInit() {
 
 	m_AutoManager.AutoInit();
 	Cob::Init();
+	ohs623::Music::Init();
 	m_DriveTrain.Init();
 	m_oi.Init();
 	m_climb.Init();
@@ -72,22 +74,22 @@ void Robot::RobotPeriodic() {
 	Cob::PushValue(CobKey::FLYWHEEL_WU, m_shooter.GetFlywheelWU());
 	Cob::PushValue(CobKey::FLYWHEEL_STATUS, m_shooter.GetFlywheelState());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
-	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
+	if (frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed) {
 		Cob::PushValue(CobKey::IS_RED, true);
-	}else{
+	} else {
 		Cob::PushValue(CobKey::IS_RED, false);
 	}
 	
-	if (frc::DriverStation::GetInstance().IsDisabled()){
+	if (frc::DriverStation::GetInstance().IsDisabled()) {
 		Cob::PushValue(CobKey::MODE, 5);
 		//DebugOutF("set to 5");
-	}else if (frc::DriverStation::GetInstance().IsAutonomous()){
+	} else if (frc::DriverStation::GetInstance().IsAutonomous()) {
 		Cob::PushValue(CobKey::MODE, 2);
 		//DebugOutF("set to 2");
-	}else if (m_oi.IsFOD()){
+	} else if (m_oi.IsFOD()) {
 		Cob::PushValue(CobKey::MODE, 0);
 		//DebugOutF("set to 0");
-	}else {
+	} else {
 		Cob::PushValue(CobKey::MODE, 1);
 
 	}

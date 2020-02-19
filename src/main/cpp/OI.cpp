@@ -3,20 +3,21 @@
 #include "Cob.h"
 #include "Robot.h"
 #include "commands/EncoderDrive.h"
+#include "ButtonIDs.h"
 
-namespace ohs2020{
+namespace ohs2020 {
 
 OI::OI() : 
 
-m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}),
-m_Turn([&] { return m_ButtonBoard.GetRawButton(26);}),
-m_VModeToggle([&] { return m_ButtonBoard.GetRawButton(31);})
+m_FodToggle(m_DriverJoystick, FOD_TOGGLE_ID),
+m_Turn(m_ButtonBoard, TURN_ID),
+m_VModeToggle(m_ButtonBoard, 16)//FIXME
 {
 
 }
 
 
-void OI::Init(){
+void OI::Init() {
 
 	m_FodToggle.WhenPressed(frc2::InstantCommand([&] { 
 

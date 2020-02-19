@@ -79,9 +79,8 @@ void Cob::InMesUpdate() {
 		std::string name = e.GetName();
 		if(e.GetType() != nt::NetworkTableType::kString || e.GetString("--NOT-EXIST--") != "--DELETED--") {
 			if (s_InMap.find(name) != s_InMap.end()) {
-				CobCallBack& jeff = s_InMap[e.GetName()];
-				jeff(e);
-				// e.Delete();
+				CobCallBack& callback = s_InMap[e.GetName()];
+				callback(e);
 				e.SetString("--DELETED--");
 			} else {
 				OHS_ERROR([&](auto& f) {

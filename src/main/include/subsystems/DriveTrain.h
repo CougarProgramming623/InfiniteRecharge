@@ -13,6 +13,9 @@ class DriveTrain : public frc2::SubsystemBase {
 public:
 	DriveTrain();
 
+	DriveTrain(const DriveTrain& other) = delete;
+	void operator=(const DriveTrain& other) = delete;
+
 
 	void Init();
 	//frc2::Command* GetDefaultCommand() const override;
@@ -28,10 +31,6 @@ public:
 	BaseTalon* GetRFront() { return m_FrontRight.get(); }
 	BaseTalon* GetLBack() { return m_BackLeft.get(); }
 	BaseTalon* GetRBack() { return m_BackRight.get(); }
-
-protected:
-	
-	//virtual std::unique_ptr<frc2::Command> TransferOwnership() && override;
 
 private:
 	std::unique_ptr<BaseTalon> m_FrontLeft, m_FrontRight;

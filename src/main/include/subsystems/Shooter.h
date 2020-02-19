@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
-#include <frc2/command/button/Button.h>
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/Command.h>	
@@ -11,8 +10,9 @@
 #include <frc2/Timer.h>
 
 #include "Util.h"
+#include "ohs/Button.h"
 
-namespace ohs2020{
+namespace ohs2020 {
 
 const double FlyWheelDefaultSpeed = 0;
 
@@ -27,26 +27,25 @@ public:
 
 	bool FlyWheelMode = false;
 
-	bool GetFlywheelState() { return isFlywheelOn; }
+	bool GetFlywheelState() { return m_IsFlywheelOn; }
 
-	double GetFlywheelWU() { return flywheelWU; }
+	double GetFlywheelWU() { return m_FlywheelWU; }
 
 private:
 
-	bool isLoaded = false;
-	bool isFlywheelOn;
-	double flywheelWU;
+	bool m_IsLoaded = false;
+	bool m_IsFlywheelOn;
+	double m_FlywheelWU;
 
-	WPI_TalonSRX Flywheel;
-	WPI_TalonSRX feeder;
+	WPI_TalonSRX m_Flywheel;
+	WPI_TalonSRX m_Feeder;
 
-	frc2::Button flyWheelToggle;
-	frc2::Button FlyWheelTuner;
-	frc2::Button launcher;
+	ohs623::Button m_FlyWheelToggle;
+	ohs623::Button m_Launcher;
 
-	CANCoder FlyWheelEncoder;
+	CANCoder m_FlyWheelEncoder;
 
-	frc2::Timer timer;
+	frc2::Timer m_Timer;
 };
 
 }//namespace

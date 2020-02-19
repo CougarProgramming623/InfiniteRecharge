@@ -35,8 +35,8 @@ DriveTrain::DriveTrain() {
 
 }
 
-void DriveTrain::Init(){
-	SetDefaultCommand(Drive()); 
+void DriveTrain::Init() {
+	SetDefaultCommand(Drive());
 
 	m_FrontLeft->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 	m_FrontRight->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
@@ -76,10 +76,6 @@ void DriveTrain::Init(){
 	m_BackRight->Config_kF(0,F,0);
 
 }
-
-/*void DriveTrain::InitDefaultCommand(){
-
-}*/
 
 void Normalize(wpi::MutableArrayRef<double> wheelSpeeds) {
 	double maxMagnitude = *std::max_element(wheelSpeeds.begin(), wheelSpeeds.end());
