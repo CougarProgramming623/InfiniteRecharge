@@ -43,12 +43,12 @@ private:
 	bool isFlywheelOn;
 	double flywheelWU;
 
-	WPI_TalonSRX Flywheel;
+	WPI_TalonSRX m_Flywheel;
 	WPI_TalonSRX LemonAID;
 
-	frc2::Button FlyWheelToggle;
-	frc2::Button FlyWheelTuner;
-	frc2::Button launcher;
+	frc2::Button m_FlyWheelToggle;
+	frc2::Button m_FlyWheelTuner;
+	frc2::Button m_Launcher;
 
 	CANCoder FlyWheelEncoder;
 
