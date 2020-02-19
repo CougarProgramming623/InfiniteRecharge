@@ -15,7 +15,7 @@ namespace ohs623 {
 		//Insert location information is it was provided
 		if (line != -1 /* && level >= LogLevel::WARN */ ) {
 			static SizedFormatter<512> formatter;
-			formatter << message << " (In \"" << file << "\" line: " << line << ")";
+			formatter << message << "\n"/*" (In \"" << file << "\" line: " << line << ")"*/;
 			message = formatter.c_str();
 		}
 

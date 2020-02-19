@@ -25,9 +25,7 @@ public:
 
 	
 	template<typename T>
-	static void PushValue(CobKey key, T value) {
-		if (EnsureExists(key)) s_Map[key].SetDouble(value);
-	}
+	static void PushValue(CobKey key, T value);
 	
 	template<typename T>
 	static T GetValue(CobKey key) {

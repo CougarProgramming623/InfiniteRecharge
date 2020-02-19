@@ -13,6 +13,9 @@ class DriveTrain : public frc2::SubsystemBase {
 public:
 	DriveTrain();
 
+	DriveTrain(const DriveTrain& other) = delete;
+	void operator=(const DriveTrain& other) = delete;
+
 
 	void Init();
 	//frc2::Command* GetDefaultCommand() const override;
@@ -24,18 +27,14 @@ public:
 	frc2::PIDCommand* TurnToPos(double angle);
 	
 	//getters for direct access to motors
-	WPI_TalonSRX* GetLFront() {return &m_LeftFront;}
-	WPI_TalonSRX* GetRFront() {return &m_RightFront;}
-	WPI_TalonSRX* GetLBack() {return &m_LeftBack;}
-	WPI_TalonSRX* GetRBack() {return &m_RightBack;}
-
-protected:
-	
-	//virtual std::unique_ptr<frc2::Command> TransferOwnership() && override;
+	BaseTalon* GetLFront() { return m_FrontLeft.get(); }
+	BaseTalon* GetRFront() { return m_FrontRight.get(); }
+	BaseTalon* GetLBack() { return m_BackLeft.get(); }
+	BaseTalon* GetRBack() { return m_BackRight.get(); }
 
 private:
-	WPI_TalonSRX m_LeftFront, m_RightFront;
-	WPI_TalonSRX m_LeftBack, m_RightBack;
+	std::unique_ptr<BaseTalon> m_FrontLeft, m_FrontRight;
+	std::unique_ptr<BaseTalon> m_BackLeft, m_BackRight;
 
 	frc2::PIDController* m_TurnController;
 
