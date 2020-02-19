@@ -21,6 +21,10 @@ void Handshake(const nt::NetworkTableEntry& entry) {
 	Cob::SendMessage(CobMessageOut::PING, "Confirmed");
 }
 
+void ReceiveAuto(const nt::NetworkTableEntry& entry) {
+		Robot::Get().GetAutoMan().SetInUse(entry.GetValue()->GetString());
+}
+
 void GyroResetConfirm(const nt::NetworkTableEntry& entry) {
 	//if (entry.GetBoolean(false) == true){
 		Robot::Get().GetNavX()->ZeroYaw();
@@ -45,6 +49,7 @@ void Cob::Init() {
 	RegisterMessageIn(CobMessageIn::GNIP, "gnip", Handshake);
 	RegisterMessageIn(CobMessageIn::GYRO_RESET, "gyroReset", GyroResetConfirm);
 	RegisterMessageOut(CobMessageOut::GYRO_RESET_CONFIRM, "gyroReset-ack");
+	RegisterMessageIn(CobMessageIn::RECEIVE_AUTO,"setAuto", ReceiveAuto);
 
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
@@ -52,6 +57,7 @@ void Cob::Init() {
 	RegisterKey(CobKey::VISION_ANGLE, "/vision/angle1");
 	RegisterKey(CobKey::VISION_X, "/vision/x");
 	RegisterKey(CobKey::VISION_Y, "/vision/y");
+	RegisterKey(CobKey::IN_USE_AUTO, "/cob/auto/in-use");
 }
 
 void Cob::RegisterKey(CobKey key, std::string name, bool persistent) {
@@ -126,7 +132,17 @@ void Cob::PushValue<bool>(CobKey key, bool value) {
 }
 
 template<>
+void Cob::PushValue<double>(CobKey key, double value) {
+	if (EnsureExists(key)) s_Map[key].SetDouble(value);
+}
+
+template<>
 void Cob::PushValue<int>(CobKey key, int value) {
+	if (EnsureExists(key)) s_Map[key].SetDouble(value);
+}
+
+template<>
+void Cob::PushValue<float>(CobKey key, float value) {
 	if (EnsureExists(key)) s_Map[key].SetDouble(value);
 }
 
@@ -134,6 +150,17 @@ template<>
 void Cob::PushValue<std::string>(CobKey key, std::string value) {
 	if (EnsureExists(key)) s_Map[key].SetString(value);
 }
+
+template<>
+void Cob::PushValue<const char*>(CobKey key, const char* value) {
+	if (EnsureExists(key)) s_Map[key].SetString(value);
+}
+
+template<>
+void Cob::PushValue<std::string&>(CobKey key, std::string& value) {
+	if (EnsureExists(key)) s_Map[key].SetString(value);
+}
+
 
 // template<>
 // void Cob::SendMessage<bool>(CobMessageOut key, bool value) {

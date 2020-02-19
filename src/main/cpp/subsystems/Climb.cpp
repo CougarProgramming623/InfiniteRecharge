@@ -1,10 +1,10 @@
 #include "subsystems/Climb.h"
-
+#include "Robot.h"
 
 
 namespace ohs2020 {
 
-int BASIC_CLIMB_SPEED;
+double BASIC_CLIMB_SPEED = 1;
 
 Climb::Climb() : 
 
@@ -18,6 +18,9 @@ endgameOverride([&] { return getOI().GetButtonBoard().GetRawButton(4); }) {
 
 	climbMotorLeft.SetInverted(true);
 	climbMotorRight.SetInverted(false);
+
+	climbMotorLeft.SetNeutralMode(Brake);
+	climbMotorRight.SetNeutralMode(Brake);
   
 }
 
@@ -73,7 +76,6 @@ void Climb::SideClimb() {
 climbLeft.WhenHeld(frc2::InstantCommand([&] {
 
 	if(CanClimb()){
-		//Modify one speed later
 		climbMotorLeft.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
 		climbMotorRight.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
 	}

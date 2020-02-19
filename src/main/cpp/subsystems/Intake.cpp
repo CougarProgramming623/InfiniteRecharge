@@ -1,10 +1,12 @@
 #include "subsystems/Intake.h"
+#include "Robot.h"
+
 
 namespace ohs2020{
 
 Intake::Intake() :
 intakeMotor(0),
-intakeButton([&] { return GetOI().GetButtonBoard().GetRawButton(7); }) { //Fork Override Button (yellow)
+intakeButton([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(7); }) { //Fork Override Button (yellow)
 
 }
 

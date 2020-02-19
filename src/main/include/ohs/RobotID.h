@@ -2,6 +2,8 @@
 
 #include <frc/DriverStation.h>
 
+#include <ctre/Phoenix.h>
+
 namespace ohs623 {
 
 enum Motor {
@@ -14,12 +16,24 @@ enum BotType {
 	BOT_TYPE_COUNT
 };
 
+
+enum class MotorControllerType {
+	TALON_SRX, TALON_FX
+};
+
+struct MotorData {
+	int ID;
+	MotorControllerType Controller;
+};
+
 class RobotID {    
 
 public:
 	RobotID() = delete;
 
+	static const MotorData& Get(Motor);
 	static int GetID(Motor);
+	static BaseTalon* InitMotor(Motor);
 
 	inline static BotType GetCurrentBot() { return s_CurrentBot; }
 
