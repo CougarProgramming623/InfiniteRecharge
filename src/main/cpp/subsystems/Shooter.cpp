@@ -1,10 +1,13 @@
 #include "subsystems/Shooter.h"
 #include "Robot.h"
+#include "ohs/RobotID.h"
 #include "ohs/Log.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "frc2/command/FunctionalCommand.h"
+
+using namespace ohs623;
 
 namespace ohs2020{
 
@@ -12,12 +15,12 @@ const double DefaultShooterPower = 1;
 
 Shooter::Shooter() : 
 
-m_Flywheel(35),
-m_Feeder(3),
-m_Launcher( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6); }), // Arm Override
-m_FlyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
-m_FlyWheelEncoder(35),
-m_Timer()
+Flywheel(RobotID::GetID(FLYWHEEL)),
+feeder(RobotID::GetID(FEEDER)),
+launcher( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6); }), // Arm Override
+flyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
+FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
+timer()
 {}
 
 void Shooter::Init() {
@@ -29,9 +32,9 @@ inline void Shooter::SetupShooterButtons() {
 
 	m_FlyWheelToggle.WhileHeld(frc2::FunctionalCommand([this]{}, [this] { //on execute
 
-		m_IsFlywheelOn = true;
+		DebugOutF(std::to_string(flywheelWU));
+		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
 		m_FlywheelWU = m_Flywheel.GetSelectedSensorVelocity() / 4;
-		frc::SmartDashboard::PutNumber("Flywheel Speed", m_FlywheelWU);
 
 		m_Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0));
 
@@ -42,6 +45,13 @@ inline void Shooter::SetupShooterButtons() {
 		m_Flywheel.Set(ControlMode::PercentOutput, 0);
 
 	}, [this] { return false; }, {}));
+
+	flyWheelToggle.WhenReleased(frc2::RunCommand([&] {
+
+		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
+		DebugOutF(std::to_string(flywheelWU));
+
+	}, {}));
 
 	std::vector<std::unique_ptr<frc2::Command>> vector;
 	frc2::FunctionalCommand* shootBall = new frc2::FunctionalCommand([this] { //on init
@@ -68,7 +78,5 @@ inline void Shooter::SetupShooterButtons() {
 		vector.push_back(std::unique_ptr<frc2::Command>(shootBall));
 		vector.push_back(std::make_unique<frc2::WaitCommand>(units::second_t(1)));
 	}
-	m_Launcher.WhenHeld(frc2::SequentialCommandGroup(std::move(vector)));
 
-}
 }//namespace
