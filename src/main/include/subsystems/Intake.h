@@ -1,13 +1,13 @@
 #pragma once //PRARMA ONCE
 
 #include <ctre/Phoenix.h>
-#include <frc2/command/button/Button.h>
-
-#include "Util.h"
-
 #include <frc2/Timer.h>
 
-namespace ohs2020{
+#include "Util.h"
+#include "ohs/Button.h"
+
+
+namespace ohs2020 {
 
 class Intake {
 
@@ -30,10 +30,10 @@ private:
 	WPI_TalonSRX intakeMotor;
 	WPI_TalonSRX intakeLift;
 
-	frc2::Button intakeDownButton;
-	frc2::Button intakeUpButton;
-	frc2::Button intakeManualButton;
-	frc2::Button intakeOnButton;
+	ohs623::Button intakeDownButton;
+	ohs623::Button intakeUpButton;
+	ohs623::Button intakeManualButton;
+	ohs623::Button intakeOnButton;
 
 	frc2::Timer timer;
 

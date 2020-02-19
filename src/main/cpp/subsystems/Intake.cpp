@@ -13,18 +13,17 @@ Intake::Intake() :
 intakeMotor(RobotID::GetID(INTAKE)),
 intakeLift(RobotID::GetID(INTAKE_LIFTER)),
 
-intakeDownButton([&] 	{ return ButtonID INTAKE_DOWN_ID; }), // >
-intakeUpButton([&]		{ return ButtonID INTAKE_UP_ID; }), //  Arm/Wrist Dial
-intakeManualButton([&]	{ return ButtonID INTAKE_MANUAL_ID; }), // >
-
-intakeOnButton([&] 		{ return ButtonID INTAKE_TOGGLE_ID; }), //Fork Override Yellow Button
+intakeDownButton(Robot::Get().GetOI().GetButtonBoard(), INTAKE_DOWN_ID), // >
+intakeUpButton(Robot::Get().GetOI().GetButtonBoard(), INTAKE_UP_ID), //  Arm/Wrist Dial
+intakeManualButton(Robot::Get().GetOI().GetButtonBoard(), INTAKE_MANUAL_ID), // >
+intakeOnButton(Robot::Get().GetOI().GetButtonBoard(), INTAKE_TOGGLE_ID), //Fork Override Yellow Button
 timer()
 {}
 
 void Intake::Init() {
 
-IntakeToggleCommands();
-IntakePlacementCommands();
+	IntakeToggleCommands();
+	IntakePlacementCommands();
 
 }
 

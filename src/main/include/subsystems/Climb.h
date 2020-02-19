@@ -1,6 +1,5 @@
 #pragma once
 
-#include <frc2/command/button/Button.h>
 #include <ctre/Phoenix.h>
 #include <frc2/command/RunCommand.h>
 #include <frc2/command/Command.h>
@@ -9,6 +8,7 @@
 #include <frc2/Timer.h>
 
 #include "Util.h"
+#include "ohs/Button.h"
 
 namespace ohs2020{
 
@@ -30,14 +30,14 @@ private:
 	WPI_TalonSRX climbMotorLeft;
 	WPI_TalonSRX climbMotorRight;
 
-	frc2::Button climbUp;
-	frc2::Button climbDown;
+	ohs623::Button climbUp;
+	ohs623::Button climbDown;
 
-	frc2::Button climbLeft;
-	frc2::Button climbRight;
+	ohs623::Button climbLeft;
+	ohs623::Button climbRight;
 
-	frc2::Button endgameOverride;
-	frc2::Button deployer;
+	ohs623::Button endgameOverride;
+	ohs623::Button deployer;
 	bool isDeployed = false;
 
 	frc2::Timer timer;

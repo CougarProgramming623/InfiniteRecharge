@@ -1,8 +1,6 @@
 #pragma once
 
-#include <frc2/command/button/JoystickButton.h>
-#include <frc/Joystick.h>
-
+#include "ohs/Button.h"
 #include "commands/DriveWithJoysticks.h"
 
 namespace ohs2020 {
@@ -25,12 +23,10 @@ public:
 
 	bool ToggleVMode() {m_VelocityMode = !m_VelocityMode; return m_VelocityMode;}
 
-	frc2::Button m_FodToggle;
-	frc2::Button m_Turn;
-	frc2::Button m_VModeToggle;
-		
-	frc2::Button m_Music;
-
+	ohs623::Button m_FodToggle;
+	ohs623::Button m_Turn;
+	ohs623::Button m_VModeToggle;
+	
 	bool m_Fod = true;
 
 private:

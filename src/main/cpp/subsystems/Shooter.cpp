@@ -15,15 +15,15 @@ const double DefaultShooterPower = 1;
 
 Shooter::Shooter() : 
 
-m_Flywheel				(RobotID::GetID(FLYWHEEL)),
-m_Feeder					(RobotID::GetID(FEEDER)),
-m_Launcher( [&] 			{return ButtonID LAUNCHER_ID;}), // Arm Override
-m_FlyWheelToggle([&] 		{return ButtonID FLYWHEEL_TOGGLE_ID;}), //Vacuum Toggle Switch
-m_FlyWheelEncoder			(RobotID::GetID(FLYWHEEL)),
-m_Timer(){
+m_Flywheel(RobotID::GetID(FLYWHEEL)),
+m_Feeder(RobotID::GetID(FEEDER)),
+m_Launcher(Robot::Get().GetOI().GetButtonBoard(), LAUNCHER_ID), // Arm Override
+m_FlyWheelToggle(Robot::Get().GetOI().GetButtonBoard(), FLYWHEEL_TOGGLE_ID), //Vacuum Toggle Switch
+m_FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
+m_Timer() {
 
-//Flywheel.ConfigAllowableClosedloopError
-m_Flywheel.Config_kF(0, .25, 0);
+	//Flywheel.ConfigAllowableClosedloopError
+	m_Flywheel.Config_kF(0, .25, 0);
 
 }
 

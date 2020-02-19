@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
-#include <frc2/command/button/Button.h>
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/Command.h>	
@@ -11,6 +10,7 @@
 #include <frc2/Timer.h>
 
 #include "Util.h"
+#include "ohs/Button.h"
 
 namespace ohs2020 {
 
@@ -40,9 +40,8 @@ private:
 	WPI_TalonSRX m_Flywheel;
 	WPI_TalonSRX m_Feeder;
 
-	frc2::Button m_FlyWheelToggle;
-	frc2::Button FlyWheelTuner;
-	frc2::Button m_Launcher;
+	ohs623::Button m_FlyWheelToggle;
+	ohs623::Button m_Launcher;
 
 	CANCoder m_FlyWheelEncoder;
 

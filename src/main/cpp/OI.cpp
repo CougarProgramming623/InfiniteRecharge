@@ -3,14 +3,15 @@
 #include "Cob.h"
 #include "Robot.h"
 #include "commands/EncoderDrive.h"
-#include "commands/PlayMusic.h"
+#include "ButtonIDs.h"
 
-namespace ohs2020{
+namespace ohs2020 {
 
 OI::OI() : 
 
-m_FodToggle([&] { return ButtonID FOD_TOGGLE_ID;}),
-m_Turn([&] { return JoystickID TURN_ID;})
+m_FodToggle(m_DriverJoystick, FOD_TOGGLE_ID),
+m_Turn(m_ButtonBoard, TURN_ID),
+m_VModeToggle(m_ButtonBoard, 16)//FIXME
 {
 
 }
@@ -27,7 +28,6 @@ void OI::Init() {
 	}, {} ));
 
 	m_Turn.WhenPressed( EncoderDrive::RotateTo(30) );
-	m_Music.WhenPressed( new PlayMusic() );
 
 	m_VModeToggle.WhenPressed( []() {DebugOutF( "VMODE?: " + std::to_string( Robot::Get().GetOI().ToggleVMode()) ); } );
 }
