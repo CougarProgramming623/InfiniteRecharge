@@ -1,6 +1,10 @@
 #include "subsystems/Climb.h"
 #include "Robot.h"
+#include "ohs/RobotID.h"
 
+#include <frc2/Timer.h>
+
+using namespace ohs623;
 
 namespace ohs2020 {
 
@@ -8,13 +12,16 @@ double BASIC_CLIMB_SPEED = 1;
 
 Climb::Climb() : 
 
-climbMotorLeft(4),
-climbMotorRight(17),
-climbUp([&]         { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2);   }),
-climbDown([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(3);   }),
-climbLeft([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(100); }),
-climbRight([&]      { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(100); }),
-endgameOverride([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(4); }) {
+climbMotorLeft		(RobotID::GetID(CLIMB_LEFT)),
+climbMotorRight		(RobotID::GetID(CLIMB_RIGHT)), 
+climbUp([&]         {return ButtonID CLIMB_UP_ID;}),
+climbDown([&]       {return ButtonID CLIMB_DOWN_ID;}),
+climbLeft([&]   	{return ButtonID CLIMB_LEFT_ID;}),
+climbRight([&]  	{return ButtonID CLIMB_RIGHT_ID;}),
+deployer([&] 		{return ButtonID DEPLOYER_ID;}),
+endgameOverride([&] {return ButtonID ENDGAME_OVERRIDE_ID;}),
+timer()
+{
 
 	climbMotorLeft.SetInverted(true);
 	climbMotorRight.SetInverted(false);
@@ -28,6 +35,7 @@ void Climb::Init() {
 
 VerticalClimb();
 SideClimb();
+Deploy();
 
 }
 
@@ -73,7 +81,7 @@ climbUp.WhileHeld(frc2::RunCommand([&] {
 
 void Climb::SideClimb() {
 
-climbLeft.WhenHeld(frc2::InstantCommand([&] {
+climbLeft.WhenHeld(frc2::RunCommand([&] {
 
 	if(CanClimb()){
 		climbMotorLeft.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
@@ -82,7 +90,7 @@ climbLeft.WhenHeld(frc2::InstantCommand([&] {
 
 }, {} ));
 
-climbLeft.WhenReleased(frc2::RunCommand([&] {
+climbLeft.WhenReleased(frc2::InstantCommand([&] {
 
 	climbMotorLeft.Set(ControlMode::PercentOutput, 0);
 	climbMotorRight.Set(ControlMode::PercentOutput, 0);
@@ -101,7 +109,7 @@ climbRight.WhenHeld(frc2::RunCommand([&] {
  }, {} ));
 
 
-climbRight.WhenReleased(frc2::RunCommand([&] {
+climbRight.WhenReleased(frc2::InstantCommand([&] {
 
 	climbMotorLeft.Set(ControlMode::PercentOutput, 0);
 	climbMotorRight.Set(ControlMode::PercentOutput, 0);
@@ -110,10 +118,38 @@ climbRight.WhenReleased(frc2::RunCommand([&] {
 
 }
 
-bool Climb::CanClimb() {
-if(endgameOverride.Get() || isEndgame)
-	return true; 
-else
-	return false;
+void Climb::Deploy() {
+
+	deployer.WhenPressed(frc2::FunctionalCommand( [this] { //on init
+
+		timer.Reset();
+		timer.Start();
+
+		climbMotorLeft.Set(ControlMode::PercentOutput, .5);
+		climbMotorRight.Set(ControlMode::PercentOutput, .5);
+
+	}, [this] {}, [this] (bool f) { //on end
+
+		climbMotorLeft.Set(ControlMode::PercentOutput, 0);
+		climbMotorRight.Set(ControlMode::PercentOutput, 0);
+
+		isDeployed = true;
+
+	}, [this] { //is finished
+
+		return timer.Get() > units::second_t(1); //Time to trigger gas spring
+
+	}, {}));
+
+}
+
+inline bool Climb::CanClimb() {
+	return (endgameOverride.Get() || (Timer::GetMatchTime() < 30)) && isDeployed;
+}
+
+bool Climb::IsShot() {
+
+double pastVelocity[10];
+
 }
 }//namespace

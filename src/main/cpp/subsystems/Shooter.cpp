@@ -15,13 +15,17 @@ const double DefaultShooterPower = 1;
 
 Shooter::Shooter() : 
 
-Flywheel(RobotID::GetID(FLYWHEEL)),
-feeder(RobotID::GetID(FEEDER)),
-launcher( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6); }), // Arm Override
-flyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
-FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
-timer()
-{}
+Flywheel				(RobotID::GetID(FLYWHEEL)),
+feeder					(RobotID::GetID(FEEDER)),
+launcher( [&] 			{return ButtonID LAUNCHER_ID;}), // Arm Override
+flyWheelToggle([&] 		{return ButtonID FLYWHEEL_TOGGLE_ID;}), //Vacuum Toggle Switch
+FlyWheelEncoder			(RobotID::GetID(FLYWHEEL)),
+timer(){
+
+//Flywheel.ConfigAllowableClosedloopError
+Flywheel.Config_kF(0, .25, 0);
+
+}
 
 void Shooter::Init() {
 
@@ -36,13 +40,13 @@ inline void Shooter::SetupShooterButtons() {
 		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
 		m_FlywheelWU = m_Flywheel.GetSelectedSensorVelocity() / 4;
 
-		m_Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0));
+		Flywheel.Set(ControlMode::Velocity, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0) * 2000);
 
 	}, [this] (bool f){//on end
 
 		m_IsFlywheelOn = false;
 
-		m_Flywheel.Set(ControlMode::PercentOutput, 0);
+		Flywheel.Set(ControlMode::Velocity, 0);
 
 	}, [this] { return false; }, {}));
 
@@ -76,7 +80,7 @@ inline void Shooter::SetupShooterButtons() {
 	}, {});
 	for(int i = 0; i < 100; i++){
 		vector.push_back(std::unique_ptr<frc2::Command>(shootBall));
-		vector.push_back(std::make_unique<frc2::WaitCommand>(units::second_t(1)));
+		vector.push_back(std::make_unique<frc2::WaitCommand>(units::second_t(.5)));
 	}
 
 }//namespace

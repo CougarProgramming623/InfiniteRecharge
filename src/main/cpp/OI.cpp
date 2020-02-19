@@ -9,9 +9,8 @@ namespace ohs2020{
 
 OI::OI() : 
 
-m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1); }),
-m_Turn([&] { return m_ButtonBoard.GetRawButton(1); }),
-m_Music([&] { return m_ButtonBoard.GetRawButton(24); })
+m_FodToggle([&] { return ButtonID FOD_TOGGLE_ID;}),
+m_Turn([&] { return JoystickID TURN_ID;})
 {
 
 }
