@@ -28,6 +28,8 @@ private:
 	bool intakeOn = false;
 
 	WPI_TalonSRX intakeMotor;
+	WPI_TalonSRX intakeMotorDos;
+	
 	WPI_TalonSRX intakeLift;
 
 	frc2::Button intakeDownButton;

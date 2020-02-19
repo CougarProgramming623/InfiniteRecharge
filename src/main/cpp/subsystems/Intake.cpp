@@ -4,6 +4,8 @@
 
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/FunctionalCommand.h>
+#include <frc2/command/StartEndCommand.h>
+
 
 using namespace ohs623;
 
@@ -11,6 +13,8 @@ namespace ohs2020{
 
 Intake::Intake() :
 intakeMotor(RobotID::GetID(INTAKE)),
+intakeMotorDos(RobotID::GetID(INTAKE_DOS)),
+
 intakeLift(RobotID::GetID(INTAKE_LIFTER)),
 
 intakeDownButton([&] 	{ return ButtonID INTAKE_DOWN_ID; }), // >
@@ -23,15 +27,23 @@ timer()
 
 void Intake::Init() {
 
-IntakeToggleCommands();
-IntakePlacementCommands();
+	IntakeToggleCommands();
+	//IntakePlacementCommands();
+	intakeMotorDos.Follow(intakeMotor);
 
 }
 
 void Intake::IntakeToggleCommands() {
-	intakeOnButton.WhenPressed(frc2::InstantCommand([&]{ intakeOn = true; DebugOutF("On"); }, {} ));
-	intakeOnButton.WhenReleased(frc2::InstantCommand([&]{ intakeOn = false; DebugOutF("Off"); }, {} ));
-	
+	// intakeOnButton.WhenPressed(frc2::InstantCommand([&]{ intakeOn = true; DebugOutF("On"); }, {} ));
+	// intakeOnButton.WhenReleased(frc2::InstantCommand([&]{ intakeOn = false; DebugOutF("Off"); }, {} ));
+	intakeOnButton.WhenPressed(frc2::StartEndCommand(
+		// Start driving forward at the start of the command
+		[this] { intakeMotor.Set(1.0); DebugOutF("intake on"); },
+		// Stop driving at the end of the command
+		[this] { intakeMotor.Set(0.0); },
+		// Requires the drive subsystem
+		{}
+	));
 }
 
 void Intake::IntakePlacementCommands() {
