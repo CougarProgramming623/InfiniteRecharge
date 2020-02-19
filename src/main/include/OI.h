@@ -23,13 +23,15 @@ public:
 	
 	frc2::Button m_FodToggle;
 	frc2::Button m_Turn;
+	frc2::Button m_VModeToggle;
 	frc2::Button m_EncoderDrive;
 
 	bool ToggleVMode() {m_VelocityMode = !m_VelocityMode; return m_VelocityMode;}
 
-	ohs623::Button m_FodToggle;
-	ohs623::Button m_Turn;
-	ohs623::Button m_VModeToggle;
+	//ohs623::Button m_FodToggle;
+	//ohs623::Button m_Turn;
+	//ohs623::Button m_VModeToggle;
+	//ohs623::Button m_EncoderDrive;
 	
 	bool m_Fod = true;
 
