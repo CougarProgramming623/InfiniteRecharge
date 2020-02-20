@@ -53,7 +53,7 @@ inline void Shooter::SetupShooterButtons() {
 		DebugOutF(std::to_string(flywheelWU));
 
 	}, {}));
-
+/*
 	std::vector<std::unique_ptr<frc2::Command>> vector;
 	frc2::FunctionalCommand* shootBall = new frc2::FunctionalCommand([this] { //on init
 
@@ -80,5 +80,6 @@ inline void Shooter::SetupShooterButtons() {
 		vector.push_back(std::make_unique<frc2::WaitCommand>(units::second_t(1)));
 	}
 	launcher.WhenHeld(frc2::SequentialCommandGroup(std::move(vector)));
+*/
 } 
 }//namespace
