@@ -1,5 +1,7 @@
 #include "commands/TurnToPosPID.h"
 
+#include <math.h> //for math.abs
+
 namespace ohs2020 {
 
 
@@ -42,11 +44,12 @@ void TurnToPosPID::Execute() {
 bool TurnToPosPID::IsFinished() {
 	DebugOutF("setpoint:" + std::to_string(m_TurnController->GetSetpoint()));
 	DebugOutF("point:" + std::to_string((double)Robot::Get().GetNavX()->GetYaw()));
-	return frc2::PIDCommand::IsFinished();//m_TurnController->GetSetpoint() - (double)Robot::Get().GetNavX()->GetYaw() == 0;
+	return abs(m_Angle - (double)Robot::Get().GetNavX()->GetYaw()) < 2;
 }
 
 void TurnToPosPID::End(bool interrupted){
 	DebugOutF("Turn Ended");
+	frc2::PIDCommand::End(interrupted);
 }
 
 frc2::PIDController TurnToPosPID::CreateTurnController() {
@@ -57,7 +60,7 @@ frc2::PIDController TurnToPosPID::CreateTurnController() {
 	roughly accurate for greater than 10 : 0.085, 0.0, 0.011
 
 	Saber PID Values:
-
+	roughly accurate: 0.325, 0.0, 0.0125
 	*/
 
     m_TurnController = new frc2::PIDController( 0.325, 0.0, 0.0125, units::second_t(20_ms) );
@@ -69,8 +72,10 @@ frc2::PIDController TurnToPosPID::CreateTurnController() {
 }
 
 double TurnToPosPID::GetVisionAngle() {
-	DebugOutF(std::to_string((double)Cob::GetValue<double>(CobKey::VISION_ANGLE)));
-    return Cob::GetValue<double>(CobKey::VISION_ANGLE);
+	// DebugOutF(std::to_string((double)Cob::GetValue<double>(CobKey::VISION_ANGLE)));
+	double x = Cob::GetValue<double>(CobKey::VISION_X);
+	// double y = Cob::GetValue<double>(CobKey::VISION_X);
+    return x;
 }
 
 } // namespace

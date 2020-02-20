@@ -15,7 +15,7 @@ Shooter::Shooter() :
 Flywheel(35),
 feeder(3),
 launcher( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6); }), // Arm Override
-flyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
+flyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); }), //Vacuum Toggle Switch
 FlyWheelEncoder(35),
 timer()
 {}
