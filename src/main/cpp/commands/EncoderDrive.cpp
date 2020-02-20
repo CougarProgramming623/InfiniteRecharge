@@ -77,10 +77,22 @@ void EncoderDrive::Execute() {
 	
 	double maxSpeed = 0.3;
 
-	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y + m_X + m_A)/max*maxSpeed*/ );
-	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y - m_X - m_A)/max*maxSpeed*/ );
-	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y - m_X + m_A)/max*maxSpeed*/ );
-	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y + m_X - m_A)/max*maxSpeed*/ );
+	//(!)NOTE: IGNORE THIS GRAVEYARD OF CODE
+
+	//Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y + m_X + m_A)/max*maxSpeed*/ );
+	//Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y - m_X - m_A)/max*maxSpeed*/ );
+	//Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y - m_X + m_A)/max*maxSpeed*/ );
+	//Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput, maxSpeed/*(m_Y + m_X - m_A)/max*maxSpeed*/ );
+
+	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::Velocity, (m_Y + m_X + m_A)/max*maxSpeed*DriveTrain::kMAX_VELOCITY );
+	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::Velocity, (m_Y - m_X - m_A)/max*maxSpeed*DriveTrain::kMAX_VELOCITY );
+	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::Velocity, (m_Y - m_X + m_A)/max*maxSpeed*DriveTrain::kMAX_VELOCITY );
+	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::Velocity, (m_Y + m_X - m_A)/max*maxSpeed*DriveTrain::kMAX_VELOCITY );
+
+	//End graveyard
+
+	
+
 
 }//execute command (does nothing, waits)
 

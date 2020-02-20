@@ -13,6 +13,9 @@ class DriveTrain : public frc2::SubsystemBase {
 public:
 	DriveTrain();
 
+	static const int kMAX_VELOCITY = 6380/60/10*2048;//RPM->Convert to RPS->Convert to RP100MS->Convert to TP100MS
+
+
 	DriveTrain(const DriveTrain& other) = delete;
 	void operator=(const DriveTrain& other) = delete;
 

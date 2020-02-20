@@ -11,8 +11,6 @@
 
 #include <algorithm>
 
-const int kMAX_VELOCITY = 6380/60/10*2048;//RPM->Convert to RPS->Convert to RP100MS->Convert to TP100MS
-
 const int kFRONT_LEFT = 0;
 const int kFRONT_RIGHT = 1;
 const int kBACK_LEFT = 2;
