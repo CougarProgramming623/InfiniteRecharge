@@ -17,12 +17,14 @@ class Climb{
 public:
 	Climb();
 	void Init();
+	void RunDeploy();
 	void Deploy();
-	bool CanClimb();
 	void VerticalClimb();
 	void SideClimb();
-	bool IsDeployed();
 
+	bool CanClimb();
+	bool IsDeployed();
+	bool IsEndgame();
 private:
 
 	WPI_TalonSRX climbMotorLeft;
