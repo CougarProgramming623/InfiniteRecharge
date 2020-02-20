@@ -94,7 +94,7 @@ void Normalize(wpi::MutableArrayRef<double> wheelSpeeds) {
 void DriveTrain::CartesianDrive(double y, double x, double rotation, double angle) {
 
 	//DebugOutF("Mode: "+ std::to_string(m_FrontLeft->GetSelectedSensorVelocity()));
-	DebugOutF("VDiff: "+ std::to_string( m_FrontLeft->GetClosedLoopTarget() - m_FrontLeft->GetSelectedSensorVelocity()/4 ));
+	// DebugOutF("VDiff: "+ std::to_string( m_FrontLeft->GetClosedLoopTarget() - m_FrontLeft->GetSelectedSensorVelocity()/4 ));
 
 	SmartDashboard::PutNumber("PIDVELOCITY", m_FrontLeft->GetSelectedSensorVelocity());
 
@@ -112,7 +112,7 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 	Normalize(wheelSpeeds);
 
 	if (Robot::Get().GetOI().GetVelocityMode()) {
-		DebugOutF("Using V");
+		// DebugOutF("Using V");
 		m_FrontLeft->Set(ControlMode::Velocity, wheelSpeeds[kFRONT_LEFT] * kMAX_VELOCITY);
 		m_BackLeft->Set(ControlMode::Velocity, wheelSpeeds[kBACK_LEFT] * kMAX_VELOCITY);
 		m_FrontRight->Set(ControlMode::Velocity, wheelSpeeds[kFRONT_RIGHT] * kMAX_VELOCITY);

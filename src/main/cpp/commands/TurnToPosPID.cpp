@@ -7,27 +7,30 @@ std::function<double()> measurement = []()->double {
     return (double)(Robot::Get().GetNavX()->GetYaw());
 };
 std::function<void(double)> output = [](double measure) { 
-    DebugOutF("Initial angle: " + std::to_string(Robot::Get().GetNavX()->GetYaw()));
+    DebugOutF("turn to: " + std::to_string(measure));
 
-	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::Velocity, measure * 5000);
-	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::Velocity, measure * 5000);
-	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::Velocity, -measure * 5000);
-	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::Velocity, -measure * 5000);
+	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::Velocity, measure * 1000);
+	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::Velocity, measure * 1000);
+	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::Velocity, -measure * 1000);
+	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::Velocity, -measure * 1000);
 };
-/*
-TurnToPosPID::TurnToPosPID() : frc2::PIDCommand(CreateTurnController(), measurement, GetVisionAngle(), output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain())) {
+
+TurnToPosPID::TurnToPosPID() : frc2::PIDCommand(CreateTurnController(), measurement, [this]{ return m_Angle; }, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain())) {
     
-    m_Angle = GetVisionAngle();
+    m_Angle = 3000;//GetVisionAngle();
 
 }
-*/
+
 TurnToPosPID::TurnToPosPID(double angle) : frc2::PIDCommand(CreateTurnController(), measurement, angle, output, {&Robot::Get().GetDriveTrain()}) {
     m_Angle = angle;
 }
 
 void TurnToPosPID::Initialize() {
+	if (m_Angle == 3000){
+		m_Angle = GetVisionAngle();
+	}
+	// m_TurnController->SetSetpoint(m_Angle);
 	frc2::PIDCommand::Initialize();
-	m_TurnController->SetSetpoint(m_Angle);
 
 }
 
@@ -37,8 +40,8 @@ void TurnToPosPID::Execute() {
 }
 
 bool TurnToPosPID::IsFinished() {
-	DebugOutF(std::to_string(m_TurnController->GetSetpoint()));
-	DebugOutF(std::to_string((double)Robot::Get().GetNavX()->GetYaw()));
+	DebugOutF("setpoint:" + std::to_string(m_TurnController->GetSetpoint()));
+	DebugOutF("point:" + std::to_string((double)Robot::Get().GetNavX()->GetYaw()));
 	return frc2::PIDCommand::IsFinished();//m_TurnController->GetSetpoint() - (double)Robot::Get().GetNavX()->GetYaw() == 0;
 }
 
@@ -57,7 +60,7 @@ frc2::PIDController TurnToPosPID::CreateTurnController() {
 
 	*/
 
-    m_TurnController = new frc2::PIDController( 0.065, 0.0, 0.0, units::second_t(20_ms) );
+    m_TurnController = new frc2::PIDController( 0.325, 0.0, 0.0125, units::second_t(20_ms) );
 
 	m_TurnController->SetTolerance( 2.0, std::numeric_limits< double >::infinity() );
 	m_TurnController->EnableContinuousInput(-180.0,180.0);

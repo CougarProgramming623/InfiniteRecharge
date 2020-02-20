@@ -12,7 +12,7 @@ class TurnToPosPID : public frc2::PIDCommand {
 public: 
     ~TurnToPosPID(){}
 
-    //TurnToPosPID();
+    TurnToPosPID();
     TurnToPosPID(double angle);
 
     void Initialize() override;
@@ -25,7 +25,7 @@ public:
 
 private:
     frc2::PIDController* m_TurnController;
-    double m_Angle;
+    double m_Angle = 0;
 };
 
 } // end namespace
