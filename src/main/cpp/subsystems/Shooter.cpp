@@ -26,6 +26,7 @@ timer()
 void Shooter::Init() {
 
 	SetupShooterButtons();
+	
 }
 
 inline void Shooter::SetupShooterButtons() {
@@ -53,33 +54,5 @@ inline void Shooter::SetupShooterButtons() {
 		DebugOutF(std::to_string(flywheelWU));
 
 	}, {}));
-/*
-	std::vector<std::unique_ptr<frc2::Command>> vector;
-	frc2::FunctionalCommand* shootBall = new frc2::FunctionalCommand([this] { //on init
-
-		timer.Reset();
-		timer.Start();
-		feeder.Set(ControlMode::PercentOutput, 1);
-		OHS_DEBUG([](auto& f){ f << "shooting init"; });
-
-	}, [this] {}, [this] (bool f) {// on end
-
-		feeder.Set(ControlMode::PercentOutput, 0);
-		OHS_DEBUG([](auto& f){ f << "shooting end"; });
-
-
-	}, [this] { // is finished
-		
-		OHS_DEBUG([&](auto& f){ f << "shooter is finished? " << (timer.Get() > units::second_t(1)); })
-		return timer.Get() > units::second_t(2);
-
-
-	}, {});
-	for(int i = 0; i < 100; i++){
-		vector.push_back(std::unique_ptr<frc2::Command>(shootBall));
-		vector.push_back(std::make_unique<frc2::WaitCommand>(units::second_t(1)));
-	}
-	launcher.WhenHeld(frc2::SequentialCommandGroup(std::move(vector)));
-*/
 } 
 }//namespace
