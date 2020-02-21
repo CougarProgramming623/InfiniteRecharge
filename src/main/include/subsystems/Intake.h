@@ -32,10 +32,10 @@ private:
 	
 	WPI_TalonSRX intakeLift;
 
-	ohs623::Button intakeDownButton;
-	ohs623::Button intakeUpButton;
-	ohs623::Button intakeManualButton;
-	ohs623::Button intakeOnButton;
+	frc2::Button intakeDownButton;
+	frc2::Button intakeUpButton;
+	frc2::Button intakeManualButton;
+	frc2::Button intakeOnButton;
 
 	frc2::Timer timer;
 

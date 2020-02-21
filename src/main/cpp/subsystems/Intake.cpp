@@ -17,16 +17,16 @@ intakeMotorDos(RobotID::GetID(INTAKE_DOS)),
 
 intakeLift(RobotID::GetID(INTAKE_LIFTER)),
 
-intakeDownButton(Robot::Get().GetOI().GetButtonBoard(), INTAKE_DOWN_ID), // >
-intakeUpButton(Robot::Get().GetOI().GetButtonBoard(), INTAKE_UP_ID), //  Arm/Wrist Dial
-intakeManualButton(Robot::Get().GetOI().GetButtonBoard(), INTAKE_MANUAL_ID), // >
-intakeOnButton(Robot::Get().GetOI().GetButtonBoard(), INTAKE_TOGGLE_ID), //Fork Override Yellow Button
+intakeDownButton(OHS_BUTTON(INTAKE_DOWN_ID)), // >
+intakeUpButton(OHS_BUTTON(INTAKE_UP_ID)), //  Arm/Wrist Dial
+intakeManualButton(OHS_BUTTON(INTAKE_MANUAL_ID)), // >
+intakeOnButton(OHS_BUTTON(INTAKE_TOGGLE_ID)), //Fork Override Yellow Button
 timer()
 {}
 
 void Intake::Init() {
 
-	IntakeToggleCommands();
+	//IntakeToggleCommands();//FIXME SEGFAULT
 	//IntakePlacementCommands();
 	intakeMotorDos.Follow(intakeMotor);
 

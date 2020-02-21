@@ -40,8 +40,8 @@ private:
 	WPI_TalonSRX m_Flywheel;
 	WPI_TalonSRX m_Feeder;
 
-	ohs623::Button m_FlyWheelToggle;
-	ohs623::Button m_Launcher;
+	frc2::Button m_Launcher;
+	frc2::Button m_FlyWheelToggle;
 
 	CANCoder m_FlyWheelEncoder;
 

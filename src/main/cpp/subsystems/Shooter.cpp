@@ -9,7 +9,7 @@
 
 using namespace ohs623;
 
-namespace ohs2020{
+namespace ohs2020 {
 
 const double DefaultShooterPower = 1;
 
@@ -17,8 +17,8 @@ Shooter::Shooter() :
 
 m_Flywheel(RobotID::GetID(FLYWHEEL)),
 m_Feeder(RobotID::GetID(FEEDER)),
-m_Launcher(Robot::Get().GetOI().GetButtonBoard(), LAUNCHER_ID), // Arm Override
-m_FlyWheelToggle(Robot::Get().GetOI().GetButtonBoard(), FLYWHEEL_TOGGLE_ID), //Vacuum Toggle Switch
+m_Launcher(OHS_BUTTON(LAUNCHER_ID)), // Arm Override
+m_FlyWheelToggle(OHS_BUTTON(FLYWHEEL_TOGGLE_ID)), //Vacuum Toggle Switch
 m_FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
 m_Timer() {
 
@@ -57,32 +57,6 @@ inline void Shooter::SetupShooterButtons() {
 		DebugOutF(std::to_string(m_FlywheelWU));
 
 	}, {}));
-
-	std::vector<std::unique_ptr<frc2::Command>> vector;
-	frc2::FunctionalCommand* shootBall = new frc2::FunctionalCommand([this] { //on init
-
-		m_Timer.Reset();
-		m_Timer.Start();
-		m_Feeder.Set(ControlMode::PercentOutput, 1);
-		OHS_DEBUG([](auto& f){ f << "shooting init"; });
-
-	}, [this] {}, [this] (bool f) {// on end
-
-		m_Feeder.Set(ControlMode::PercentOutput, 0);
-		OHS_DEBUG([](auto& f){ f << "shooting end"; });
-
-
-	}, [this] { // is finished
-		
-		OHS_DEBUG([&](auto& f){ f << "shooter is finished? " << (m_Timer.Get() > units::second_t(1)); })
-		return m_Timer.Get() > units::second_t(2);
-
-
-	}, {});
-	for(int i = 0; i < 100; i++){
-		vector.push_back(std::unique_ptr<frc2::Command>(shootBall));
-		vector.push_back(std::make_unique<frc2::WaitCommand>(units::second_t(.5)));
-	}
 
 }
 

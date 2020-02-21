@@ -4,6 +4,8 @@
 
 #include <frc2/Timer.h>
 
+#include <Robot.h>
+
 using namespace ohs623;
 
 namespace ohs2020 {
@@ -13,13 +15,14 @@ double BASIC_CLIMB_SPEED = 1;
 Climb::Climb() : 
 
 climbMotorLeft		(RobotID::GetID(CLIMB_LEFT)),
-climbMotorRight		(RobotID::GetID(CLIMB_RIGHT)), 
-climbUp				(Robot::Get().GetOI().GetButtonBoard(), CLIMB_UP_ID),
-climbDown			(Robot::Get().GetOI().GetButtonBoard(), CLIMB_DOWN_ID),
-climbLeft			(Robot::Get().GetOI().GetButtonBoard(), CLIMB_LEFT_ID),
-climbRight			(Robot::Get().GetOI().GetButtonBoard(), CLIMB_RIGHT_ID),
-deployer			(Robot::Get().GetOI().GetButtonBoard(), DEPLOYER_ID),
-endgameOverride		(Robot::Get().GetOI().GetButtonBoard(), ENDGAME_OVERRIDE_ID),
+climbMotorRight		(RobotID::GetID(CLIMB_RIGHT)),
+
+climbUp				(OHS_BUTTON(CLIMB_UP_ID)),
+climbDown			(OHS_BUTTON(CLIMB_DOWN_ID)),
+climbLeft			(OHS_BUTTON(CLIMB_LEFT_ID)),
+climbRight			(OHS_BUTTON(CLIMB_RIGHT_ID)),
+deployer			(OHS_BUTTON(DEPLOYER_ID)),
+endgameOverride		(OHS_BUTTON(ENDGAME_OVERRIDE_ID)),
 timer()
 {
 
@@ -32,16 +35,24 @@ timer()
 }
 
 void Climb::Init() {
+	OHS_DEBUG([](auto& f){ f << "Cilib::Init() 1"; });
 
 	VerticalClimb();
-	SideClimb();
-	Deploy();
+	OHS_DEBUG([](auto& f){ f << "Cilib::Init() 2"; });
+
+	//SideClimb();
+	OHS_DEBUG([](auto& f){ f << "Cilib::Init() 3"; });
+
+	//Deploy();
+	OHS_DEBUG([](auto& f){ f << "Cilib::Init() 4"; });
 
 }
 
 void Climb::VerticalClimb() {
+	OHS_DEBUG([](auto& f){ f << "Cilib::VerticalClimb() 1"; });
 
 	climbUp.WhileHeld(frc2::RunCommand([&] {
+		OHS_DEBUG([](auto& f){ f << "Cilib::WhileHeld Lambda() 1"; });
 
 		if(CanClimb()){
 			climbMotorLeft.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
@@ -49,8 +60,10 @@ void Climb::VerticalClimb() {
 
 			DebugOutF("Climbing Up");
 		}
+		OHS_DEBUG([](auto& f){ f << "Cilib::WhileHeld Lambda() 2"; });
 
 	}, {} ));
+	OHS_DEBUG([](auto& f){ f << "Cilib::VerticalClimb() 2"; });
 
 	climbUp.WhenReleased(frc2::InstantCommand([&] {
 
@@ -58,6 +71,7 @@ void Climb::VerticalClimb() {
 		climbMotorRight.Set(ControlMode::PercentOutput, 0);
 
 	}, {} ));
+	OHS_DEBUG([](auto& f){ f << "Cilib::VerticalClimb() 3"; });
 
 	climbDown.WhenHeld(frc2::RunCommand([&] {
 
@@ -69,6 +83,7 @@ void Climb::VerticalClimb() {
 		}
 
 	}, {} ));
+	OHS_DEBUG([](auto& f){ f << "Cilib::VerticalClimb() 4"; });
 
 	climbDown.WhenReleased(frc2::InstantCommand([&] {
 
@@ -76,6 +91,8 @@ void Climb::VerticalClimb() {
 		climbMotorRight.Set(ControlMode::PercentOutput, 0);
 
 	}, {} ));
+		OHS_DEBUG([](auto& f){ f << "Cilib::VerticalClimb() 5"; });
+
 }
 
 
@@ -150,6 +167,6 @@ inline bool Climb::CanClimb() {
 bool Climb::IsShot() {
 
 	double pastVelocity[10];
-
+	return false;
 }
 }//namespace

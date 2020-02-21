@@ -3,13 +3,6 @@
 #include <frc2/command/button/JoystickButton.h>
 #include <frc/Joystick.h>
 
-//A fix for the grabage class frc2::JoystickButton during the 2020 season
-namespace ohs623 {
+#define OHS_BUTTON(id) []() { return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(id); }
+#define OHS_DRIVER_BUTTON(id) [](){ return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(id); }
 
-class Button : public frc2::Button {
-public:
-	Button(frc::Joystick& stick, int id) : frc2::Button([&] { return stick.GetRawButton(id); }) {}
-};
-
-
-}

@@ -30,14 +30,14 @@ private:
 	WPI_TalonSRX climbMotorLeft;
 	WPI_TalonSRX climbMotorRight;
 
-	ohs623::Button climbUp;
-	ohs623::Button climbDown;
+	frc2::Button climbUp;
+	frc2::Button climbDown;
 
-	ohs623::Button climbLeft;
-	ohs623::Button climbRight;
+	frc2::Button climbLeft;
+	frc2::Button climbRight;
 
-	ohs623::Button endgameOverride;
-	ohs623::Button deployer;
+	frc2::Button endgameOverride;
+	frc2::Button deployer;
 	bool isDeployed = false;
 
 	frc2::Timer timer;

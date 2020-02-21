@@ -28,19 +28,39 @@ Robot::Robot() {
 
 	s_Instance = this;
 
+	OHS_DEBUG([](auto& f){ f << "Robot::Robot()"; });
+
 }
 
 
 void Robot::RobotInit() {
 
+	OHS_DEBUG([](auto& f){ f << "1"; });
+
 	m_AutoManager.AutoInit();
+	OHS_DEBUG([](auto& f){ f << "2"; });
+
 	Cob::Init();
+	OHS_DEBUG([](auto& f){ f << "3"; });
+
 	ohs623::Music::Init();
+	OHS_DEBUG([](auto& f){ f << "4"; });
+
 	m_DriveTrain.Init();
+	OHS_DEBUG([](auto& f){ f << "5"; });
+
 	m_oi.Init();
-	m_climb.Init();
-	m_shooter.Init();
+	OHS_DEBUG([](auto& f){ f << "6"; });
+
+	m_climb.Init();//FIXME SEGFAULT
+	OHS_DEBUG([](auto& f){ f << "7"; });
+
+	//m_shooter.Init();//FIXME SEGFAULT
+	OHS_DEBUG([](auto& f){ f << "8"; });
+
 	m_intake.Init();
+	OHS_DEBUG([](auto& f){ f << "9"; });
+
 
 	try {
 		navx = new AHRS(SPI::Port::kMXP);
