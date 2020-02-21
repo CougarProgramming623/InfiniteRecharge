@@ -124,13 +124,9 @@ climbRight.WhenReleased(frc2::InstantCommand([&] {
 
 }
 
-void Climb::RunDeploy() {
-	deployer.WhenPressed(Deploy());
-}
-
 void Climb::Deploy() {
 
-	frc2::FunctionalCommand( [this] { //on init
+	deployer.WhenPressed(frc2::FunctionalCommand( [this] { //on init
 
 		timer.Reset();
 		timer.Start();
@@ -138,31 +134,35 @@ void Climb::Deploy() {
 		climbMotorLeft.Set(ControlMode::PercentOutput, .5);
 		climbMotorRight.Set(ControlMode::PercentOutput, .5);
 
+		DebugOutF("Deploying **");
+
 	}, [this] {}, [this] (bool f) { //on end
 
 		climbMotorLeft.Set(ControlMode::PercentOutput, 0);
 		climbMotorRight.Set(ControlMode::PercentOutput, 0);
 
-		isDeployed = true;
+		if(IsEndgame())
+			isDeployed = true;
 
 	}, [this] { //is finished
 
-		return timer.Get() > units::second_t(1); //Time to trigger gas spring
-		DebugOutF("Deployed");
+		if(!IsEndgame())
+			return true;
 
-	}, {});
+		return timer.Get() > units::second_t(1); //Time to trigger gas spring
+
+		if(IsEndgame()) DebugOutF("Deployed");
+
+	}, {}));
 
 }
 
 inline bool Climb::IsEndgame() {
-	return endgameOverride.Get() || (Timer::GetMatchTime() < 30);
-}
-
-inline bool Climb::IsDeployed() {
-	
+	return Timer::GetMatchTime() < 30 || endgameOverride.Get();
 }
 
 inline bool Climb::CanClimb() {
-	return IsEndgame() && IsDeployed();
+	return (Timer::GetMatchTime() < 30 && isDeployed) || endgameOverride.Get();
 }
+
 }//namespace

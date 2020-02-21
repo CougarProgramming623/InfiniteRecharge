@@ -22,9 +22,9 @@ public:
 	void VerticalClimb();
 	void SideClimb();
 
-	bool CanClimb();
-	bool IsDeployed();
 	bool IsEndgame();
+	bool CanClimb();
+	
 private:
 
 	WPI_TalonSRX climbMotorLeft;
