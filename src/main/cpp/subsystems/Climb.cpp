@@ -1,6 +1,7 @@
 #include "subsystems/Climb.h"
 #include "Robot.h"
 #include "ohs/RobotID.h"
+#include "Util.h"
 
 #include <frc2/Timer.h>
 
@@ -28,6 +29,8 @@ timer()
 
 	climbMotorLeft.SetNeutralMode(Brake);
 	climbMotorRight.SetNeutralMode(Brake);
+
+	RemoveRegistry(this, &climbMotorLeft, &climbMotorRight);
   
 }
 

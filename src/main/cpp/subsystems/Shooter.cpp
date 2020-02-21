@@ -19,8 +19,8 @@ Shooter::Shooter() :
 
 Flywheel(RobotID::GetID(FLYWHEEL)),
 feeder(RobotID::GetID(FEEDER)),
-lowTransport(RobotID::GetID(LOW_TRANSPORT)),
-highTransport(RobotID::GetID(HIGH_TRANSPORT)),
+lowConveyor(RobotID::GetID(LOW_TRANSPORT)),
+highConveyor(RobotID::GetID(HIGH_TRANSPORT)),
 FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
 
 launcher( [&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); 	}),
@@ -28,14 +28,14 @@ flyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(
 conveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 		}),
 timer() {
 
-	RemoveRegistry(this, &Flywheel, &feeder, &lowTransport, &highTransport);
+	RemoveRegistry(this, &Flywheel, &feeder, &lowConveyor, &highConveyor);
 
 }
 
 void Shooter::Init() {
 
 	SetupShooterButtons();
-	SetupTransportButtons();
+	SetupConveyorButtons();
 
 }
 
@@ -79,19 +79,20 @@ void Shooter::SetupShooterButtons() {
 	}, {} ));
 } 
 
-void Shooter::SetupTransportButtons() {
+
+void Shooter::SetupConveyorButtons() {
 
 conveyorToggle.WhenHeld(frc2::RunCommand([&] {
 
-	lowTransport.Set(ControlMode::PercentOutput, 1);
-	highTransport.Set(ControlMode::PercentOutput, 1);
+	lowConveyor.Set(ControlMode::PercentOutput, 1);
+	highConveyor.Set(ControlMode::PercentOutput, 1);
 
 }, {}));
 
 conveyorToggle.WhenReleased(frc2::InstantCommand([&] {
 	
-	lowTransport.Set(ControlMode::PercentOutput, 0);
-	highTransport.Set(ControlMode::PercentOutput, 0);
+	lowConveyor.Set(ControlMode::PercentOutput, 0);
+	highConveyor.Set(ControlMode::PercentOutput, 0);
 
 }, {}));
 

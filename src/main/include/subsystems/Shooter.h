@@ -24,7 +24,7 @@ public:
 	void Init();
 
 	void SetupShooterButtons();
-	void SetupTransportButtons();
+	void SetupConveyorButtons();
 
 	bool FlyWheelMode = false;
 
@@ -40,8 +40,8 @@ private:
 
 	WPI_TalonSRX Flywheel;
 	WPI_TalonSRX feeder;
-	WPI_TalonSRX lowTransport;
-	WPI_TalonSRX highTransport;
+	WPI_TalonSRX lowConveyor;
+	WPI_TalonSRX highConveyor;
 
 	frc2::Button flyWheelToggle;
 	frc2::Button FlyWheelTuner;
