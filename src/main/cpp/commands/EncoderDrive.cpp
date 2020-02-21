@@ -52,6 +52,7 @@ void EncoderDrive::Initialize() {
 	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(Coast);
 	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(Coast);
 
+	Robot::Get().GetDriveTrain().UsePositionPID();
 }//starts motor turn
 
 bool EncoderDrive::IsFinished() {
@@ -120,6 +121,9 @@ void EncoderDrive::End(bool interrupted) {
 	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(Brake);
 	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(Brake);
 	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(Brake);
+
+	Robot::Get().GetDriveTrain().UseVelocityPID();
+
 }//stops motors and exits
 //end override commands
 

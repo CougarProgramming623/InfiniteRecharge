@@ -35,6 +35,41 @@ void DriveTrain::Init(){
 	m_RightFront.SetNeutralMode(Brake);
 	m_LeftBack.SetNeutralMode(Brake);
 	m_RightBack.SetNeutralMode(Brake);
+}
+
+void DriveTrain::UsePositionPID(){
+	DriveTrain::SetPID(50, 0.01, 0, 0, 0.01);
+}
+
+void DriveTrain::UseVelocityPID(){
+	DriveTrain::SetPID(50, 0, 0, 0, 0.05);
+}
+
+void DriveTrain::SetPID(int E, double P, double I, double D, double F){
+	GetLFront()->ConfigAllowableClosedloopError(0,E,0);
+	GetRFront()->ConfigAllowableClosedloopError(0,E,0);
+	GetLBack()->ConfigAllowableClosedloopError(0,E,0);
+	GetRBack()->ConfigAllowableClosedloopError(0,E,0);
+
+	GetLFront()->Config_kP(0,P,0);
+	GetRFront()->Config_kP(0,P,0);
+	GetLBack()->Config_kP(0,P,0);
+	GetRBack()->Config_kP(0,P,0);
+
+	GetLFront()->Config_kI(0,I,0);
+	GetRFront()->Config_kI(0,I,0);
+	GetLBack()->Config_kI(0,I,0);
+	GetRBack()->Config_kI(0,I,0);
+
+	GetLFront()->Config_kD(0,D,0);
+	GetRFront()->Config_kD(0,D,0);
+	GetLBack()->Config_kD(0,D,0);
+	GetRBack()->Config_kD(0,D,0);
+
+	GetLFront()->Config_kF(0,F,0);
+	GetRFront()->Config_kF(0,F,0);
+	GetLBack()->Config_kF(0,F,0);
+	GetRBack()->Config_kF(0,F,0);
 
 }
 

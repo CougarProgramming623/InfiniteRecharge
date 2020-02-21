@@ -19,6 +19,12 @@ public:
 
 	void CartesianDrive(double x, double y, double rotation, double angle);
 
+	void UseVelocityPID();
+
+	void UsePositionPID();
+
+	void SetPID(int E, double P, double I, double D, double F);
+
 	//virtual void InitDefaultCommand() override;  
 
 	frc2::PIDCommand* TurnToPos(double angle);
