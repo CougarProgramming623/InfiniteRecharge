@@ -63,7 +63,7 @@ private:
 
 	//movement variables
 	int m_X, m_Y, m_A;//x and y traverse (horizontal(x) & vertical(y)) in encoder ticks, EncoderTurnTicks(A)
-	int m_InitialTicks;
+	int m_InitialTicks [4];
 	//end movement variables
 
 };//end class
