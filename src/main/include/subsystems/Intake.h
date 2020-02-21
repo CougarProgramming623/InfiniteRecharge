@@ -1,13 +1,14 @@
 #pragma once //PRARMA ONCE
 
 #include <ctre/Phoenix.h>
-#include <frc2/Timer.h>
+#include <frc2/command/button/Button.h>
+#include <frc2/command/RunCommand.h>
 
+
+#include "OI.h"
 #include "Util.h"
-#include "ohs/Button.h"
 
-
-namespace ohs2020 {
+namespace ohs2020{
 
 class Intake {
 
@@ -15,29 +16,15 @@ public:
 	Intake();
 
 	void Init();
+	void Spin();
 
-	void IntakeToggleCommands();
-	void IntakePlacementCommands();
-
-	void IntakePlacementUp();
-	void IntakePlacementDown();
-	void ManualModeCommands();
+	OI& GetOI() { return m_oi; }
 
 private:
-
-	bool intakeOn = false;
+	OI m_oi;
 
 	WPI_TalonSRX intakeMotor;
-	WPI_TalonSRX intakeMotorDos;
-	
-	WPI_TalonSRX intakeLift;
 
-	frc2::Button intakeDownButton;
-	frc2::Button intakeUpButton;
-	frc2::Button intakeManualButton;
-	frc2::Button intakeOnButton;
-
-	frc2::Timer timer;
-
+	frc2::Button intakeButton;
 };
 }//namespace

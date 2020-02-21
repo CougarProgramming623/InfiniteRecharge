@@ -1,51 +1,58 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
+#include <frc2/command/button/Button.h>
 
-#include <frc2/command/SubsystemBase.h>
-#include <frc2/command/Command.h>	
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/RunCommand.h>
-
-#include <frc2/Timer.h>
+#include <frc2/command/Command.h>	
 
 #include "Util.h"
-#include "ohs/Button.h"
+#include "OI.h"
 
-namespace ohs2020 {
+namespace ohs2020{
 
 const double FlyWheelDefaultSpeed = 0;
 
-class Shooter : public frc2::SubsystemBase {
+class Shooter {
 
 public:
 	Shooter();
 
 	void Init();
 
-	void SetupShooterButtons();
+	void SetFlyWheelCommands();
+	void FlyWheelOn();
+	void FlyWheelOff();
+
+	void FlyWheelTune();
+	void LoadLemon();
+
+	void Shoot();
 
 	bool FlyWheelMode = false;
 
-	bool GetFlywheelState() { return m_IsFlywheelOn; }
+	bool GetFlywheelState() { return isFlywheelOn; }
+	double GetFlywheelWU() { return flywheelWU; }
 
-	double GetFlywheelWU() { return m_FlywheelWU; }
+	bool GetLoadStatus() { return isLoaded; }
 
 private:
 
-	bool m_IsLoaded = false;
-	bool m_IsFlywheelOn;
-	double m_FlywheelWU;
+	bool isLoaded = false;
+	bool isFlywheelOn;
+	double flywheelWU;
 
-	WPI_TalonSRX m_Flywheel;
-	WPI_TalonSRX m_Feeder;
+	WPI_TalonSRX Flywheel;
+	WPI_TalonSRX LemonAID;
 
-	frc2::Button m_Launcher;
-	frc2::Button m_FlyWheelToggle;
+	frc2::Button FlyWheelToggle;
+	frc2::Button FlyWheelTuner;
+	frc2::Button launcher;
 
-	CANCoder m_FlyWheelEncoder;
+	CANCoder FlyWheelEncoder;
 
-	frc2::Timer m_Timer;
+	OI m_OI;
 };
 
 }//namespace

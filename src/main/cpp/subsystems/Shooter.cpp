@@ -1,63 +1,81 @@
 #include "subsystems/Shooter.h"
-#include "Robot.h"
-#include "ohs/RobotID.h"
-#include "ohs/Log.h"
 
-#include <frc/smartdashboard/SmartDashboard.h>
+namespace ohs2020{
 
-#include "frc2/command/FunctionalCommand.h"
-
-using namespace ohs623;
-
-namespace ohs2020 {
-
-const double DefaultShooterPower = 1;
+const double DefaultShooterPower = 0;
 
 Shooter::Shooter() : 
 
-m_Flywheel(RobotID::GetID(FLYWHEEL)),
-m_Feeder(RobotID::GetID(FEEDER)),
-m_Launcher(OHS_BUTTON(LAUNCHER_ID)), // Arm Override
-m_FlyWheelToggle(OHS_BUTTON(FLYWHEEL_TOGGLE_ID)), //Vacuum Toggle Switch
-m_FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
-m_Timer() {
-
-	//Flywheel.ConfigAllowableClosedloopError
-	m_Flywheel.Config_kF(0, .25, 0);
+Flywheel(0), //35 
+LemonAID(0),
+launcher( [&] { return m_OI.GetButtonBoard().GetRawButton(6); }), // Arm	 Override
+FlyWheelToggle([&] { return m_OI.GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
+FlyWheelEncoder(0) //35
+{ //2 -- Green Button | 19 -- Cargo/Hatch Toggle | 1 -- Vacuum Toggle Switch
 
 }
 
 void Shooter::Init() {
 
-	SetupShooterButtons();
+	//SetFlyWheelCommands();
+	//Shoot();
 }
 
-inline void Shooter::SetupShooterButtons() {
+inline void Shooter::SetFlyWheelCommands() {
 
-	m_FlyWheelToggle.WhileHeld(frc2::FunctionalCommand([this]{}, [this] { //on execute
-
-		m_IsFlywheelOn = true;
-		m_FlywheelWU = m_Flywheel.GetSelectedSensorVelocity();
-		DebugOutF(std::to_string(m_FlywheelWU));
-		frc::SmartDashboard::PutNumber("Flywheel Speed", m_FlywheelWU);
-
-		m_Flywheel.Set(ControlMode::Velocity, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0) * 22000);
-
-	}, [this] (bool f){//on end
-
-		m_IsFlywheelOn = false;
-
-		m_Flywheel.Set(ControlMode::Velocity, 0);
-
-	}, [this] { return false; }, {}));
-
-	m_FlyWheelToggle.WhenReleased(frc2::RunCommand([&] {
-
-		m_FlywheelWU = m_Flywheel.GetSelectedSensorVelocity();
-		DebugOutF(std::to_string(m_FlywheelWU));
-
-	}, {}));
+	//FlyWheelToggle.WhileHeld(frc2::RunCommand([&] { FlyWheelOn(); }, {} ));
+	//FlyWheelToggle.WhenReleased(frc2::InstantCommand([&] { FlyWheelOff(); }, {} ));
 
 }
 
+
+inline void Shooter::FlyWheelOn() {
+
+	DebugOutF("FlyWheel On");
+
+	isFlywheelOn = true;
+	flywheelWU = Flywheel.GetSelectedSensorVelocity() / 2048;
+
+	//DebugOutF(std::to_string(m_OI.GetButtonBoard().GetRawAxis(0)));
+
+	Flywheel.Set(ControlMode::PercentOutput, DefaultShooterPower + m_OI.GetButtonBoard().GetRawAxis(0) /* * .75 */);
+}
+
+
+inline void Shooter::FlyWheelOff() {
+
+	DebugOutF("FlyWheel Off");
+
+	isFlywheelOn = false;
+	flywheelWU = 0;
+
+	Flywheel.Set(ControlMode::PercentOutput, 0);
+}
+
+
+void Shooter::LoadLemon() {
+
+	if(FlyWheelToggle.Get()){
+
+		LemonAID.Set(ControlMode::PercentOutput, .1);
+
+		Wait(2000); //Amount of time to load a lemon into the launching chamber
+
+		LemonAID.Set(ControlMode::PercentOutput, 0);
+
+	}
+}
+
+void Shooter::Shoot() {
+
+	launcher.WhileHeld(frc2::RunCommand([&] {
+
+		DebugOutF("Firing!");
+
+		LoadLemon();
+
+		Wait(3000); //Amount of time needed for flywheel to reach required velocity again
+
+	}, {} ));
+}
 }//namespace

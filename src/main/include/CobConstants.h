@@ -3,7 +3,7 @@
 namespace ohs2020 {
 
 enum class CobKey {
-    MODE, ROTATION, TIME_LEFT, IS_RED, FLYWHEEL_WU, FLYWHEEL_STATUS, IN_USE_AUTO
+    MODE, ROTATION, TIME_LEFT, IS_RED, FLYWHEEL_WU, FLYWHEEL_STATUS
 };
 
 enum class CobMessageOut {
@@ -11,7 +11,7 @@ enum class CobMessageOut {
 };
 
 enum class CobMessageIn {
-    GNIP, GYRO_RESET, RECEIVE_AUTO
+    GNIP, GYRO_RESET
 };
 
 }//namespace

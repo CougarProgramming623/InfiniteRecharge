@@ -21,10 +21,6 @@ void Handshake(const nt::NetworkTableEntry& entry) {
 	Cob::SendMessage(CobMessageOut::PING, "Confirmed");
 }
 
-void ReceiveAuto(const nt::NetworkTableEntry& entry) {
-		Robot::Get().GetAutoMan().SetInUse(entry.GetValue()->GetString());
-}
-
 void GyroResetConfirm(const nt::NetworkTableEntry& entry) {
 	//if (entry.GetBoolean(false) == true){
 		Robot::Get().GetNavX()->ZeroYaw();
@@ -49,11 +45,10 @@ void Cob::Init() {
 	RegisterMessageIn(CobMessageIn::GNIP, "gnip", Handshake);
 	RegisterMessageIn(CobMessageIn::GYRO_RESET, "gyroReset", GyroResetConfirm);
 	RegisterMessageOut(CobMessageOut::GYRO_RESET_CONFIRM, "gyroReset-ack");
-	RegisterMessageIn(CobMessageIn::RECEIVE_AUTO,"setAuto", ReceiveAuto);
 
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
-	RegisterKey(CobKey::IN_USE_AUTO, "/cob/auto/in-use");
+
 }
 
 void Cob::RegisterKey(CobKey key, std::string name, bool persistent) {
@@ -79,8 +74,9 @@ void Cob::InMesUpdate() {
 		std::string name = e.GetName();
 		if(e.GetType() != nt::NetworkTableType::kString || e.GetString("--NOT-EXIST--") != "--DELETED--") {
 			if (s_InMap.find(name) != s_InMap.end()) {
-				CobCallBack& callback = s_InMap[e.GetName()];
-				callback(e);
+				CobCallBack& jeff = s_InMap[e.GetName()];
+				jeff(e);
+				// e.Delete();
 				e.SetString("--DELETED--");
 			} else {
 				OHS_ERROR([&](auto& f) {
@@ -127,17 +123,7 @@ void Cob::PushValue<bool>(CobKey key, bool value) {
 }
 
 template<>
-void Cob::PushValue<double>(CobKey key, double value) {
-	if (EnsureExists(key)) s_Map[key].SetDouble(value);
-}
-
-template<>
 void Cob::PushValue<int>(CobKey key, int value) {
-	if (EnsureExists(key)) s_Map[key].SetDouble(value);
-}
-
-template<>
-void Cob::PushValue<float>(CobKey key, float value) {
 	if (EnsureExists(key)) s_Map[key].SetDouble(value);
 }
 
@@ -145,17 +131,6 @@ template<>
 void Cob::PushValue<std::string>(CobKey key, std::string value) {
 	if (EnsureExists(key)) s_Map[key].SetString(value);
 }
-
-template<>
-void Cob::PushValue<const char*>(CobKey key, const char* value) {
-	if (EnsureExists(key)) s_Map[key].SetString(value);
-}
-
-template<>
-void Cob::PushValue<std::string&>(CobKey key, std::string& value) {
-	if (EnsureExists(key)) s_Map[key].SetString(value);
-}
-
 
 // template<>
 // void Cob::SendMessage<bool>(CobMessageOut key, bool value) {

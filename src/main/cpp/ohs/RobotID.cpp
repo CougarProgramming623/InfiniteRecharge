@@ -1,7 +1,6 @@
 #include "ohs/RobotID.h"
 #include "ohs/Formatter.h"
 #include "ohs/Assert.h"
-#include "ohs/Log.h"
 
 #include <algorithm>
 #include <sys/ioctl.h>
@@ -14,7 +13,7 @@
 namespace ohs623 {
 
 	BotType RobotID::s_CurrentBot = BotType::BOT_TYPE_COUNT;
-	MotorData IDs [BotType::BOT_TYPE_COUNT][Motor::MOTOR_COUNT];
+	int IDs [BotType::BOT_TYPE_COUNT][Motor::MOTOR_COUNT];
 
 	const uint8_t SABER_MAC_ADDRESS[6] = { 0x00, 0x80, 0x2F, 0x27, 0x20, 0x48 };
 	const uint8_t MARK_MAC_ADDRESS [6] = { 0x00, 0x80, 0x2F, 0x17, 0xEE, 0xE9 };
@@ -28,53 +27,20 @@ namespace ohs623 {
 	}
 
 	int RobotID::GetID(Motor id) {
-		const MotorData& data = Get(id);
-		return data.ID;
-	}
-
-	BaseTalon* RobotID::InitMotor(Motor motor) {
-		const MotorData& data = Get(motor);
-		switch (data.Controller)
-		{
-			case MotorControllerType::TALON_SRX: 
-			{
-				OHS_DEBUG([motor](auto& f) { f << "Initalizing Talon SRX id " << motor; });
-				return new WPI_TalonSRX(data.ID);
-			}
-			case MotorControllerType::TALON_FX:
-			{
-				OHS_DEBUG([motor](auto& f) { f << "Initalizing Talon FX id " << motor; });
-				return new WPI_TalonFX(data.ID);
-			}
-			default: OHS_ASSERT(false, "Motor controller type not recognised!!");
-		}
-		return nullptr;
-	}
-
-	const MotorData& RobotID::Get(Motor motorID) {
+		
 		if (s_CurrentBot == BotType::BOT_TYPE_COUNT) {
-			MotorData defaultData = { -1, MotorControllerType::TALON_SRX };
-			std::fill(IDs[0], IDs[0] + sizeof(IDs) / sizeof(IDs[0]), defaultData);
+			std::fill(IDs[0], IDs[0] + sizeof(IDs) / sizeof(int), -1);
 
-			IDs[BotType::MARK][Motor::FRONT_LEFT] = { 6, MotorControllerType::TALON_SRX };
-			IDs[BotType::MARK][Motor::FRONT_RIGHT] = { 2, MotorControllerType::TALON_SRX };
-			IDs[BotType::MARK][Motor::BACK_LEFT] = { 1, MotorControllerType::TALON_SRX };
-			IDs[BotType::MARK][Motor::BACK_RIGHT] = { 5, MotorControllerType::TALON_SRX };
+			IDs[BotType::MARK][Motor::FRONT_LEFT] =  6;
+			IDs[BotType::MARK][Motor::FRONT_RIGHT] =  2;
+			IDs[BotType::MARK][Motor::BACK_LEFT] =  1;
+			IDs[BotType::MARK][Motor::BACK_RIGHT] =  5;
 
-			IDs[BotType::SABER][Motor::FRONT_LEFT] = { 31, MotorControllerType::TALON_FX };
-			IDs[BotType::SABER][Motor::FRONT_RIGHT] = { 32, MotorControllerType::TALON_FX };
-			IDs[BotType::SABER][Motor::BACK_LEFT] = { 34, MotorControllerType::TALON_FX };
-			IDs[BotType::SABER][Motor::BACK_RIGHT] = { 33, MotorControllerType::TALON_FX };     
-			IDs[BotType::SABER][Motor::FLYWHEEL] = { 35, MotorControllerType::TALON_SRX };     
-			IDs[BotType::SABER][Motor::FEEDER] = { 3, MotorControllerType::TALON_SRX };     
-			IDs[BotType::SABER][Motor::INTAKE] = {7, MotorControllerType::TALON_SRX }; 
-			IDs[BotType::SABER][Motor::INTAKE_DOS] = {15, MotorControllerType::TALON_SRX }; 
-			    
-			IDs[BotType::SABER][Motor::INTAKE_LIFTER] = { -1, MotorControllerType::TALON_SRX };     
-			IDs[BotType::SABER][Motor::CLIMB_LEFT] = { 4, MotorControllerType::TALON_SRX };     
-			IDs[BotType::SABER][Motor::CLIMB_RIGHT] = { 7, MotorControllerType::TALON_SRX };     
+			IDs[BotType::SABER][Motor::FRONT_LEFT] =  31;
+			IDs[BotType::SABER][Motor::FRONT_RIGHT] =  32;
+			IDs[BotType::SABER][Motor::BACK_LEFT] =  34;
+			IDs[BotType::SABER][Motor::BACK_RIGHT] =  33;     
 
-			//Default to saber if the bot type cant be found
 			s_CurrentBot = BotType::SABER;
 
 			// MAC address detection
@@ -123,11 +89,11 @@ namespace ohs623 {
 			}
 		}
 
-		if (IDs[s_CurrentBot][motorID].ID == -1) {
-			frc::DriverStation::ReportError("Invalid ID Number: " + std::to_string(motorID) + " For bot " + std::to_string(s_CurrentBot));
+		int actualID = IDs[s_CurrentBot][id];
+		if (actualID == -1) {
+			frc::DriverStation::ReportError("Invalid ID Number: " + std::to_string(actualID) + " For bot " + std::to_string(s_CurrentBot));
 		}
-
-		return IDs[s_CurrentBot][motorID];
+		return actualID;
 	}
 
 } // namespace
