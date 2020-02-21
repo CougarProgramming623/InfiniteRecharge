@@ -89,7 +89,9 @@ void Robot::RobotPeriodic() {
 
 	}
 
-    //Cob::PushValue(CobKey::MODE, isFodMode());
+	m_climb.LEDCanClimb();
+
+	//Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
 

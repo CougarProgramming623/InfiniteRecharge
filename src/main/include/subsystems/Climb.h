@@ -6,6 +6,8 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/FunctionalCommand.h>
 
+#include <frc/GenericHID.h>
+
 #include <frc2/Timer.h>
 
 #include "Util.h"
@@ -21,6 +23,7 @@ public:
 	void Deploy();
 	void VerticalClimb();
 	void SideClimb();
+	void LEDCanClimb();
 
 	bool IsEndgame();
 	bool CanClimb();
@@ -38,7 +41,9 @@ private:
 
 	frc2::Button endgameOverride;
 	frc2::Button deployer;
+
 	bool isDeployed = false;
+	bool isClimbActionHappening = false;
 
 	frc2::Timer timer;
 };

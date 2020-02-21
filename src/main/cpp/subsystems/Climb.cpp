@@ -21,7 +21,6 @@ climbRight([&]      { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(
 deployer([&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(17);  }),
 endgameOverride([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(18);  }),
 timer()
-
 {
 
 	climbMotorLeft.SetInverted(true);
@@ -154,6 +153,13 @@ void Climb::Deploy() {
 		if(IsEndgame()) DebugOutF("Deployed");
 
 	}, {}));
+
+}
+
+void Climb::LEDCanClimb() {
+
+if(CanClimb()) 
+	Robot::Get().GetOI().GetButtonBoard().SetOutput(1, true);
 
 }
 
