@@ -1,10 +1,13 @@
 #include "subsystems/Shooter.h"
 #include "Robot.h"
+#include "ohs/RobotID.h"
 #include "ohs/Log.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "frc2/command/FunctionalCommand.h"
+
+using namespace ohs623;
 
 namespace ohs2020{
 
@@ -12,17 +15,18 @@ const double DefaultShooterPower = 1;
 
 Shooter::Shooter() : 
 
-Flywheel(35),
-feeder(3),
+Flywheel(RobotID::GetID(FLYWHEEL)),
+feeder(RobotID::GetID(FEEDER)),
 launcher( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6); }), // Arm Override
 flyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
-FlyWheelEncoder(35),
+FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
 timer()
 {}
 
 void Shooter::Init() {
 
 	SetupShooterButtons();
+	
 }
 
 inline void Shooter::SetupShooterButtons() {
@@ -30,7 +34,12 @@ inline void Shooter::SetupShooterButtons() {
 	flyWheelToggle.WhileHeld(frc2::FunctionalCommand([this]{}, [this] { //on execute
 
 		isFlywheelOn = true;
+<<<<<<< HEAD
 		flywheelWU = Flywheel.GetSelectedSensorVelocity() / 4;
+=======
+		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
+		DebugOutF(std::to_string(flywheelWU));
+>>>>>>> shooter
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
 
 		Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0));
@@ -43,20 +52,12 @@ inline void Shooter::SetupShooterButtons() {
 
 	}, [this] { return false; }, {}));
 
-	std::vector<std::unique_ptr<frc2::Command>> vector;
-	frc2::FunctionalCommand* shootBall = new frc2::FunctionalCommand([this] { //on init
+	flyWheelToggle.WhenReleased(frc2::RunCommand([&] {
 
-		timer.Reset();
-		timer.Start();
-		feeder.Set(ControlMode::PercentOutput, 1);
-		OHS_DEBUG([](auto& f){ f << "shooting init"; });
+		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
+		DebugOutF(std::to_string(flywheelWU));
 
-	}, [this] {}, [this] (bool f) {// on end
-
-		feeder.Set(ControlMode::PercentOutput, 0);
-		OHS_DEBUG([](auto& f){ f << "shooting end"; });
-
-
+<<<<<<< HEAD
 	}, [this] { // is finished
 		
 		OHS_DEBUG([&](auto& f){ f << "shooter is finished? " << (timer.Get() > units::second_t(1)); })
@@ -71,4 +72,8 @@ inline void Shooter::SetupShooterButtons() {
 	launcher.WhenHeld(frc2::SequentialCommandGroup(std::move(vector)));
 
 }
+=======
+	}, {}));
+} 
+>>>>>>> shooter
 }//namespace
