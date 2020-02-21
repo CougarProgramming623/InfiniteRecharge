@@ -29,6 +29,7 @@ private:
 
 	WPI_TalonSRX intakeMotor;
 	WPI_TalonSRX intakeLift;
+	WPI_TalonSRX convery;
 
 	frc2::Button intakeDownButton;
 	frc2::Button intakeUpButton;

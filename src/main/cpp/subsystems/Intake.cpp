@@ -13,9 +13,9 @@ Intake::Intake() :
 intakeMotor(RobotID::GetID(INTAKE)),
 intakeLift(RobotID::GetID(INTAKE_LIFTER)),
 
-intakeDownButton([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(9); }), // >
-intakeUpButton([&]		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(10); }), //  Arm/Wrist Dial
-intakeManualButton([&]	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11); }), // >
+intakeDownButton([&] 	{ return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2); }), // >
+intakeUpButton([&]		{ return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2); }), //  Arm/Wrist Dial
+intakeManualButton([&]	{ return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2); }), // >s	
 
 intakeOnButton([&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(7); }), //Fork Override Yellow Button
 timer()
