@@ -22,7 +22,6 @@ namespace ohs2020 {
 using namespace ohs623;
 
 DriveTrain::DriveTrain() {
-	OHS_DEBUG([](auto& f) { f << "DriveTrain::DriveTrain()"; });
 	m_FrontLeft.reset(RobotID::InitMotor(FRONT_LEFT));
 	m_FrontRight.reset(RobotID::InitMotor(FRONT_RIGHT));
 	m_BackLeft.reset(RobotID::InitMotor(BACK_LEFT));

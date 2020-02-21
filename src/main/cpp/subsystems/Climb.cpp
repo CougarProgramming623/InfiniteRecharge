@@ -35,24 +35,15 @@ timer()
 }
 
 void Climb::Init() {
-	OHS_DEBUG([](auto& f){ f << "Cilib::Init() 1"; });
-
 	VerticalClimb();
-	OHS_DEBUG([](auto& f){ f << "Cilib::Init() 2"; });
-
-	//SideClimb();
-	OHS_DEBUG([](auto& f){ f << "Cilib::Init() 3"; });
-
-	//Deploy();
-	OHS_DEBUG([](auto& f){ f << "Cilib::Init() 4"; });
+	SideClimb();
+	Deploy();
 
 }
 
 void Climb::VerticalClimb() {
-	OHS_DEBUG([](auto& f){ f << "Cilib::VerticalClimb() 1"; });
 
 	climbUp.WhileHeld(frc2::RunCommand([&] {
-		OHS_DEBUG([](auto& f){ f << "Cilib::WhileHeld Lambda() 1"; });
 
 		if(CanClimb()){
 			climbMotorLeft.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
@@ -60,10 +51,8 @@ void Climb::VerticalClimb() {
 
 			DebugOutF("Climbing Up");
 		}
-		OHS_DEBUG([](auto& f){ f << "Cilib::WhileHeld Lambda() 2"; });
 
 	}, {} ));
-	OHS_DEBUG([](auto& f){ f << "Cilib::VerticalClimb() 2"; });
 
 	climbUp.WhenReleased(frc2::InstantCommand([&] {
 
@@ -71,7 +60,6 @@ void Climb::VerticalClimb() {
 		climbMotorRight.Set(ControlMode::PercentOutput, 0);
 
 	}, {} ));
-	OHS_DEBUG([](auto& f){ f << "Cilib::VerticalClimb() 3"; });
 
 	climbDown.WhenHeld(frc2::RunCommand([&] {
 
@@ -83,7 +71,6 @@ void Climb::VerticalClimb() {
 		}
 
 	}, {} ));
-	OHS_DEBUG([](auto& f){ f << "Cilib::VerticalClimb() 4"; });
 
 	climbDown.WhenReleased(frc2::InstantCommand([&] {
 
@@ -91,7 +78,6 @@ void Climb::VerticalClimb() {
 		climbMotorRight.Set(ControlMode::PercentOutput, 0);
 
 	}, {} ));
-		OHS_DEBUG([](auto& f){ f << "Cilib::VerticalClimb() 5"; });
 
 }
 
