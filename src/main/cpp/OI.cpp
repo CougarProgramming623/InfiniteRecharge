@@ -28,7 +28,8 @@ void OI::Init(){
 		
 	}, {} ));
 
-	m_Turn.WhileHeld( new TurnToPosPID() );
+	m_Turn.WhenPressed( new TurnToPosPID() );
+	
 
 	//m_EncoderDrive.WhenPressed( new EncoderDrive(0, 0, 50));
 }

@@ -9,12 +9,15 @@ std::function<double()> measurement = []()->double {
     return (double)(Robot::Get().GetNavX()->GetYaw());
 };
 std::function<void(double)> output = [](double measure) { 
-    DebugOutF("turn to: " + std::to_string(measure));
-
-	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::Velocity, measure * 1000);
-	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::Velocity, measure * 1000);
-	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::Velocity, -measure * 1000);
-	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::Velocity, -measure * 1000);
+	// Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::Velocity, measure * 1000);
+	// Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::Velocity, measure * 1000);
+	// Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::Velocity, -measure * 1000);
+	// Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::Velocity, -measure * 1000);
+	
+	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput, measure);
+	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, measure);
+	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, -measure);
+	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput, -measure);
 };
 
 TurnToPosPID::TurnToPosPID() : frc2::PIDCommand(CreateTurnController(), measurement, [this]{ return m_Angle; }, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain())) {
@@ -42,8 +45,9 @@ void TurnToPosPID::Execute() {
 }
 
 bool TurnToPosPID::IsFinished() {
-	DebugOutF("setpoint:" + std::to_string(m_TurnController->GetSetpoint()));
+	DebugOutF("setpoint:" + std::to_string(m_Angle));
 	DebugOutF("point:" + std::to_string((double)Robot::Get().GetNavX()->GetYaw()));
+	DebugOutF(std::to_string(abs(m_Angle - (double)Robot::Get().GetNavX()->GetYaw())));
 	return abs(m_Angle - (double)Robot::Get().GetNavX()->GetYaw()) < 2;
 }
 
@@ -60,10 +64,10 @@ frc2::PIDController TurnToPosPID::CreateTurnController() {
 	roughly accurate for greater than 10 : 0.085, 0.0, 0.011
 
 	Saber PID Values:
-	roughly accurate: 0.325, 0.0, 0.0125
+	0.325, 0.0, 0.0125
 	*/
 
-    m_TurnController = new frc2::PIDController( 0.325, 0.0, 0.0125, units::second_t(20_ms) );
+    m_TurnController = new frc2::PIDController( 0.085, 0.0, 0.011, units::second_t(20_ms) );
 
 	m_TurnController->SetTolerance( 2.0, std::numeric_limits< double >::infinity() );
 	m_TurnController->EnableContinuousInput(-180.0,180.0);
