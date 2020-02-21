@@ -5,6 +5,7 @@
 #include "ohs/RobotID.h"
 #include "ohs/Log.h"
 
+#include <frc/smartdashboard/SendableRegistry.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/drive/Vector2d.h>
 #include <frc2/command/button/JoystickButton.h>
@@ -32,6 +33,8 @@ DriveTrain::DriveTrain() {
 
 	m_FrontRight->SetInverted(true);
 	m_BackRight->SetInverted(true);
+
+	RemoveRegistry(m_FrontLeft.get(), m_FrontRight.get(), m_BackLeft.get(), m_BackRight.get());
 
 }
 
@@ -94,7 +97,6 @@ void Normalize(wpi::MutableArrayRef<double> wheelSpeeds) {
 void DriveTrain::CartesianDrive(double y, double x, double rotation, double angle) {
 
 	//DebugOutF("Mode: "+ std::to_string(m_FrontLeft->GetSelectedSensorVelocity()));
-	DebugOutF("VDiff: "+ std::to_string( m_FrontLeft->GetClosedLoopTarget() - m_FrontLeft->GetSelectedSensorVelocity()/4 ));
 
 	SmartDashboard::PutNumber("PIDVELOCITY", m_FrontLeft->GetSelectedSensorVelocity());
 

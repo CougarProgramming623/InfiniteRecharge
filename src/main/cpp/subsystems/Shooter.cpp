@@ -2,8 +2,10 @@
 #include "Robot.h"
 #include "ohs/RobotID.h"
 #include "ohs/Log.h"
+#include "Util.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SendableRegistry.h>
 
 #include "frc2/command/FunctionalCommand.h"
 
@@ -17,29 +19,33 @@ Shooter::Shooter() :
 
 Flywheel(RobotID::GetID(FLYWHEEL)),
 feeder(RobotID::GetID(FEEDER)),
-launcher( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6); }), // Arm Override
-flyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
+lowTransport(RobotID::GetID(LOW_TRANSPORT)),
+highTransport(RobotID::GetID(HIGH_TRANSPORT)),
 FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
-timer()
-{}
+
+launcher( [&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); 	}),
+flyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11);	}), 
+conveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 		}),
+timer() {
+
+	RemoveRegistry(this, &Flywheel, &feeder, &lowTransport, &highTransport);
+
+}
 
 void Shooter::Init() {
 
 	SetupShooterButtons();
-	
+	SetupTransportButtons();
+
 }
 
-inline void Shooter::SetupShooterButtons() {
+void Shooter::SetupShooterButtons() {
 
 	flyWheelToggle.WhileHeld(frc2::FunctionalCommand([this]{}, [this] { //on execute
 
 		isFlywheelOn = true;
-<<<<<<< HEAD
-		flywheelWU = Flywheel.GetSelectedSensorVelocity() / 4;
-=======
 		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
 		DebugOutF(std::to_string(flywheelWU));
->>>>>>> shooter
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
 
 		Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0));
@@ -57,23 +63,43 @@ inline void Shooter::SetupShooterButtons() {
 		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
 		DebugOutF(std::to_string(flywheelWU));
 
-<<<<<<< HEAD
-	}, [this] { // is finished
-		
-		OHS_DEBUG([&](auto& f){ f << "shooter is finished? " << (timer.Get() > units::second_t(1)); })
-		return timer.Get() > units::second_t(2);
+	}, {}));
 
 
-	}, {});
-	for(int i = 0; i < 100; i++){
-		vector.push_back(std::unique_ptr<frc2::Command>(shootBall));
-		vector.push_back(std::make_unique<frc2::WaitCommand>(units::second_t(1)));
-	}
-	launcher.WhenHeld(frc2::SequentialCommandGroup(std::move(vector)));
+	launcher.WhenHeld(frc2::RunCommand([&] {
+
+		feeder.Set(ControlMode::PercentOutput, 1);
+
+	}, {} ));
+
+	launcher.WhenReleased(frc2::InstantCommand([&] {
+
+		feeder.Set(ControlMode::PercentOutput, 0);
+
+	}, {} ));
+} 
+
+void Shooter::SetupTransportButtons() {
+
+conveyorToggle.WhenHeld(frc2::RunCommand([&] {
+
+	lowTransport.Set(ControlMode::PercentOutput, 1);
+	highTransport.Set(ControlMode::PercentOutput, 1);
+
+}, {}));
+
+conveyorToggle.WhenReleased(frc2::InstantCommand([&] {
+	
+	lowTransport.Set(ControlMode::PercentOutput, 0);
+	highTransport.Set(ControlMode::PercentOutput, 0);
+
+}, {}));
+
 
 }
-=======
-	}, {}));
-} 
->>>>>>> shooter
+
+
+
+
+
 }//namespace

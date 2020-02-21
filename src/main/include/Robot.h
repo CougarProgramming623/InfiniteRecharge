@@ -9,9 +9,7 @@
 
 #include "OI.h"
 #include "subsystems/DriveTrain.h"
-#include "subsystems/Climb.h"
 #include "subsystems/Shooter.h"
-#include "subsystems/Intake.h"
 #include "Util.h"
 
 #include "ohs/Assert.h"
@@ -43,9 +41,7 @@ public:
 
 	inline OI& GetOI() { return m_oi; }
 	inline DriveTrain& GetDriveTrain() { return m_DriveTrain; }
-	inline Intake& GetIntake() { return m_intake; }
 	inline Shooter& GetShooter() { return m_shooter; }
-	inline Climb& GetClimb() { return m_climb; }
 	inline AHRS* GetNavX() const { return navx; }
 	inline bool IsInitComplete() const { return m_Init; }
 	inline AutoManager& GetAutoMan() { return m_AutoManager; }
@@ -58,12 +54,11 @@ private:
 
 	AutoManager m_AutoManager;
 
+	
 	OI m_oi;
 	DriveTrain m_DriveTrain;
 	AHRS* navx;
-	Climb m_climb;
 	Shooter m_shooter;
-	Intake m_intake;
 
 	bool m_Init = false;
 

@@ -36,9 +36,9 @@ void Robot::RobotInit() {
 	Cob::Init();
 	m_DriveTrain.Init();
 	m_oi.Init();
-	m_climb.Init();
 	m_shooter.Init();
-	m_intake.Init();
+
+	RemoveRegistry(navx);
 
 	try {
 		navx = new AHRS(SPI::Port::kMXP);
