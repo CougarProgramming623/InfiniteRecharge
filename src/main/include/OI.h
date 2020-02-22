@@ -29,6 +29,7 @@ public:
 	frc2::Button m_Turn;
 	frc2::Button m_EncoderDrive;
 	frc2::Button m_VModeToggle;
+	frc2::Button m_LimelightToggle;
 		
 	bool m_Fod = true;
 

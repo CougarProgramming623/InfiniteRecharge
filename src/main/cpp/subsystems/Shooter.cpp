@@ -1,10 +1,15 @@
 #include "subsystems/Shooter.h"
 #include "Robot.h"
+#include "ohs/RobotID.h"
 #include "ohs/Log.h"
+#include "Util.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SendableRegistry.h>
 
 #include "frc2/command/FunctionalCommand.h"
+
+using namespace ohs623;
 
 namespace ohs2020{
 
@@ -12,25 +17,35 @@ const double DefaultShooterPower = 1;
 
 Shooter::Shooter() : 
 
-Flywheel(35),
-feeder(3),
-launcher( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6); }), // Arm Override
-flyWheelToggle([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); }), //Vacuum Toggle Switch
-FlyWheelEncoder(35),
-timer()
-{}
+Flywheel(RobotID::GetID(FLYWHEEL)),
+feeder(RobotID::GetID(FEEDER)),
+lowConveyor(RobotID::GetID(LOW_TRANSPORT)),
+highConveyor(RobotID::GetID(HIGH_TRANSPORT)),
+FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
+
+launcher( [&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); 	}),
+flyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11);	}), 
+conveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 		}),
+timer() {
+
+	RemoveRegistry(this, &Flywheel, &feeder, &lowConveyor, &highConveyor);
+
+}
 
 void Shooter::Init() {
 
 	SetupShooterButtons();
+	SetupConveyorButtons();
+
 }
 
-inline void Shooter::SetupShooterButtons() {
+void Shooter::SetupShooterButtons() {
 
 	flyWheelToggle.WhileHeld(frc2::FunctionalCommand([this]{}, [this] { //on execute
 
 		isFlywheelOn = true;
-		flywheelWU = Flywheel.GetSelectedSensorVelocity() / 4;
+		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
+		DebugOutF(std::to_string(flywheelWU));
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
 
 		Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0));
@@ -43,32 +58,49 @@ inline void Shooter::SetupShooterButtons() {
 
 	}, [this] { return false; }, {}));
 
-	std::vector<std::unique_ptr<frc2::Command>> vector;
-	frc2::FunctionalCommand* shootBall = new frc2::FunctionalCommand([this] { //on init
+	flyWheelToggle.WhenReleased(frc2::RunCommand([&] {
 
-		timer.Reset();
-		timer.Start();
+		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
+		DebugOutF(std::to_string(flywheelWU));
+
+	}, {}));
+
+
+	launcher.WhenHeld(frc2::RunCommand([&] {
+
 		feeder.Set(ControlMode::PercentOutput, 1);
-		OHS_DEBUG([](auto& f){ f << "shooting init"; });
 
-	}, [this] {}, [this] (bool f) {// on end
+	}, {} ));
+
+	launcher.WhenReleased(frc2::InstantCommand([&] {
 
 		feeder.Set(ControlMode::PercentOutput, 0);
-		OHS_DEBUG([](auto& f){ f << "shooting end"; });
+
+	}, {} ));
+} 
 
 
-	}, [this] { // is finished
-		
-		OHS_DEBUG([&](auto& f){ f << "shooter is finished? " << (timer.Get() > units::second_t(1)); })
-		return timer.Get() > units::second_t(2);
+void Shooter::SetupConveyorButtons() {
 
+conveyorToggle.WhenHeld(frc2::RunCommand([&] {
 
-	}, {});
-	for(int i = 0; i < 100; i++){
-		vector.push_back(std::unique_ptr<frc2::Command>(shootBall));
-		vector.push_back(std::make_unique<frc2::WaitCommand>(units::second_t(1)));
-	}
-	launcher.WhenHeld(frc2::SequentialCommandGroup(std::move(vector)));
+	lowConveyor.Set(ControlMode::PercentOutput, .5);
+	highConveyor.Set(ControlMode::PercentOutput, 1);
+
+}, {}));
+
+conveyorToggle.WhenReleased(frc2::InstantCommand([&] {
+	
+	lowConveyor.Set(ControlMode::PercentOutput, 0);
+	highConveyor.Set(ControlMode::PercentOutput, 0);
+
+}, {}));
+
 
 }
+
+
+
+
+
 }//namespace

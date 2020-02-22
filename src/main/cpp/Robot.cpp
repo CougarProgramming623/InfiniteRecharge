@@ -36,9 +36,10 @@ void Robot::RobotInit() {
 	Cob::Init();
 	m_DriveTrain.Init();
 	m_oi.Init();
-	m_climb.Init();
 	m_shooter.Init();
-	m_intake.Init();
+	m_climb.Init();
+
+	RemoveRegistry(navx);
 
 	try {
 		navx = new AHRS(SPI::Port::kMXP);
@@ -92,7 +93,9 @@ void Robot::RobotPeriodic() {
 
 	}
 
-    //Cob::PushValue(CobKey::MODE, isFodMode());
+	m_climb.LEDCanClimb();
+
+	//Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
 
