@@ -54,6 +54,8 @@ void Cob::Init() {
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
 	RegisterKey(CobKey::IN_USE_AUTO, "/cob/auto/in-use");
+
+	RegisterKey(CobKey::LIMELIGHT_TOGGLE, "/limelight/ledMode");
 }
 
 void Cob::RegisterKey(CobKey key, std::string name, bool persistent) {
