@@ -19,6 +19,7 @@
 #include "ohs/Log.h"
 
 
+
 namespace ohs2020 {
 
 	Robot* Robot::s_Instance = nullptr;
@@ -51,6 +52,18 @@ void Robot::RobotInit() {
 	navx->ZeroYaw();
 
 	m_Init = true;
+
+
+	m_led.SetLength(kLength);
+
+	for(int i = 0; i < kLength; i++){
+		m_ledBuffer[i].SetRGB(0, 0, 0);
+	}
+
+	m_led.SetData(m_ledBuffer);
+	m_led.Start();
+
+
 }
 
 /**
@@ -91,6 +104,23 @@ void Robot::RobotPeriodic() {
 		Cob::PushValue(CobKey::MODE, 1);
 
 	}
+
+	for(int i = 0; i < kLength; i++){
+		m_ledBuffer[i].SetHSV((i*5 + ledOffset) % 255, 255, 128); //rainbow
+	}
+
+	// for(int i = 0; i < kLength; i++){
+	// 	if((i + ledOffset / 10) % 3 == 0)
+	// 		m_ledBuffer[i].SetRGB(184, 155, 2); //gold
+	// 	else
+	// 		m_ledBuffer[i].SetRGB(46, 1, 1); //burg
+	// }
+
+	ledOffset++;
+
+	m_led.SetData(m_ledBuffer);
+
+
 
     //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
