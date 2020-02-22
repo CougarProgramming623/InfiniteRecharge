@@ -63,6 +63,19 @@ bool TurnToPosPID::IsFinished() {
 
 void TurnToPosPID::End(bool interrupted){
 	DebugOutF("Turn Ended");
+
+	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputForward(1, 0);
+	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputReverse(1, 0);
+
+	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputForward(1, 0);
+	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputForward(1, 0);
+
+	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputForward(1, 0);
+	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputForward(1, 0);
+
+	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputForward(1, 0);
+	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputForward(1, 0);
+
 	frc2::PIDCommand::End(interrupted);
 }
 
