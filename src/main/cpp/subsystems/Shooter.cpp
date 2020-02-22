@@ -25,7 +25,7 @@ FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
 
 launcher( [&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); 	}),
 flyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11);	}), 
-conveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 		}),
+conveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 	}),
 timer() {
 
 	RemoveRegistry(this, &Flywheel, &feeder, &lowConveyor, &highConveyor);
