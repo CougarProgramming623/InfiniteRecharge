@@ -37,6 +37,7 @@ void Robot::RobotInit() {
 	m_DriveTrain.Init();
 	m_oi.Init();
 	m_shooter.Init();
+	m_climb.Init();
 
 	RemoveRegistry(navx);
 

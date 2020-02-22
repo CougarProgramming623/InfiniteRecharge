@@ -84,7 +84,7 @@ void Shooter::SetupConveyorButtons() {
 
 conveyorToggle.WhenHeld(frc2::RunCommand([&] {
 
-	lowConveyor.Set(ControlMode::PercentOutput, 1);
+	lowConveyor.Set(ControlMode::PercentOutput, .5);
 	highConveyor.Set(ControlMode::PercentOutput, 1);
 
 }, {}));

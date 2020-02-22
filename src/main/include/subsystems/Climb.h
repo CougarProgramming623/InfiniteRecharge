@@ -35,16 +35,15 @@ private:
 
 	frc2::Button climbUp;
 	frc2::Button climbDown;
-
 	frc2::Button climbLeft;
 	frc2::Button climbRight;
 
 	frc2::Button endgameOverride;
 	frc2::Button deployer;
 
-	bool isDeployed = false;
-	bool isClimbActionHappening = false;
-
 	frc2::Timer timer;
+
+	bool isDeployed = false;
+	bool isDeployFinished = false;
 };
 }//namespace
