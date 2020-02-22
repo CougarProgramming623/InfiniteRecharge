@@ -53,7 +53,7 @@ void Climb::VerticalClimb() {
 climbUp.WhileHeld(frc2::RunCommand([&] {
 
 	if(CanClimb()){
-		climbMotorLeft.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);
+		climbMotorLeft.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);//correct direction
 		climbMotorRight.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);
 
 		DebugOutF("Climbing Up");
@@ -72,7 +72,7 @@ climbUp.WhileHeld(frc2::RunCommand([&] {
 
 	if(CanClimb()){
 		climbMotorLeft.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
-		climbMotorRight.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
+		climbMotorRight.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);//correct direction
 
 		DebugOutF("Climbing Down");
 	}
@@ -140,8 +140,8 @@ void Climb::Deploy() {
 			DebugOutF("start deploy");
 			timer.Reset();
 			timer.Start();
-			climbMotorLeft.Set(ControlMode::PercentOutput, 1);
-			climbMotorRight.Set(ControlMode::PercentOutput, 1);
+			climbMotorLeft.Set(ControlMode::PercentOutput, -1); //correct direction
+			climbMotorRight.Set(ControlMode::PercentOutput, -1);
 
 			frc2::CommandScheduler::GetInstance().Schedule(new frc2::SequentialCommandGroup(
 				frc2::WaitCommand(units::second_t(5)),
@@ -169,7 +169,7 @@ void Climb::Deploy() {
 
 		DebugOutF("Deploying");
 
-		return timer.Get() > units::second_t(.5); //Time to trigger gas spring
+		return timer.Get() > units::second_t(.2); //Time to trigger gas spring
 
 	}, {}));
 

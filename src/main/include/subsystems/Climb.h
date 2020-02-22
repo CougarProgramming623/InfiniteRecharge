@@ -27,6 +27,9 @@ public:
 
 	bool IsEndgame();
 	bool CanClimb();
+
+	bool isDeployed = false;
+	bool isDeployFinished = false;
 	
 private:
 
@@ -42,8 +45,5 @@ private:
 	frc2::Button deployer;
 
 	frc2::Timer timer;
-
-	bool isDeployed = false;
-	bool isDeployFinished = false;
 };
 }//namespace
