@@ -12,8 +12,8 @@ climbMotorLeft(4),
 climbMotorRight(17),
 climbUp([&]         { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2);   }),
 climbDown([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(3);   }),
-climbLeft([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(100); }),
-climbRight([&]      { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(100); }),
+climbLeft([&]       { return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2); }),
+climbRight([&]      { return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2); }),
 endgameOverride([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(4); }) {
 
 	climbMotorLeft.SetInverted(true);

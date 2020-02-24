@@ -57,7 +57,7 @@ void Robot::RobotInit() {
 	m_led.SetLength(kLength);
 
 	for(int i = 0; i < kLength; i++){
-		m_ledBuffer[i].SetRGB(0, 0, 0);
+		m_ledBuffer[i].SetRGB(0, 255, 0);
 	}
 
 	m_led.SetData(m_ledBuffer);
@@ -105,9 +105,6 @@ void Robot::RobotPeriodic() {
 
 	}
 
-	for(int i = 0; i < kLength; i++){
-		m_ledBuffer[i].SetHSV((i*5 + ledOffset) % 255, 255, 128); //rainbow
-	}
 
 	// for(int i = 0; i < kLength; i++){
 	// 	if((i + ledOffset / 10) % 3 == 0)
@@ -116,8 +113,20 @@ void Robot::RobotPeriodic() {
 	// 		m_ledBuffer[i].SetRGB(46, 1, 1); //burg
 	// }
 
-	ledOffset++;
-
+	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
+		for(int i = 0; i < kLength; i++){
+			m_ledBuffer[i].SetRGB(255, 0, 0);
+		}
+	} else if (frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kBlue){
+		for(int i = 0; i < kLength; i++){
+			m_ledBuffer[i].SetRGB(0, 0, 255);
+		}
+	} else {
+		for(int i = 0; i < kLength; i++){
+			m_ledBuffer[i].SetRGB(0, 255, 0);
+		}
+	}
+	
 	m_led.SetData(m_ledBuffer);
 
 
