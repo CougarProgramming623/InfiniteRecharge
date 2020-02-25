@@ -109,7 +109,9 @@ void Robot::RobotPeriodic() {
 
 void Robot::DisabledInit() {
 
-	
+	m_climb.isDeployed = false;
+	m_climb.isDeployFinished = false;
+
 }
 
 void Robot::DisabledPeriodic() {
