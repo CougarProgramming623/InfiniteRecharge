@@ -28,6 +28,8 @@ private:
     double m_Angle = 0.0;
     double m_Offset = 0.0;
     bool m_IsVision;
+    std::array<double, 10> m_OffsetValues;
+    int m_Index = 0;
 };
 
 } // end namespace

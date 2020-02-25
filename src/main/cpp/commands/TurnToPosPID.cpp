@@ -18,11 +18,13 @@ std::function<void(double)> output = [](double measure) {
 
 TurnToPosPID::TurnToPosPID() : frc2::PIDCommand(CreateTurnController(), measurement, [this]{ return m_Angle + m_Offset; }, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain())) {
     m_IsVision = true;
+	std::fill(m_OffsetValues.begin(), m_OffsetValues.end(), 0.0);
 }
 
 TurnToPosPID::TurnToPosPID(double angle) : frc2::PIDCommand(CreateTurnController(), measurement, [this]{ return m_Angle + m_Offset; }, output, {&Robot::Get().GetDriveTrain()}) {
     m_IsVision = false;
 	m_Angle = angle;
+	std::fill(m_OffsetValues.begin(), m_OffsetValues.end(), 0.0);
 }
 
 void TurnToPosPID::Initialize() {
@@ -51,14 +53,21 @@ void TurnToPosPID::Initialize() {
 
 void TurnToPosPID::Execute() {
 	frc2::PIDCommand::Execute();
-	//Robot::Get().GetDriveTrain().CartesianDrive(0, 0, 0.3, Robot::Get().GetNavX()->GetYaw());
+	m_OffsetValues[m_Index % 10] = m_Angle + m_Offset - Robot::Get().GetNavX()->GetYaw();
+	m_Index = m_Index + 1;
 }
 
 bool TurnToPosPID::IsFinished() {
 	DebugOutF("setpoint:" + std::to_string(m_Angle));
 	DebugOutF("point:" + std::to_string((double)Robot::Get().GetNavX()->GetYaw()));
 	DebugOutF(std::to_string(abs(m_Angle - (double)Robot::Get().GetNavX()->GetYaw())));
-	return Robot::Get().GetOI().GetButtonBoard().GetRawButtonReleased(1); //GetController().AtSetpoint()
+	if(m_Index < 12)
+		return false;
+	for(int i = 0; i < 10; i++) {
+		if(abs(m_OffsetValues[i]) > 2)
+			return false;
+	}
+	return true; //Robot::Get().GetOI().GetButtonBoard().GetRawButtonReleased(1);
 }
 
 
