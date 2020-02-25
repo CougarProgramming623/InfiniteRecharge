@@ -12,7 +12,7 @@
 namespace ohs2020 {
 
 nt::NetworkTableInstance Cob::s_Table;
-std::map<CobKey, nt::NetworkTableEntry> Cob::s_Map;
+std::map<CobKey, OHSNetworkTableEntry> Cob::s_Map;
 std::map<CobMessageOut, nt::NetworkTableEntry> Cob::s_OutMap;
 std::map<std::string, CobCallBack> Cob::s_InMap;
 
@@ -56,13 +56,16 @@ void Cob::Init() {
 	RegisterKey(CobKey::IN_USE_AUTO, "/cob/auto/in-use");
 
 	RegisterKey(CobKey::LIMELIGHT_TOGGLE, "/limelight/ledMode");
+
+	LoadPersistent();
 }
 
 void Cob::RegisterKey(CobKey key, std::string name, bool persistent) {
 	nt::NetworkTableEntry entry = s_Table.GetEntry(name);
-	s_Map[key] = entry;
-	if (persistent)
-		entry.SetPersistent();
+	if (s_Map.find(key) == s_Map.end()) {
+		s_Map[key] = { entry, persistent };
+
+	}
 }
 
 void Cob::RegisterMessageOut(CobMessageOut key, std::string name) {
@@ -126,37 +129,37 @@ bool Cob::EnsureExists(CobMessageOut key) {
 //Explicit specialization for non numeric types
 template<>
 void Cob::PushValue<bool>(CobKey key, bool value) {
-	if (EnsureExists(key)) s_Map[key].SetBoolean(value);
+	if (EnsureExists(key)) s_Map[key].Entry.SetBoolean(value);
 }
 
 template<>
 void Cob::PushValue<double>(CobKey key, double value) {
-	if (EnsureExists(key)) s_Map[key].SetDouble(value);
+	if (EnsureExists(key)) s_Map[key].Entry.SetDouble(value);
 }
 
 template<>
 void Cob::PushValue<int>(CobKey key, int value) {
-	if (EnsureExists(key)) s_Map[key].SetDouble(value);
+	if (EnsureExists(key)) s_Map[key].Entry.SetDouble(value);
 }
 
 template<>
 void Cob::PushValue<float>(CobKey key, float value) {
-	if (EnsureExists(key)) s_Map[key].SetDouble(value);
+	if (EnsureExists(key)) s_Map[key].Entry.SetDouble(value);
 }
 
 template<>
 void Cob::PushValue<std::string>(CobKey key, std::string value) {
-	if (EnsureExists(key)) s_Map[key].SetString(value);
+	if (EnsureExists(key)) s_Map[key].Entry.SetString(value);
 }
 
 template<>
 void Cob::PushValue<const char*>(CobKey key, const char* value) {
-	if (EnsureExists(key)) s_Map[key].SetString(value);
+	if (EnsureExists(key)) s_Map[key].Entry.SetString(value);
 }
 
 template<>
 void Cob::PushValue<std::string&>(CobKey key, std::string& value) {
-	if (EnsureExists(key)) s_Map[key].SetString(value);
+	if (EnsureExists(key)) s_Map[key].Entry.SetString(value);
 }
 
 
@@ -182,12 +185,28 @@ void Cob::PushValue<std::string&>(CobKey key, std::string& value) {
 
 template<>
 bool Cob::GetValue(CobKey key) {
-	return s_Map[key].GetBoolean(false);
+	return s_Map[key].Entry.GetBoolean(false);
 }
 
 template<>
 std::string Cob::GetValue(CobKey key) {
-	return s_Map[key].GetString("");
+	return s_Map[key].Entry.GetString("");
 }
+
+
+void Cob::LoadPersistent() {
+	DriverStation::ReportError("Load begin...");
+	for (auto entry : s_Table.GetEntries("/", 0)) {
+		std::string toPrint = "Deleting: " + entry.GetName();
+		DriverStation::ReportError(toPrint);
+		entry.Delete();
+	}
+	DriverStation::ReportError("Load end");
+}
+
+void Cob::SavePersistent() {
+
+}
+
 
 }//namespace
