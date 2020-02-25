@@ -25,7 +25,6 @@ public:
 	
 	frc2::Button m_FodToggle;
 	frc2::Button m_Turn;
-	frc2::Button m_Music;
 
 	bool m_Fod = true;
 

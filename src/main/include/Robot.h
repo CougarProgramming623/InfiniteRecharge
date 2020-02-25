@@ -60,8 +60,6 @@ private:
 	Climb m_climb;
 	Shooter m_shooter;
 	Intake m_intake;
-	Music m_music;
-
 
 	bool m_Init = false;
 

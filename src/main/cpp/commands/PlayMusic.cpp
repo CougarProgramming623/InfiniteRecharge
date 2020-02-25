@@ -8,36 +8,26 @@
 #include <frc2/command/PrintCommand.h>
 #include <frc/DriverStation.h>
 #include "Util.h"
-#include "ohs/Music.h"
 
 #include "math.h"
 
-namespace ohs2020 {
+namespace ohs623 {
 
 	PlayMusic::PlayMusic() {
-		AddRequirements({ &Robot::Get().GetDriveTrain() });
+		AddRequirements({ &ohs2020::Robot::Get().GetDriveTrain() });
 	}
 
     void PlayMusic::Initialize() {
-		Music::Start();
-		OHS_DEBUG([](auto& f) {
-			f << "Initalized PlayMusic";
-		});
+		DebugOutF("Playing");
+		Music::GetOrchestra().Play();
 	}
 	
-	void PlayMusic::Execute() {
-		OHS_DEBUG([](auto& f) {
-			f << "playing music!";
-		});
-	}
+	void PlayMusic::Execute() {}
 
 	bool PlayMusic::IsFinished() {
-		frc::Joystick& stick = Robot::Get().GetOI().GetDriverJoystick();
+		frc::Joystick& stick = ohs2020::Robot::Get().GetOI().GetDriverJoystick();
 		const float deadBand = 0.2f;
 		if (abs(stick.GetRawAxis(0)) > deadBand || abs(stick.GetRawAxis(1)) > deadBand || abs(stick.GetRawAxis(2)) > deadBand) {
-			OHS_DEBUG([](auto& f) {
-				f << "Quitting because joystick exceeds deadband!";
-			});
 			return true;
 		}
 
@@ -45,9 +35,7 @@ namespace ohs2020 {
 	}
 
 	void PlayMusic::End(bool interrupted) {
-		OHS_DEBUG([](auto& f) {
-			f << "PlayMusic::End()";
-		});
+
 	}
 
 

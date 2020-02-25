@@ -38,7 +38,7 @@ void Robot::RobotInit() {
 	m_climb.Init();
 	m_shooter.Init();
 	m_intake.Init();
-	m_music.Init();
+	ohs623::Music::Init();
 
 	try {
 		navx = new AHRS(SPI::Port::kMXP);

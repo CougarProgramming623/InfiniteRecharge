@@ -3,7 +3,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
-namespace ohs2020 {
+namespace ohs623 {
 
 class PlayMusic : public frc2::CommandHelper<frc2::CommandBase, PlayMusic> {
 

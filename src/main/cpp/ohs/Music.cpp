@@ -1,15 +1,25 @@
-
-#include "ohs/Music.h"
 #include "ohs/Log.h"
 
 #include "Robot.h"
 
+#include "commands/PlayMusic.h"
 
-namespace ohs2020 {
+
+namespace ohs623 {
 
 ctre::phoenix::music::Orchestra Music::m_Orchestra;
 
+frc2::Button Music::musicPlayer( [&] { return ohs2020::Robot::Get().GetOI().GetButtonBoard().GetRawButton(9); });
+frc2::Button Music::musicStopper( [&] { return ohs2020::Robot::Get().GetOI().GetButtonBoard().GetRawButton(10); });
+
+bool isPaused = false;
+
 std::string DuelOfTheFates = "DuelOfTheFates.chrp";
+std::string StarWars = "StarWarsMainTheme.chrp";
+std::string JurassicPark = "JurassicParkMainTheme.chrp";
+std::string ImperialSuite = "ImperialSuite.chrp";
+std::string CoconutMall = "CoconutMall.chrp";
+
 
 void Music::Init() {
 	TalonFX* rightBack = dynamic_cast<TalonFX*>(ohs2020::Robot::Get().GetDriveTrain().GetRBack());
@@ -36,17 +46,31 @@ void Music::Init() {
 
 void Music::Start() {
 
-	m_Orchestra.LoadMusic(DuelOfTheFates);
+	m_Orchestra.LoadMusic(StarWars);
+	DebugOutF("Loaded Music");
+	
+	musicPlayer.WhenPressed(PlayMusic());
+	musicStopper.WhenPressed(frc2::InstantCommand([&] { 
 
-	OHS_DEBUG([](auto& f) {
-		f << "Music::Start()";
-	});
+	if(!isPaused){
+		m_Orchestra.Pause();
+		isPaused = true;
+	} else {
+		m_Orchestra.Stop();
+		isPaused = false;
+	}
 
-	m_Orchestra.Play();
+	}, {}));
 }
 
 void Music::Stop() {
 
+}
+
+
+
+void Music::Selector() {
+	
 }
 
 }
