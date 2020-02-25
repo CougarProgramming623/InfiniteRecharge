@@ -11,6 +11,7 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/PrintCommand.h>
 #include <frc2/command/CommandScheduler.h>
+#include <frc2/command/WaitCommand.h>
 #include "ohs/Log.h"
 
 #include "CobConstants.h"
@@ -21,18 +22,21 @@ namespace ohs2020 {
 class AutoManager {
 
 public:
-    AutoManager();
-    ~AutoManager();
+	AutoManager();
+	~AutoManager();
 
-    void AutoInit();
-    void RunAuto();
+	void AutoInit();
+	void RunAuto();
 
-    inline std::string getInUse() {return m_InUse;}
-    frc2::Command* getAuto();
-    void SetInUse(std::string setAuto);
+	inline std::string GetInUse() {return m_InUse; }
+	inline double GetDelay() { return m_Delay; }
+	frc2::Command* GetAuto();
+	void SetInUse(std::string setAuto);
+	inline void SetDelay(double setDelay) {m_Delay = setDelay;}
 
 private:
-    std::map<std::string, frc2::Command*> m_AutoMap;
-    std::string m_InUse = "default";
+	std::map<std::string, frc2::Command*> m_AutoMap;
+	std::string m_InUse = "default";
+	double m_Delay = 0;
 };
 }
