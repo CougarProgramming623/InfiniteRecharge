@@ -11,7 +11,6 @@
 #include <frc2/command/button/JoystickButton.h>
 
 #include <algorithm>
-
 const int kMAX_VELOCITY = 6380/60/10*2048;//RPM->Convert to RPS->Convert to RP100MS->Convert to TP100MS
 
 const int kFRONT_LEFT = 0;
@@ -37,46 +36,67 @@ DriveTrain::DriveTrain() {
 	RemoveRegistry(m_FrontLeft.get(), m_FrontRight.get(), m_BackLeft.get(), m_BackRight.get());
 
 }
-
+  
 void DriveTrain::Init(){
 	SetDefaultCommand(Drive()); 
 
-	m_FrontLeft->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	m_FrontRight->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	m_BackLeft->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	m_BackRight->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	SetBrakeMode(true);
 
-	//PID Configuration
+	UseVelocityPID();
+}
 
-	m_FrontLeft->ConfigAllowableClosedloopError(0,50,0);
-	m_FrontRight->ConfigAllowableClosedloopError(0,50,0);
-	m_BackLeft->ConfigAllowableClosedloopError(0,50,0);
-	m_BackRight->ConfigAllowableClosedloopError(0,50,0);
+void DriveTrain::SetBrakeMode(bool on){
+	if(on){
+		Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(Brake);
+		Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(Brake);
+		Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(Brake);
+		Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(Brake);
+	}else{
+		Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(Coast);
+		Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(Coast);
+		Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(Coast);
+		Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(Coast);
+	}
+}
 
-	double P = 0.0;
-	double I = 0.0;
-	double D = 0.0;
-	double F = 0.05;
+void DriveTrain::UsePositionPID(){
+	DebugOutF("ERROR: USING POSITION PID");
+	DriveTrain::SetPID(50, 0.05, 0.0, 0.0, 0.0);
+}
 
-	m_FrontLeft->Config_kP(0,P,0);
-	m_FrontRight->Config_kP(0,P,0);
-	m_BackLeft->Config_kP(0,P,0);
-	m_BackRight->Config_kP(0,P,0);
+void DriveTrain::UseVelocityPID(){
+	DebugOutF("ERROR:USING VELOCITY PID");
+	DriveTrain::SetPID(50, 0.0, 0.0, 0.0, 0.05);
+}
 
-	m_FrontLeft->Config_kI(0,I,0);
-	m_FrontRight->Config_kI(0,I,0);
-	m_BackLeft->Config_kI(0,I,0);
-	m_BackRight->Config_kI(0,I,0);
+void DriveTrain::SetPID(double E, double P, double I, double D, double F){
 
-	m_FrontLeft->Config_kD(0,D,0);
-	m_FrontRight->Config_kD(0,D,0);
-	m_BackLeft->Config_kD(0,D,0);
-	m_BackRight->Config_kD(0,D,0);
+	DebugOutF("ERROR:SET EPIDF TO: "+ std::to_string(E) + "/"+ std::to_string(P) + "/"+ std::to_string(I) + "/"+ std::to_string(D) + "/"+ std::to_string(F)  );
 
-	m_FrontLeft->Config_kF(0,F,0);
-	m_FrontRight->Config_kF(0,F,0);
-	m_BackLeft->Config_kF(0,F,0);
-	m_BackRight->Config_kF(0,F,0);
+	GetLFront()->ConfigAllowableClosedloopError(0,E,0);
+	GetRFront()->ConfigAllowableClosedloopError(0,E,0);
+	GetLBack()->ConfigAllowableClosedloopError(0,E,0);
+	GetRBack()->ConfigAllowableClosedloopError(0,E,0);
+
+	GetLFront()->Config_kP(0,P,0);
+	GetRFront()->Config_kP(0,P,0);
+	GetLBack()->Config_kP(0,P,0);
+	GetRBack()->Config_kP(0,P,0);
+
+	GetLFront()->Config_kI(0,I,0);
+	GetRFront()->Config_kI(0,I,0);
+	GetLBack()->Config_kI(0,I,0);
+	GetRBack()->Config_kI(0,I,0);
+
+	GetLFront()->Config_kD(0,D,0);
+	GetRFront()->Config_kD(0,D,0);
+	GetLBack()->Config_kD(0,D,0);
+	GetRBack()->Config_kD(0,D,0);
+
+	GetLFront()->Config_kF(0,F,0);
+	GetRFront()->Config_kF(0,F,0);
+	GetLBack()->Config_kF(0,F,0);
+	GetRBack()->Config_kF(0,F,0);
 
 }
 
@@ -95,11 +115,6 @@ void Normalize(wpi::MutableArrayRef<double> wheelSpeeds) {
 } //Normalize()
 
 void DriveTrain::CartesianDrive(double y, double x, double rotation, double angle) {
-
-	//DebugOutF("Mode: "+ std::to_string(m_FrontLeft->GetSelectedSensorVelocity()));
-
-	SmartDashboard::PutNumber("PIDVELOCITY", m_FrontLeft->GetSelectedSensorVelocity());
-
 	//source: WPILib
 	//same code found in CartesianDrive in the WPI Library but adapted for being used in Velocity Mode
 	frc::Vector2d input{x, y};
@@ -146,7 +161,7 @@ frc2::PIDCommand* DriveTrain::TurnToPos(double angle) {
 	180 : 0.0835, 0.0, 0.01
 	roughly accurate for greater than 10 : 0.085, 0.0, 0.011
 	*/
-	m_TurnController = new frc2::PIDController( 0.03, 0.0, 0.0, units::second_t(20_ms) ); 
+	m_TurnController = new frc2::PIDController( 0.085, 0.0, 0.011, units::second_t(20_ms) ); 
 
 	m_TurnController->SetTolerance( 1.0, std::numeric_limits< double >::infinity() );
 	m_TurnController->SetSetpoint(angle);
