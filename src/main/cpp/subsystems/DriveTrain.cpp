@@ -33,8 +33,6 @@ void DriveTrain::Init(){
 	SetBrakeMode(true);
 
 	UseVelocityPID();
-
-	enableJoySticks = true;
 }
 
 void DriveTrain::SetBrakeMode(bool on){
@@ -53,7 +51,7 @@ void DriveTrain::SetBrakeMode(bool on){
 
 void DriveTrain::UsePositionPID(){
 	DebugOutF("ERROR: USING POSITION PID");
-	DriveTrain::SetPID(25, 0.025, 0.0, 0.0, 0.0);
+	DriveTrain::SetPID(50, 0.05, 0.0, 0.0, 0.0);
 }
 
 void DriveTrain::UseVelocityPID(){

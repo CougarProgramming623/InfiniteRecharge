@@ -19,9 +19,9 @@ namespace ohs2020 {
 //constructors
 EncoderDriveV::EncoderDriveV(int x, int y, int a){
 	m_X = x*HORIZONTAL_CALIBRATION;
-	m_Y = y;
+	m_Y = y*VERTICAL_CALIBRATION;
 	m_A = a;
-	AddRequirements(wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
+	AddRequirements(&Robot::Get().GetDriveTrain());
 } //base constructor
 
 EncoderDriveV::EncoderDriveV(double x, double y, int a) : EncoderDriveV(static_cast <int> (x*CPI*(12/13)), static_cast <int> (y*CPI*(12/13)), 0) {} 
@@ -45,7 +45,6 @@ void EncoderDriveV::Initialize() {
 	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
 	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
 
-	enableJoySticks = false;
 }//starts motor turn
 
 bool EncoderDriveV::IsFinished() {
@@ -85,7 +84,6 @@ void EncoderDriveV::End(bool interrupted) {
 	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, 0 );
 	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput,  0 );
 	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput,  0 );
-	enableJoySticks = true;
 }//stops motors and exits
 //end override commands
 

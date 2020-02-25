@@ -5,7 +5,6 @@
 
 namespace ohs2020 {
 
-static bool enableJoySticks;
 
 class Drive : public frc2::CommandHelper<frc2::CommandBase, Drive> {
 

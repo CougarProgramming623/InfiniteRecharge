@@ -43,7 +43,7 @@ void OI::Init(){
 	// vector.push_back(std::make_unique<EncoderDrive>(0, 24576, 0) );
 	// vector.push_back(std::make_unique<frc2::InstantCommand>(inst) );
 	//new frc2::SequentialCommandGroup(std::move(vector)
-	m_EncoderDrive.WhenPressed( new EncoderDrive(0.0, 12.0, 0) );
+	m_EncoderDrive.WhenPressed( new EncoderDriveV(36.0, 0.0, 0) );
 }
 
 
