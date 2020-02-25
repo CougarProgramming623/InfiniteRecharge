@@ -46,7 +46,7 @@ void Music::Init() {
 
 void Music::Start() {
 
-	m_Orchestra.LoadMusic(StarWars);
+	m_Orchestra.LoadMusic(CoconutMall);
 	DebugOutF("Loaded Music");
 	
 	musicPlayer.WhenPressed(PlayMusic());
@@ -70,7 +70,19 @@ void Music::Stop() {
 
 
 void Music::Selector() {
-	
+
+	double selection = ohs2020::Robot::Get().GetOI().GetButtonBoard().GetRawAxis(1);
+
+	if(selection > (songCount - 2) / songCount ){ //scans 0 zone
+
+	} else if (selection < -(songCount - 2) / songCount && selection > songCount - 2){ //scans pos zone
+
+	} else if ( selection > -(songCount - 2) / songCount && selection < songCount - 2) { // scans neg zone
+
+	}
+
+
+
 }
 
 }
