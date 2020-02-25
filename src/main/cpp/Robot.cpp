@@ -33,12 +33,12 @@ Robot::Robot() {
 void Robot::RobotInit() {
 
 	Cob::Init();
-	ohs623::Music::Init();
 	m_DriveTrain.Init();
     m_oi.Init();
 	m_climb.Init();
 	m_shooter.Init();
 	m_intake.Init();
+	m_music.Init();
 
 	try {
 		navx = new AHRS(SPI::Port::kMXP);

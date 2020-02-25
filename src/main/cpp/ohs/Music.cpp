@@ -4,20 +4,23 @@
 
 #include "Robot.h"
 
-namespace ohs623 {
+
+namespace ohs2020 {
 
 ctre::phoenix::music::Orchestra Music::m_Orchestra;
 
+std::string DuelOfTheFates = "DuelOfTheFates.chrp";
+
 void Music::Init() {
-	TalonFX* rb = dynamic_cast<TalonFX*>(ohs2020::Robot::Get().GetDriveTrain().GetRBack());
-	TalonFX* lb = dynamic_cast<TalonFX*>(ohs2020::Robot::Get().GetDriveTrain().GetLBack());
-	TalonFX* rf = dynamic_cast<TalonFX*>(ohs2020::Robot::Get().GetDriveTrain().GetRFront());
-	TalonFX* lf = dynamic_cast<TalonFX*>(ohs2020::Robot::Get().GetDriveTrain().GetLFront());
-	if (rb != nullptr) m_Orchestra.AddInstrument(*rb);
-	if (lb != nullptr) m_Orchestra.AddInstrument(*lb);
-	if (rf != nullptr) m_Orchestra.AddInstrument(*rf);
-	if (lf != nullptr) m_Orchestra.AddInstrument(*lf);
-	if (!rb && !lb && !rf && !lf) {
+	TalonFX* rightBack = dynamic_cast<TalonFX*>(ohs2020::Robot::Get().GetDriveTrain().GetRBack());
+	TalonFX* leftBack = dynamic_cast<TalonFX*>(ohs2020::Robot::Get().GetDriveTrain().GetLBack());
+	TalonFX* rightFront = dynamic_cast<TalonFX*>(ohs2020::Robot::Get().GetDriveTrain().GetRFront());
+	TalonFX* leftFront = dynamic_cast<TalonFX*>(ohs2020::Robot::Get().GetDriveTrain().GetLFront());
+	if (rightBack != nullptr) m_Orchestra.AddInstrument(*rightBack);
+	if (leftBack != nullptr) m_Orchestra.AddInstrument(*leftBack);
+	if (rightFront != nullptr) m_Orchestra.AddInstrument(*rightFront);
+	if (leftFront != nullptr) m_Orchestra.AddInstrument(*leftFront);
+	if (!rightBack && !leftBack && !rightFront && !leftFront) {
 		OHS_WARN([](auto& f) {
 			f << "No Talon FX's avilable on robot to play music with!";
 		});
@@ -27,19 +30,23 @@ void Music::Init() {
 		});
 	}
 
-
+	Start();
 
 }
 
 void Music::Start() {
+
+	m_Orchestra.LoadMusic(DuelOfTheFates);
+
 	OHS_DEBUG([](auto& f) {
 		f << "Music::Start()";
 	});
+
+	m_Orchestra.Play();
 }
 
 void Music::Stop() {
 
 }
-
 
 }

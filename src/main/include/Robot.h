@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+
 #pragma once
 
 #include "OI.h"
@@ -12,6 +13,7 @@
 #include "subsystems/Climb.h"
 #include "subsystems/Shooter.h"
 #include "subsystems/Intake.h"
+#include "ohs/Music.h"
 #include "Util.h"
 
 #include "ohs/Assert.h"
@@ -58,6 +60,8 @@ private:
 	Climb m_climb;
 	Shooter m_shooter;
 	Intake m_intake;
+	Music m_music;
+
 
 	bool m_Init = false;
 
