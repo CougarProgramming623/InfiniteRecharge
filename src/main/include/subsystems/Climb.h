@@ -6,6 +6,10 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/FunctionalCommand.h>
 
+#include <frc/GenericHID.h>
+
+#include <frc2/Timer.h>
+
 #include "Util.h"
 
 namespace ohs2020{
@@ -15,28 +19,31 @@ class Climb{
 public:
 	Climb();
 	void Init();
+	void RunDeploy();
 	void Deploy();
-	bool CanClimb();
 	void VerticalClimb();
 	void SideClimb();
+	void LEDCanClimb();
 
-	bool isEndgame = false;
+	bool IsEndgame();
+	bool CanClimb();
 
+	bool isDeployed = false;
+	bool isDeployFinished = false;
+	
 private:
-
-	bool isClimbing = false;
-
-	int verticalDirection = 1;
 
 	WPI_TalonSRX climbMotorLeft;
 	WPI_TalonSRX climbMotorRight;
 
 	frc2::Button climbUp;
 	frc2::Button climbDown;
-
 	frc2::Button climbLeft;
 	frc2::Button climbRight;
 
 	frc2::Button endgameOverride;
+	frc2::Button deployer;
+
+	frc2::Timer timer;
 };
 }//namespace

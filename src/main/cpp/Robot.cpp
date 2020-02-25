@@ -37,9 +37,10 @@ void Robot::RobotInit() {
 	Cob::Init();
 	m_DriveTrain.Init();
 	m_oi.Init();
-	m_climb.Init();
 	m_shooter.Init();
-	m_intake.Init();
+	m_climb.Init();
+
+	RemoveRegistry(navx);
 
 	try {
 		navx = new AHRS(SPI::Port::kMXP);
@@ -80,11 +81,13 @@ void Robot::RobotPeriodic() {
 
 	frc2::CommandScheduler::GetInstance().Run();
 
-	Cob::PushValue(CobKey::IN_USE_AUTO, m_AutoManager.getInUse());
+	Cob::PushValue(CobKey::IN_USE_AUTO, m_AutoManager.GetInUse());
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
 	Cob::PushValue(CobKey::FLYWHEEL_WU, m_shooter.GetFlywheelWU());
 	Cob::PushValue(CobKey::FLYWHEEL_STATUS, m_shooter.GetFlywheelState());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
+	Cob::PushValue(CobKey::CURRENT_DELAY, m_AutoManager.GetDelay());
+	
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
 		Cob::PushValue(CobKey::IS_RED, true);
 	}else{
@@ -105,14 +108,6 @@ void Robot::RobotPeriodic() {
 
 	}
 
-
-	// for(int i = 0; i < kLength; i++){
-	// 	if((i + ledOffset / 10) % 3 == 0)
-	// 		m_ledBuffer[i].SetRGB(184, 155, 2); //gold
-	// 	else
-	// 		m_ledBuffer[i].SetRGB(46, 1, 1); //burg
-	// }
-
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
 		for(int i = 0; i < kLength; i++){
 			m_ledBuffer[i].SetRGB(255, 0, 0);
@@ -129,9 +124,6 @@ void Robot::RobotPeriodic() {
 	
 	m_led.SetData(m_ledBuffer);
 
-
-
-    //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
 
@@ -143,7 +135,9 @@ void Robot::RobotPeriodic() {
 
 void Robot::DisabledInit() {
 
-	
+	m_climb.isDeployed = false;
+	m_climb.isDeployFinished = false;
+
 }
 
 void Robot::DisabledPeriodic() {
@@ -157,7 +151,7 @@ void Robot::DisabledPeriodic() {
  */
 void Robot::AutonomousInit() {
 	navx->ZeroYaw();
-	m_autonomousCommand = m_AutoManager.getAuto();
+	m_autonomousCommand = m_AutoManager.GetAuto();
 	frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand);
 }
 
