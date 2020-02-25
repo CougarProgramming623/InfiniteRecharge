@@ -26,6 +26,8 @@ public:
 	void SetupShooterButtons();
 	void SetupConveyorButtons();
 
+	void ReverseConveyor();
+
 	bool FlyWheelMode = false;
 
 	bool GetFlywheelState() { return isFlywheelOn; }

@@ -32,6 +32,21 @@ void GyroResetConfirm(const nt::NetworkTableEntry& entry) {
 	//}
 }
 
+
+void ReverseConveyor(const nt::NetworkTableEntry& entry) {
+		Robot::Get().GetShooter().ReverseConveyor();
+}
+
+void SetDelayMess(const nt::NetworkTableEntry& entry){
+	//Robot::Get().GetAutoMan().SetDelay(entry.GetDouble(-1));
+	std::stringstream stream(entry.GetValue()->GetString());
+	double x = 0;
+	OHS_DEBUG([&] (auto &f) {f << "X before: " << x;});
+	stream >> x;
+	OHS_DEBUG([&] (auto &f) {f << "X after:" << x;});
+	Robot::Get().GetAutoMan().SetDelay(x);
+}
+
 void Cob::Init() {
 	s_Table = nt::NetworkTableInstance::GetDefault();
 
@@ -44,13 +59,16 @@ void Cob::Init() {
     RegisterKey(CobKey::TIME_LEFT, "/cob/fms/time-left");
     RegisterKey(CobKey::IS_RED, "/FMSInfo/IsRedAlliance");
     RegisterKey(CobKey::MODE, "/cob/mode");
+	RegisterKey(CobKey::CURRENT_DELAY, "/cob/auto/current-delay");
 
 	RegisterMessageOut(CobMessageOut::PING, "ping");
 	RegisterMessageIn(CobMessageIn::GNIP, "gnip", Handshake);
 	RegisterMessageIn(CobMessageIn::GYRO_RESET, "gyroReset", GyroResetConfirm);
 	RegisterMessageOut(CobMessageOut::GYRO_RESET_CONFIRM, "gyroReset-ack");
 	RegisterMessageIn(CobMessageIn::RECEIVE_AUTO,"setAuto", ReceiveAuto);
-
+	RegisterMessageIn(CobMessageIn::REMOVE_LEMON, "removeLemon", ReverseConveyor);
+	RegisterMessageIn(CobMessageIn::RECEIVE_AUTO, "setAuto", ReceiveAuto);
+	RegisterMessageIn(CobMessageIn::RECEIVE_DELAY, "delay", SetDelayMess);
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
 
