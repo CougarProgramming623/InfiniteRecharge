@@ -23,24 +23,35 @@ namespace ohs2020 {
 	}
 	
 	void Drive::Execute() {
-		double y = Robot::Get().GetOI().GetDriverJoystick().GetY();
-		double x = Robot::Get().GetOI().GetDriverJoystick().GetX();
-		double rot = Robot::Get().GetOI().GetDriverJoystick().GetZ();
-		double gyro = Robot::Get().GetNavX()->GetYaw();
+		if(enableJoySticks == true){
+			DebugOutF("JoySticks");
 
-		x = abs(x) <= 0.05f ? 0 : x;
-		y = abs(y) <= 0.05f ? 0 : y;
-		rot = abs(rot) <= 0.025f ? 0 : rot;
+			double y = Robot::Get().GetOI().GetDriverJoystick().GetY();
+			double x = Robot::Get().GetOI().GetDriverJoystick().GetX();
+			double rot = Robot::Get().GetOI().GetDriverJoystick().GetZ();
+			double gyro = Robot::Get().GetNavX()->GetYaw();
 
-		ohs623::DefaultFormatter formatter;
-		formatter << "Drive values: stick: [" << x << ", " << y << ", " << rot << "] Is FOD " << Robot::Get().GetOI().IsFOD();
-		//frc::DriverStation::ReportError(formatter.c_str());
+			x = abs(x) <= 0.05f ? 0 : x;
+			y = abs(y) <= 0.05f ? 0 : y;
+			rot = abs(rot) <= 0.025f ? 0 : rot;
+
+			ohs623::DefaultFormatter formatter;
+			formatter << "Drive values: stick: [" << x << ", " << y << ", " << rot << "] Is FOD " << Robot::Get().GetOI().IsFOD();
+			//frc::DriverStation::ReportError(formatter.c_str());
 
 
-		if (Robot::Get().GetOI().IsFOD()) {
-			Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, gyro);//Add in gyro later once the navax code is in
-		} else {
-			Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, 0.0);
+			if (Robot::Get().GetOI().IsFOD()) {
+				Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, gyro);//Add in gyro later once the navax code is in
+			} else {
+				Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, 0.0);
+			}
+		}else{
+			DebugOutF("WARNING: JOYSTICK DISABLED");
+
+			if(abs(Robot::Get().GetOI().GetDriverJoystick().GetY()) > 0.1 || abs(Robot::Get().GetOI().GetDriverJoystick().GetX()) > 0.1 || abs(Robot::Get().GetOI().GetDriverJoystick().GetZ()) > 0.1) {
+				enableJoySticks = true;
+			}
+
 		}
 	}
 

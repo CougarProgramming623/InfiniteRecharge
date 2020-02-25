@@ -9,7 +9,6 @@
 
 #include <algorithm>
 
-const int kMAX_VELOCITY = 643;
 
 const int kFRONT_LEFT = 0;
 const int kFRONT_RIGHT = 1;
@@ -25,27 +24,47 @@ DriveTrain::DriveTrain() : m_LeftFront(RobotID::GetID(FRONT_LEFT)), m_RightFront
 
 	m_RightFront.SetInverted(true);
 	m_RightBack.SetInverted(true);
-	
+
 }
   
 void DriveTrain::Init(){
 	SetDefaultCommand(Drive()); 
 
-	m_LeftFront.SetNeutralMode(Brake);
-	m_RightFront.SetNeutralMode(Brake);
-	m_LeftBack.SetNeutralMode(Brake);
-	m_RightBack.SetNeutralMode(Brake);
+	SetBrakeMode(true);
+
+	UseVelocityPID();
+
+	enableJoySticks = true;
+}
+
+void DriveTrain::SetBrakeMode(bool on){
+	if(on){
+		Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(Brake);
+		Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(Brake);
+		Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(Brake);
+		Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(Brake);
+	}else{
+		Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(Coast);
+		Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(Coast);
+		Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(Coast);
+		Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(Coast);
+	}
 }
 
 void DriveTrain::UsePositionPID(){
-	DriveTrain::SetPID(50, 0.01, 0, 0, 0.01);
+	DebugOutF("ERROR: USING POSITION PID");
+	DriveTrain::SetPID(25, 0.025, 0.0, 0.0, 0.0);
 }
 
 void DriveTrain::UseVelocityPID(){
-	DriveTrain::SetPID(50, 0, 0, 0, 0.05);
+	DebugOutF("ERROR:USING VELOCITY PID");
+	DriveTrain::SetPID(50, 0.0, 0.0, 0.0, 0.05);
 }
 
-void DriveTrain::SetPID(int E, double P, double I, double D, double F){
+void DriveTrain::SetPID(double E, double P, double I, double D, double F){
+
+	DebugOutF("ERROR:SET EPIDF TO: "+ std::to_string(E) + "/"+ std::to_string(P) + "/"+ std::to_string(I) + "/"+ std::to_string(D) + "/"+ std::to_string(F)  );
+
 	GetLFront()->ConfigAllowableClosedloopError(0,E,0);
 	GetRFront()->ConfigAllowableClosedloopError(0,E,0);
 	GetLBack()->ConfigAllowableClosedloopError(0,E,0);

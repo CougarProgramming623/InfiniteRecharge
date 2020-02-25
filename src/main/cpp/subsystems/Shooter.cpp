@@ -9,7 +9,7 @@ Shooter::Shooter() :
 Flywheel(0), //35 
 LemonAID(0),
 launcher( [&] { return m_OI.GetButtonBoard().GetRawButton(6); }), // Arm	 Override
-FlyWheelToggle([&] { return m_OI.GetButtonBoard().GetRawButton(1); }), //Vacuum Toggle Switch
+FlyWheelToggle([&] { return m_OI.GetButtonBoard().GetRawButton(5); }), //Vacuum Toggle Switch
 FlyWheelEncoder(0) //35
 { //2 -- Green Button | 19 -- Cargo/Hatch Toggle | 1 -- Vacuum Toggle Switch
 
