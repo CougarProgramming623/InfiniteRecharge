@@ -25,7 +25,9 @@ public:
 
 private:
     frc2::PIDController* m_TurnController;
-    double m_Angle = 0;
+    double m_Angle = 0.0;
+    double m_Offset = 0.0;
+    bool m_IsVision;
 };
 
 } // end namespace

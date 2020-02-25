@@ -16,34 +16,34 @@ std::function<void(double)> output = [](double measure) {
 	
 };
 
-TurnToPosPID::TurnToPosPID() : frc2::PIDCommand(CreateTurnController(), measurement, [this]{ return m_Angle; }, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain())) {
-    
-    m_Angle = 3000;//GetVisionAngle();
-
+TurnToPosPID::TurnToPosPID() : frc2::PIDCommand(CreateTurnController(), measurement, [this]{ return m_Angle + m_Offset; }, output, wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain())) {
+    m_IsVision = true;
 }
 
-TurnToPosPID::TurnToPosPID(double angle) : frc2::PIDCommand(CreateTurnController(), measurement, angle, output, {&Robot::Get().GetDriveTrain()}) {
-    m_Angle = angle;
+TurnToPosPID::TurnToPosPID(double angle) : frc2::PIDCommand(CreateTurnController(), measurement, [this]{ return m_Angle + m_Offset; }, output, {&Robot::Get().GetDriveTrain()}) {
+    m_IsVision = false;
+	m_Angle = angle;
 }
 
 void TurnToPosPID::Initialize() {
 
-	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputForward(0.4, 0);
-	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputReverse(0.4, 0);
+	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputForward(0.3, 0);
+	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputReverse(-0.3, 0);
 
-	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputForward(0.4, 0);
-	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputForward(0.4, 0);
+	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputForward(0.3, 0);
+	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputReverse(-0.3, 0);
 
-	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputForward(0.4, 0);
-	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputForward(0.4, 0);
+	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputForward(0.3, 0);
+	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputReverse(-0.3, 0);
 
-	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputForward(0.4, 0);
-	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputForward(0.4, 0);
+	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputForward(0.3, 0);
+	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputReverse(-0.3, 0);
 
 
-	if (m_Angle == 3000){
+	if (m_IsVision){
 		m_Angle = GetVisionAngle();
 	}
+	m_Offset = Robot::Get().GetNavX()->GetYaw();
 	// m_TurnController->SetSetpoint(m_Angle);
 	frc2::PIDCommand::Initialize();
 
@@ -51,32 +51,33 @@ void TurnToPosPID::Initialize() {
 
 void TurnToPosPID::Execute() {
 	frc2::PIDCommand::Execute();
-	//Robot::Get().GetDriveTrain().CartesianDrive(0, 0, 0.4, Robot::Get().GetNavX()->GetYaw());
+	//Robot::Get().GetDriveTrain().CartesianDrive(0, 0, 0.3, Robot::Get().GetNavX()->GetYaw());
 }
 
 bool TurnToPosPID::IsFinished() {
 	DebugOutF("setpoint:" + std::to_string(m_Angle));
 	DebugOutF("point:" + std::to_string((double)Robot::Get().GetNavX()->GetYaw()));
 	DebugOutF(std::to_string(abs(m_Angle - (double)Robot::Get().GetNavX()->GetYaw())));
-	return abs(m_Angle - (double)Robot::Get().GetNavX()->GetYaw()) < 2;
+	return Robot::Get().GetOI().GetButtonBoard().GetRawButtonReleased(1); //GetController().AtSetpoint()
 }
+
 
 void TurnToPosPID::End(bool interrupted){
 	DebugOutF("Turn Ended");
 
-	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputForward(1, 0);
-	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputReverse(1, 0);
-
-	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputForward(1, 0);
-	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputForward(1, 0);
-
-	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputForward(1, 0);
-	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputForward(1, 0);
-
-	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputForward(1, 0);
-	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputForward(1, 0);
-
 	frc2::PIDCommand::End(interrupted);
+
+	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputForward(1, 0);
+	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputReverse(-1, 0);
+
+	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputForward(1, 0);
+	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputReverse(-1, 0);
+
+	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputForward(1, 0);
+	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputReverse(-1, 0);
+
+	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputForward(1, 0);
+	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputReverse(-1, 0);
 }
 
 frc2::PIDController TurnToPosPID::CreateTurnController() {
@@ -90,16 +91,15 @@ frc2::PIDController TurnToPosPID::CreateTurnController() {
 	0.325, 0.0, 0.0125
 	*/
 
-    m_TurnController = new frc2::PIDController( 0.325, 0.0, 0.0125, units::second_t(20_ms) );
+    m_TurnController = new frc2::PIDController( 0.85, 0.0, 0.04, units::second_t(20_ms) );
 
-	m_TurnController->SetTolerance( 2.0, std::numeric_limits< double >::infinity() );
+	m_TurnController->SetTolerance( 2, std::numeric_limits< double >::infinity() );
 	m_TurnController->EnableContinuousInput(-180.0,180.0);
 
     return *m_TurnController;
 }
 
 double TurnToPosPID::GetVisionAngle() {
-	// DebugOutF(std::to_string((double)Cob::GetValue<double>(CobKey::VISION_ANGLE)));
 	double x = Cob::GetValue<double>(CobKey::VISION_X);
 	// double y = Cob::GetValue<double>(CobKey::VISION_X);
     return x;
