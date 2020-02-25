@@ -48,7 +48,7 @@ void Shooter::SetupShooterButtons() {
 		DebugOutF(std::to_string(flywheelWU));
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
 
-		Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0));
+		Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0) * .2 + .8);
 
 	}, [this] (bool f){//on end
 
