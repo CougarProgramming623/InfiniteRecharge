@@ -11,7 +11,9 @@ enum class CobMessageOut {
 };
 
 enum class CobMessageIn {
-	GNIP, GYRO_RESET, RECEIVE_AUTO, RECEIVE_DELAY
+
+    GNIP, GYRO_RESET, RECEIVE_AUTO, REMOVE_LEMON, RECEIVE_DELAY
+
 };
 
 }//namespace
