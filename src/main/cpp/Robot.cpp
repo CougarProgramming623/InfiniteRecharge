@@ -68,11 +68,13 @@ void Robot::RobotPeriodic() {
 
 	frc2::CommandScheduler::GetInstance().Run();
 
-	Cob::PushValue(CobKey::IN_USE_AUTO, m_AutoManager.getInUse());
+	Cob::PushValue(CobKey::IN_USE_AUTO, m_AutoManager.GetInUse());
 	Cob::PushValue(CobKey::ROTATION, navx->GetYaw());
 	Cob::PushValue(CobKey::FLYWHEEL_WU, m_shooter.GetFlywheelWU());
 	Cob::PushValue(CobKey::FLYWHEEL_STATUS, m_shooter.GetFlywheelState());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
+	Cob::PushValue(CobKey::CURRENT_DELAY, m_AutoManager.GetDelay());
+	
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
 		Cob::PushValue(CobKey::IS_RED, true);
 	}else{
@@ -121,7 +123,7 @@ void Robot::DisabledPeriodic() {
  */
 void Robot::AutonomousInit() {
 	navx->ZeroYaw();
-	m_autonomousCommand = m_AutoManager.getAuto();
+	m_autonomousCommand = m_AutoManager.GetAuto();
 	frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand);
 }
 
