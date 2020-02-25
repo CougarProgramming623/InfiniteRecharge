@@ -35,7 +35,6 @@ void GyroResetConfirm(const nt::NetworkTableEntry& entry) {
 
 void ReverseConveyor(const nt::NetworkTableEntry& entry) {
 		Robot::Get().GetShooter().ReverseConveyor();
-		Cob::SendMessage(CobMessageOut::GYRO_RESET_CONFIRM, "Reversed Conveyor");
 }
 
 void SetDelayMess(const nt::NetworkTableEntry& entry){
