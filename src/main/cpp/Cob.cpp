@@ -32,6 +32,11 @@ void GyroResetConfirm(const nt::NetworkTableEntry& entry) {
 	//}
 }
 
+void ReverseConveyor(const nt::NetworkTableEntry& entry) {
+		Robot::Get().GetShooter().ReverseConveyor();
+		Cob::SendMessage(CobMessageOut::GYRO_RESET_CONFIRM, "Reversed Conveyor");
+}
+
 void Cob::Init() {
 	s_Table = nt::NetworkTableInstance::GetDefault();
 
@@ -50,7 +55,7 @@ void Cob::Init() {
 	RegisterMessageIn(CobMessageIn::GYRO_RESET, "gyroReset", GyroResetConfirm);
 	RegisterMessageOut(CobMessageOut::GYRO_RESET_CONFIRM, "gyroReset-ack");
 	RegisterMessageIn(CobMessageIn::RECEIVE_AUTO,"setAuto", ReceiveAuto);
-
+	RegisterMessageIn(CobMessageIn::REMOVE_LEMON, "removeLemon", ReverseConveyor);
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
 	RegisterKey(CobKey::IN_USE_AUTO, "/cob/auto/in-use");

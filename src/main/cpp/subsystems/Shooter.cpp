@@ -96,7 +96,22 @@ conveyorToggle.WhenReleased(frc2::InstantCommand([&] {
 
 }, {}));
 
+}
 
+void Shooter::ReverseConveyor() {
+	frc2::CommandScheduler::GetInstance().Schedule(new frc2::SequentialCommandGroup(
+
+		frc2::InstantCommand( [&] { 
+			highConveyor.Set(ControlMode::PercentOutput, -1);
+		 }, {}), 
+
+		frc2::WaitCommand(units::second_t(1)),
+
+		frc2::InstantCommand( [&] {
+			highConveyor.Set(ControlMode::PercentOutput, 0);
+		}, {})
+
+	));
 }
 
 
