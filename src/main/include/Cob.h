@@ -13,6 +13,11 @@
 namespace ohs2020 {
 using CobCallBack = std::function<void (const nt::NetworkTableEntry&)>;
 
+struct OHSNetworkTableEntry {
+	nt::NetworkTableEntry Entry;
+	bool Persistent;
+};
+
 class Cob {
 public:
 	//Sets up the internal state needed to handle communications with the COB
@@ -30,10 +35,12 @@ public:
 	template<typename T>
 	static T GetValue(CobKey key) {
 		//Default values dont matter here because if the key doesnt exist in the map c++ will throw an exception
-		return s_Map[key].GetDouble(-1.0);
+		return s_Map[key].Entry.GetDouble(-1.0);
 	}
 
-	static void InMesUpdate ();
+	static void InMesUpdate();
+
+	static void SavePersistent();
 
 private:
 	static bool EnsureExists(CobKey key);
@@ -41,11 +48,14 @@ private:
 	static void RegisterKey(CobKey key, std::string name, bool persistent = false);
 	static void RegisterMessageOut(CobMessageOut key, std::string name);
 	static void RegisterMessageIn(CobMessageIn key, std::string name, CobCallBack callBack);
+	static void LoadPersistent();
 
+	static bool DecodePersistentData(nt::NetworkTableType type, CobKey cobKey, FILE* file);
+	static void EncodePersistentData(CobKey cobKey, const OHSNetworkTableEntry& entry, FILE* file);
 
 private:
 	static nt::NetworkTableInstance s_Table;
-	static std::map<CobKey, nt::NetworkTableEntry> s_Map;
+	static std::map<CobKey, OHSNetworkTableEntry> s_Map;
 	static std::map<CobMessageOut, nt::NetworkTableEntry> s_OutMap;
 	static std::map<std::string, CobCallBack> s_InMap;
 };

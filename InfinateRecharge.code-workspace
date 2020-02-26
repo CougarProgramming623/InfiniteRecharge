@@ -80,7 +80,8 @@
 			"cinttypes": "cpp",
 			"typeinfo": "cpp",
 			"xhash": "cpp",
-			"xstring": "cpp"
+			"xstring": "cpp",
+			"bit": "cpp"
 		},
 	}
 }
