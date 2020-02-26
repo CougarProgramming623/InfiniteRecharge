@@ -3,15 +3,17 @@
 #include "Cob.h"
 #include "Robot.h"
 #include "commands/EncoderDrive.h"
+#include "commands/TurnToPosPID.h"
 
 namespace ohs2020{
 
 OI::OI() : 
 
 m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}),
-m_Turn([&] { return m_DriverJoystick.GetRawButton(2);}),
+
+m_Turn([&] { return m_ButtonBoard.GetRawButton(1);}),
 m_VModeToggle([&] { return m_DriverJoystick.GetRawButton(2);}),
-m_LimelightToggle([&] { return m_ButtonBoard.GetRawButton(14);}) // 1 off 3 on
+m_LimelightToggle([&] { return m_ButtonBoard.GetRawButton(14);}) 
 {
 
 }
@@ -35,9 +37,8 @@ void OI::Init(){
 		Cob::PushValue(CobKey::LIMELIGHT_TOGGLE, 1); 
 	}, {} ));
 
-	m_Turn.WhenPressed( EncoderDrive::RotateTo(30) );
+	m_Turn.WhenPressed( new TurnToPosPID() );
 
-	m_VModeToggle.WhenPressed( []() {DebugOutF( "VMODE?: " + std::to_string( Robot::Get().GetOI().ToggleVMode()) ); } );
 }
 
 

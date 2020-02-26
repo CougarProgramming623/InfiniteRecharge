@@ -14,6 +14,7 @@ double BASIC_CLIMB_SPEED = 1;
 
 Climb::Climb() : 
 
+
 climbMotorLeft		( RobotID::GetID(CLIMB_LEFT)),
 climbMotorRight		( RobotID::GetID(CLIMB_RIGHT)), 
 
@@ -26,6 +27,7 @@ endgameOverride([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(
 
 timer()
 {
+
 
 	climbMotorLeft.SetInverted(true);
 	climbMotorRight.SetInverted(false);
