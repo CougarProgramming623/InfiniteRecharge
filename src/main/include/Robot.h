@@ -62,6 +62,7 @@ private:
 	AHRS* navx;
 	Shooter m_shooter;
 	Climb m_climb;
+	int m_CobCheck;
 
 	bool m_Init = false;
 
