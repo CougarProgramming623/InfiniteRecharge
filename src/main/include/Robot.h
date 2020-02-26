@@ -21,6 +21,8 @@
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
 
+#include <frc/AddressableLED.h>
+
 namespace ohs2020 {
 
 class Robot : public frc::TimedRobot {
@@ -62,6 +64,11 @@ private:
 	AHRS* navx;
 	Shooter m_shooter;
 	Climb m_climb;
+
+	static const int kLength = 70; // **test**
+	frc::AddressableLED m_led{9};
+	std::array<frc::AddressableLED::LEDData, kLength> m_ledBuffer;
+	int ledOffset = 0;
 
 	bool m_Init = false;
 
