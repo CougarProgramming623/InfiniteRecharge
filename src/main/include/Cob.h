@@ -50,6 +50,9 @@ private:
 	static void RegisterMessageIn(CobMessageIn key, std::string name, CobCallBack callBack);
 	static void LoadPersistent();
 
+	static bool DecodePersistentData(nt::NetworkTableType type, CobKey cobKey, FILE* file);
+	static void EncodePersistentData(CobKey cobKey, FILE* file);
+
 private:
 	static nt::NetworkTableInstance s_Table;
 	static std::map<CobKey, OHSNetworkTableEntry> s_Map;

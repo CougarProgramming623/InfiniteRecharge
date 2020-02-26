@@ -126,7 +126,6 @@ bool Cob::EnsureExists(CobMessageOut key) {
 }
 
 
-//Explicit specialization for non numeric types
 template<>
 void Cob::PushValue<bool>(CobKey key, bool value) {
 	if (EnsureExists(key)) s_Map[key].Entry.SetBoolean(value);
@@ -163,26 +162,6 @@ void Cob::PushValue<std::string&>(CobKey key, std::string& value) {
 }
 
 
-// template<>
-// void Cob::SendMessage<bool>(CobMessageOut key, bool value) {
-// 	if (EnsureExists(key)) s_OutMap[key].SetBoolean(value);
-// }
-
-// template<>
-// void Cob::SendMessage<int>(CobMessageOut key, int value) {
-// 	if (EnsureExists(key)) s_OutMap[key].SetDouble(value);
-// }
-
-// template<>
-// void Cob::SendMessage<std::string>(CobMessageOut key, std::string value) {
-// 	if (EnsureExists(key)) s_OutMap[key].SetString(value);
-// }
-
-// template<>
-// void Cob::SendMessage<const char*>(CobMessageOut key, const char* value) {
-// 	if (EnsureExists(key)) s_OutMap[key].SetString(value);
-// }
-
 template<>
 bool Cob::GetValue(CobKey key) {
 	return s_Map[key].Entry.GetBoolean(false);
@@ -194,14 +173,155 @@ std::string Cob::GetValue(CobKey key) {
 }
 
 
+struct SerializedEntry {
+	char Path[32];
+	nt::NetworkTableType Type;
+	CobKey Key;
+};
+
+//Returns the number of characters used by the c-string str (not including the null termination character)
+//Or maxSize if there is no null byte with the first [0, maxSize) bytes
+std::size_t StrlenOrSize(const char* str, std::size_t maxSize) {
+	for (std::size_t i = 0; i < maxSize; i++) {
+		if (str[i] == 0x00) return i;
+	}
+	return maxSize;
+	
+}
+
+//Decodes the value of a persistent entry from the stream and pushes it to the cob
+bool Cob::DecodePersistentData(nt::NetworkTableType type, CobKey cobKey, FILE* file) {
+	if (s_Map.find(cobKey) == s_Map.end()) {
+		OHS_ERROR([&](auto& f) { f << "Failed to find NT entry with the cobkey " << static_cast<int>(cobKey); });
+		return false;
+	} else {
+		nt::NetworkTableEntry& ntEntry = s_Map[cobKey].Entry;
+		switch (type) {
+			case nt::NetworkTableType::kUnassigned:
+
+				return true;
+			case nt::NetworkTableType::kBoolean:
+			{
+				unsigned char value;
+				fread(&value, sizeof(value), 1, file);
+
+				PushValue(cobKey, (value == 0) ? false : true);
+				OHS_INFO([&](auto& f) { f << "Decoded persistent NT entry boolean " << value << " for value " << ntEntry.GetName(); });
+
+				return true;
+			}
+			case nt::NetworkTableType::kDouble:
+			{
+				double value;
+				fread(&value, sizeof(value), 1, file);
+				OHS_INFO([&](auto& f) { f << "Decoded persistent NT entry double " << value << " for value " << ntEntry.GetName(); });
+
+				PushValue(cobKey, value);
+				return true;
+			}
+			case nt::NetworkTableType::kString:
+			{
+				uint32_t length;
+				fread(&length, sizeof(length), 1, file);
+				if (length > 128) {
+					OHS_WARN([&](auto& f) { f << "Large NT persistent entry size: " << length << " for value " << ntEntry.GetName(); });
+				}
+				if (length > 1024) {
+					OHS_ERROR([&](auto& f) { f << "Persistent NT entry size too large! " << length << " for value " << ntEntry.GetName() << ". File may be corrupt"; });
+					return false;
+				}
+				std::string value;
+				value.resize(length);
+				fread(value.data(), length, 1, file);
+				OHS_INFO([&](auto& f) { f << "Decoded persistent NT entry string " << value << " for value " << ntEntry.GetName(); });
+				PushValue(cobKey, value);
+				return true;
+			}
+			case nt::NetworkTableType::kRaw:
+				goto Unimplemented;
+
+			case nt::NetworkTableType::kBooleanArray:
+				goto Unimplemented;
+
+			case nt::NetworkTableType::kDoubleArray:
+				goto Unimplemented;
+
+			case nt::NetworkTableType::kStringArray:
+				goto Unimplemented;
+
+			case nt::NetworkTableType::kRpc:
+				goto Unimplemented;
+
+			default:
+				OHS_ERROR([&](auto& f) { f << "Unknown NT type " << static_cast<int>(type) << " for value " << ntEntry.GetName(); });
+				return false;
+
+		}
+
+		Unimplemented:
+			OHS_ERROR([&](auto& f) { f << "Unable to decode the NT type: " << static_cast<int>(type) << " for value " << ntEntry.GetName(); });
+			return false;
+	}
+}
+
+void Cob::EncodePersistentData(CobKey cobKey, FILE* file) {
+	
+}
+
+
 void Cob::LoadPersistent() {
 	DriverStation::ReportError("Load begin...");
-	for (auto entry : s_Table.GetEntries("/", 0)) {
-		std::string toPrint = "Deleting: " + entry.GetName();
-		DriverStation::ReportError(toPrint);
+
+	int deleteCount = 0;
+	for (auto entry : s_Table.GetEntries(nt::StringRef(nullptr, 0), 0)) {
 		entry.Delete();
+		deleteCount++;
 	}
+	DriverStation::ReportError("for \"\" Deleting: " + std::to_string(deleteCount));
+
+	FILE* file = fopen("~/CobPersistentValues.bat", "rb");
+	if (file == nullptr) {
+		OHS_WARN([&](auto& f) { f << "[Persistent COB] Unable to find values file"; });
+	} else {
+		OHS_INFO([&](auto& f) { f << "[Persistent COB] Found pre-existing values file"; });
+		SerializedEntry entry;
+		while (fread(&entry, sizeof(entry), 1, file) == sizeof(entry)) {
+			std::size_t pathLength = StrlenOrSize(entry.Path, sizeof(entry.Path));
+			std::string path(entry.Path, pathLength);
+			for (auto& mapEntry : s_Map) {
+				bool namesMatch = mapEntry.second.Entry.GetName() == path;
+				bool cobKeysMatch = mapEntry.first == entry.Key;
+				bool typesMatch = mapEntry.second.Entry.GetType() == entry.Type;
+				int matchCount = namesMatch + cobKeysMatch + typesMatch;
+				
+				if (matchCount == 3) {
+					//Good persistent key, everything is the same
+					if (!DecodePersistentData(entry.Type, entry.Key, file)) goto DeserializeError;
+				} else if (cobKeysMatch) {
+					OHS_WARN([&](auto& f) { f << "[Persistent COB] Serialized Value " << entry.Path << "changed to " << mapEntry.second.Entry.GetName() << ". Deserialization is continuing..."; });		
+					if (!DecodePersistentData(entry.Type, entry.Key, file)) goto DeserializeError;
+				} else {
+					OHS_ERROR([&](auto& f) { f << "[Persistent COB] Persistent NT value has changed since serialization!"; });
+					OHS_ERROR([&](auto& f) {
+						f << "[Persistent COB] Persistent NT value has changed since serialization!"; });
+					goto DeserializeError;
+				}
+
+			}
+		}
+	}
+	
+
 	DriverStation::ReportError("Load end");
+	return;
+
+	DeserializeError:
+	{
+		OHS_ERROR([&](auto& f) { f << "[Persistent COB] Serialization failed "; });
+		return;
+	}
+
+
 }
 
 void Cob::SavePersistent() {
