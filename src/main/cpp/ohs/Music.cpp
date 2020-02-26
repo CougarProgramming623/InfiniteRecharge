@@ -16,7 +16,7 @@ frc2::Button Music::musicStopper( [&] { return ohs2020::Robot::Get().GetOI().Get
 
 bool isPaused = false;
 
-char songs [15][27] = {
+char songs [16][27] = {
 
 	"DuelOfTheFates.chrp", //Star Wars
 	"StarWarsMainTheme.chrp",
@@ -39,7 +39,8 @@ char songs [15][27] = {
 	"AmericanAnthem.chrp",
 
 	"CoconutMall.chrp", //Misc
-	"HomeDepotTheme.chrp"
+	"HomeDepotTheme.chrp",
+	"GiornoTheme.chrp"
 	
 };
 
