@@ -32,6 +32,11 @@ void GyroResetConfirm(const nt::NetworkTableEntry& entry) {
 	//}
 }
 
+
+void ReverseConveyor(const nt::NetworkTableEntry& entry) {
+		Robot::Get().GetShooter().ReverseConveyor();
+}
+
 void SetDelayMess(const nt::NetworkTableEntry& entry){
 	//Robot::Get().GetAutoMan().SetDelay(entry.GetDouble(-1));
 	std::stringstream stream(entry.GetValue()->GetString());
@@ -60,11 +65,18 @@ void Cob::Init() {
 	RegisterMessageIn(CobMessageIn::GNIP, "gnip", Handshake);
 	RegisterMessageIn(CobMessageIn::GYRO_RESET, "gyroReset", GyroResetConfirm);
 	RegisterMessageOut(CobMessageOut::GYRO_RESET_CONFIRM, "gyroReset-ack");
+	RegisterMessageIn(CobMessageIn::RECEIVE_AUTO,"setAuto", ReceiveAuto);
+	RegisterMessageIn(CobMessageIn::REMOVE_LEMON, "removeLemon", ReverseConveyor);
 	RegisterMessageIn(CobMessageIn::RECEIVE_AUTO, "setAuto", ReceiveAuto);
 	RegisterMessageIn(CobMessageIn::RECEIVE_DELAY, "delay", SetDelayMess);
-
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
+
+	RegisterKey(CobKey::VISION_X, "/limelight/tx");
+	RegisterKey(CobKey::VISION_Y, "/limelight/ty");
+	
+	// RegisterKey(CobKey::VISION_X, "/vision/x");
+	// RegisterKey(CobKey::VISION_Y, "/vision/y");
 	RegisterKey(CobKey::IN_USE_AUTO, "/cob/auto/in-use");
 
 	RegisterKey(CobKey::LIMELIGHT_TOGGLE, "/limelight/ledMode");
