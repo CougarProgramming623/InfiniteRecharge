@@ -35,7 +35,7 @@ void OI::Init(){
 		Cob::PushValue(CobKey::LIMELIGHT_TOGGLE, 1); 
 	}, {} ));
 
-	m_Turn.WhenPressed( EncoderDrive::RotateTo(30) );
+	m_Turn.WhenPressed( new EncoderDrive(0.0, 36.0, 0) );
 
 	m_VModeToggle.WhenPressed( []() {DebugOutF( "VMODE?: " + std::to_string( Robot::Get().GetOI().ToggleVMode()) ); } );
 }
