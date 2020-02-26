@@ -51,7 +51,7 @@ private:
 	static void LoadPersistent();
 
 	static bool DecodePersistentData(nt::NetworkTableType type, CobKey cobKey, FILE* file);
-	static void EncodePersistentData(CobKey cobKey, FILE* file);
+	static void EncodePersistentData(CobKey cobKey, const OHSNetworkTableEntry& entry, FILE* file);
 
 private:
 	static nt::NetworkTableInstance s_Table;
