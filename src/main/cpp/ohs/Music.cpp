@@ -16,7 +16,32 @@ frc2::Button Music::musicStopper( [&] { return ohs2020::Robot::Get().GetOI().Get
 
 bool isPaused = false;
 
-char songs [5][30] = {"DuelOfTheFates.chrp", "StarWarsMainTheme.chrp", "JurassicParkMainTheme.chrp", "ImperialSuite.chrp", "CoconutMall.chrp"};
+char songs [15][27] = {
+
+	"DuelOfTheFates.chrp", //Star Wars
+	"StarWarsMainTheme.chrp",
+	"ImperialSuite.chrp",
+	"ImperialMarch.chrp",
+
+	"JurassicParkMainTheme.chrp", //Jurassic Park
+
+	"RaidersOftheLostArk.chrp", //Indiana Jones
+
+	"PiratesOfTheCaribbean.chrp", //Pirates of the Caribbean
+
+	"ImmigrantSong.chrp", //Marvel
+
+	"Megalovania.chrp", //Nintendo
+	"BunnyTime.chrp", 
+
+	"RussianAnthem.chrp", //Anthems
+	"SovietAnthem.chrp",
+	"AmericanAnthem.chrp",
+
+	"CoconutMall.chrp", //Misc
+	"HomeDepotTheme.chrp"
+	
+};
 
 static int songCount = sizeof(songs);
 std::string songToPlay = std::string(songs[0]);
@@ -46,12 +71,12 @@ void Music::Init() {
 
 void Music::Start() {
 
-	m_Orchestra.LoadMusic(songToPlay);
-	DebugOutF("Loaded Music");
-	
-	musicPlayer.WhenPressed(PlayMusic());
-	musicStopper.WhenPressed(frc2::InstantCommand([&] { 
+	musicPlayer.WhenPressed(frc2::InstantCommand( [&] {
+		isPaused = false;
+		frc2::CommandScheduler::GetInstance().Schedule(new PlayMusic());
+	}, {} ));
 
+	musicStopper.WhenPressed(frc2::InstantCommand([&] { 
 	if(!isPaused){
 		m_Orchestra.Pause();
 		isPaused = true;
@@ -59,26 +84,18 @@ void Music::Start() {
 		m_Orchestra.Stop();
 		isPaused = false;
 	}
-
 	}, {}));
 }
 
 void Music::Selector() {
 
-	double selection = (int) //gets leading digit of choice
+	double selection = (int)((ohs2020::Robot::Get().GetOI().GetButtonBoard().GetRawAxis(1) + 1)/ 2 * songCount);
 
-	((ohs2020::Robot::Get().GetOI().GetButtonBoard().GetRawAxis(1) + 1)/ 2 //converts scale to 0 - 1, from -1 - 1
-
-	* songCount);//gets scale from 0 - SongCount
-
-
-
-	if(selection == songCount){
-		selection--;
-	}//removes extra option at end of slide (last digit)
+	if(selection == songCount) selection--; //removes extra option at end of slide (last digit)
 
 	for(int i = 0; i < songCount; i++){
-		if(selection = i){
+		if(selection == i){
+			DebugOutF(std::string(songs[i]));
 			songToPlay = std::string(songs[i]);
 			m_Orchestra.LoadMusic(songToPlay);
 			DebugOutF(songToPlay);
