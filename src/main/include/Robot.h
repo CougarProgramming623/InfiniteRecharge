@@ -64,6 +64,7 @@ private:
 	AHRS* navx;
 	Shooter m_shooter;
 	Climb m_climb;
+	int m_CobCheck;
 
 	static const int kLength = 70; // **test**
 	frc::AddressableLED m_led{9};
