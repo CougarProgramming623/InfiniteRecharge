@@ -25,7 +25,7 @@ FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
 
 launcher( [&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); 	}),
 flyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11);	}), 
-conveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 		}),
+conveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 	}),
 timer() {
 
 	RemoveRegistry(this, &Flywheel, &feeder, &lowConveyor, &highConveyor);
@@ -48,7 +48,7 @@ void Shooter::SetupShooterButtons() {
 		DebugOutF(std::to_string(flywheelWU));
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
 
-		Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0));
+		Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0) * .2 + .8);
 
 	}, [this] (bool f){//on end
 
@@ -96,7 +96,22 @@ conveyorToggle.WhenReleased(frc2::InstantCommand([&] {
 
 }, {}));
 
+}
 
+void Shooter::ReverseConveyor() {
+	frc2::CommandScheduler::GetInstance().Schedule(new frc2::SequentialCommandGroup(
+
+		frc2::InstantCommand( [&] { 
+			highConveyor.Set(ControlMode::PercentOutput, -1);
+		 }, {}), 
+
+		frc2::WaitCommand(units::second_t(1)),
+
+		frc2::InstantCommand( [&] {
+			highConveyor.Set(ControlMode::PercentOutput, 0);
+		}, {})
+
+	));
 }
 
 
