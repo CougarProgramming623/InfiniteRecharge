@@ -67,7 +67,7 @@ private:
 	Shooter m_shooter;
 	Intake m_intake;
 
-	static const int kLength = 12;
+	static const int kLength = 70; // **test**
 	frc::AddressableLED m_led{9};
 	std::array<frc::AddressableLED::LEDData, kLength> m_ledBuffer;
 	int ledOffset = 0;
