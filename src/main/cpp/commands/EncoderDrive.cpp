@@ -4,10 +4,11 @@
 #include "subsystems/DriveTrain.h"
 #include "Util.h"
 
-#include <math.h> //for math.abs
 #include <memory>
 #include <frc/drive/Vector2d.h>  //for mechanum calculations
 #include <wpi/ArrayRef.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 //end includes
 
 namespace ohs2020 {
@@ -17,11 +18,10 @@ namespace ohs2020 {
 //constructors
 EncoderDrive::EncoderDrive(int x, int y, int a){
 	m_X = x*HORIZONTAL_CALIBRATION;
-	m_Y = y;
-	m_A = ( a-4 ) * 2000/7;
-	// angle calculation: ( degrees-4 ) * 2000/7
-	AddRequirements(wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
-
+	m_Y = y*VERTICAL_CALIBRATION;
+	m_A = a;
+	//AddRequirements(wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
+	AddRequirements(&Robot::Get().GetDriveTrain());
 } //base constructor
 
 EncoderDrive::EncoderDrive(double x, double y, int a) : EncoderDrive(static_cast <int> (x*CPI), static_cast <int> (y*CPI), 0) {} 
@@ -38,76 +38,83 @@ EncoderDrive::EncoderDrive(double x, double y) : EncoderDrive(x, y, 0) {}
 //override commands
 void EncoderDrive::Initialize() {
 
-	m_InitialTicks = Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition();
+	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputForward(0.5,0);
+	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputForward(0.5,0);
+	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputForward(0.5,0);
+	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputForward(0.5,0);
 
-	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
-	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
-	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
-	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
+	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputReverse(-0.5,0);
+	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputReverse(-0.5,0);
+	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputReverse(-0.5,0);
+	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputReverse(-0.5,0);
 
+	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, 0 );
+	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, 0 );
+	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput,  0 );
+	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput,  0 );
+
+	m_InitialTicks[0] = Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition();
+	m_InitialTicks[1] = Robot::Get().GetDriveTrain().GetRFront()->GetSelectedSensorPosition();
+	m_InitialTicks[2] = Robot::Get().GetDriveTrain().GetLBack()->GetSelectedSensorPosition();
+	m_InitialTicks[3] = Robot::Get().GetDriveTrain().GetRBack()->GetSelectedSensorPosition();
+
+	Robot::Get().GetDriveTrain().SetBrakeMode(false);
+
+	Robot::Get().GetDriveTrain().UsePositionPID();
+
+	DebugOutF("ERROR:FINISH ENCODER DRIVE INIT");
+	
 }//starts motor turn
 
 bool EncoderDrive::IsFinished() {
-
-	DebugOutF("DIFF:"+ std::to_string(m_Y + m_A+m_InitialTicks + m_X) + "|" + std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) + "|" + std::to_string(abs((m_InitialTicks + m_X + m_Y + m_A) - Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()) <= COUNT_THRESHOLD));
-	DebugOutF("MOTOR%: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetMotorOutputPercent()));
-
-	if( m_X + m_Y + m_A < 0 ){
-		return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() <= (m_Y + m_A + m_InitialTicks + m_X);
-	} else {
-		return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() >= (m_Y + m_A + m_InitialTicks + m_X);
-	}
+	
+	return
+		abs( Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() - (m_InitialTicks[0] + m_Y + m_X + m_A)) <= COUNT_THRESHOLD &&
+		abs( Robot::Get().GetDriveTrain().GetRFront()->GetSelectedSensorPosition() - (m_InitialTicks[1] + m_Y - m_X - m_A)) <= COUNT_THRESHOLD &&
+		abs( Robot::Get().GetDriveTrain().GetLBack()->GetSelectedSensorPosition() - (m_InitialTicks[2] + m_Y - m_X + m_A)) <= COUNT_THRESHOLD &&
+		abs( Robot::Get().GetDriveTrain().GetRBack()->GetSelectedSensorPosition() - (m_InitialTicks[3] + m_Y + m_X - m_A)) <= COUNT_THRESHOLD;
 
 }//returns true when encoderTicks is equals to or greater than target
 
 void EncoderDrive::Execute() {
 	
-	int max = 1;
-	double maxSpeed = 0.4;
+	Robot::Get().GetDriveTrain().UsePositionPID();
+	DebugOutF("ERROR:MOVING| "+std::to_string( Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() - (m_Y + m_A + m_InitialTicks[0] + m_X) ));
+	DebugOutF("ERROR:MOVING| "+std::to_string( Robot::Get().GetDriveTrain().GetRFront()->GetSelectedSensorPosition() - (m_Y + m_A + m_InitialTicks[1] + m_X) ));
+	DebugOutF("ERROR:MOVING| "+std::to_string( Robot::Get().GetDriveTrain().GetLBack()->GetSelectedSensorPosition() - (m_Y + m_A + m_InitialTicks[2] + m_X) ));
+	DebugOutF("ERROR:MOVING| "+std::to_string( Robot::Get().GetDriveTrain().GetRBack()->GetSelectedSensorPosition() - (m_Y + m_A + m_InitialTicks[3] + m_X) ));
+	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::Position, m_InitialTicks[0]+(m_Y + m_X + m_A) );
+	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::Position, m_InitialTicks[1]+(m_Y - m_X - m_A) );
+	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::Position,  m_InitialTicks[2]+(m_Y - m_X + m_A) );
+	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::Position,  m_InitialTicks[3]+(m_Y + m_X - m_A) );
 
-	if(m_X > m_Y){
-		max = m_X+m_A;
-	}else{
-		max = m_Y+m_A;
-	}
-
-	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, (m_Y + m_X + m_A)/max*maxSpeed );
-	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, (m_Y - m_X - m_A)/max*maxSpeed );
-	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput, (m_Y - m_X + m_A)/max*maxSpeed );
-	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput, (m_Y + m_X - m_A)/max*maxSpeed );
-}//execute command (does nothing, waits)
+}//execute command
 
 void EncoderDrive::End(bool interrupted) {
 	
-	DebugOutF("|STOP|"+std::to_string(interrupted));
-	DebugOutF("Final Pos: "+std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
+	DebugOutF("ERROR:|STOP|" + std::to_string( Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() - (m_Y + m_A + m_InitialTicks[0] + m_X) ));
 
-	
-	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+	Robot::Get().GetDriveTrain().SetBrakeMode(true);
+	Robot::Get().GetDriveTrain().UseVelocityPID();
+
+	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, 0 );
+	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, 0 );
+	Robot::Get().GetDriveTrain().GetLBack()->Set(ControlMode::PercentOutput,  0 );
+	Robot::Get().GetDriveTrain().GetRBack()->Set(ControlMode::PercentOutput,  0 );
+
+	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputForward(1,0);
+	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputForward(1,0);
+	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputForward(1,0);
+	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputForward(1,0);
+
+	Robot::Get().GetDriveTrain().GetLFront()->ConfigPeakOutputReverse(-1,0);
+	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputReverse(-1,0);
+	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputReverse(-1,0);
+	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputReverse(-1,0);
+
 }//stops motors and exits
 //end override commands
 
-frc2::Command* EncoderDrive::RotateTo(double angle){
-	if (abs(angle) < 10){
-		std::vector<std::unique_ptr<frc2::Command>> vector;
-		if (angle < 0){
-			vector.push_back( std::make_unique<EncoderDrive>(0, 0, 10));
-			vector.push_back( std::make_unique<EncoderDrive>(0, 0, angle - 10));
-		}
-		else {
-			vector.push_back( std::make_unique<EncoderDrive>(0, 0, -10));
-			vector.push_back( std::make_unique<EncoderDrive>(0, 0, angle + 10));
-		}
-		return new frc2::SequentialCommandGroup(std::move(vector));
-	} else if (abs(angle) < 40) {
-		return new EncoderDrive(0, 0, angle);
-	} else {
-		return Robot::Get().GetDriveTrain().TurnToPos(angle);
-	}
-}
 //end EncoderDrive
 
 }//end namespace

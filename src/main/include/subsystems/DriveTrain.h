@@ -28,7 +28,7 @@ public:
 	void UsePositionPID();
 	void SetPID(double, double, double, double, double);
 	void SetBrakeMode(bool);
-	git 
+	
 	//getters for direct access to motors
 	BaseTalon* GetLFront() { return m_FrontLeft.get(); }
 	BaseTalon* GetRFront() { return m_FrontRight.get(); }
