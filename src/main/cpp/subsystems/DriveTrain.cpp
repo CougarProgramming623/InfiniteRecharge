@@ -60,13 +60,30 @@ void DriveTrain::SetBrakeMode(bool on){
 }
 
 void DriveTrain::UsePositionPID(){
-	DebugOutF("ERROR: USING POSITION PID");
+	DebugOutF("WARNING: USING POSITION PID");
 	DriveTrain::SetPID(50, 0.05, 0.0, 0.0, 0.0);
 }
 
 void DriveTrain::UseVelocityPID(){
-	DebugOutF("ERROR:USING VELOCITY PID");
+	DebugOutF("WARNING:USING VELOCITY PID");
 	DriveTrain::SetPID(50, 0.0, 0.0, 0.0, 0.05);
+}
+
+void DriveTrain::UseMagicPID(){
+	DebugOutF("WARNING:USING Magic PID");
+	DriveTrain::SetPID(50, 0.05, 0.0, 0.5, 0.0);
+	
+	double cruiseP = 0.5*kMAX_VELOCITY;
+
+	GetLFront()->ConfigMotionCruiseVelocity(cruiseP, 0);
+	GetRFront()->ConfigMotionCruiseVelocity(cruiseP, 0);
+	GetLBack()->ConfigMotionCruiseVelocity(cruiseP, 0);
+	GetRBack()->ConfigMotionCruiseVelocity(cruiseP, 0);
+
+	GetLFront()->ConfigMotionAcceleration(cruiseP, 0);
+	GetRFront()->ConfigMotionAcceleration(cruiseP, 0);
+	GetLBack()->ConfigMotionAcceleration(cruiseP, 0);
+	GetRBack()->ConfigMotionAcceleration(cruiseP, 0);
 }
 
 void DriveTrain::SetPID(double E, double P, double I, double D, double F){

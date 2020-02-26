@@ -26,6 +26,7 @@ public:
 	void SetBrakeMode();
 	void UseVelocityPID();
 	void UsePositionPID();
+	void UseMagicPID();
 	void SetPID(double, double, double, double, double);
 	void SetBrakeMode(bool);
 	
