@@ -26,7 +26,6 @@ private:
 	static frc2::Button musicPlayer;
 	static frc2::Button musicStopper;
 
-	static int songCount;
 
 	
 	

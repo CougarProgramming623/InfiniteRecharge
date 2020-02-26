@@ -4,6 +4,8 @@
 
 #include "commands/PlayMusic.h"
 
+#include <string>
+
 
 namespace ohs623 {
 
@@ -14,12 +16,10 @@ frc2::Button Music::musicStopper( [&] { return ohs2020::Robot::Get().GetOI().Get
 
 bool isPaused = false;
 
-std::string DuelOfTheFates = "DuelOfTheFates.chrp";
-std::string StarWars = "StarWarsMainTheme.chrp";
-std::string JurassicPark = "JurassicParkMainTheme.chrp";
-std::string ImperialSuite = "ImperialSuite.chrp";
-std::string CoconutMall = "CoconutMall.chrp";
+char songs [5][30] = {"DuelOfTheFates.chrp", "StarWarsMainTheme.chrp", "JurassicParkMainTheme.chrp", "ImperialSuite.chrp", "CoconutMall.chrp"};
 
+static int songCount = sizeof(songs);
+std::string songToPlay = std::string(songs[0]);
 
 void Music::Init() {
 	TalonFX* rightBack = dynamic_cast<TalonFX*>(ohs2020::Robot::Get().GetDriveTrain().GetRBack());
@@ -46,7 +46,7 @@ void Music::Init() {
 
 void Music::Start() {
 
-	m_Orchestra.LoadMusic(CoconutMall);
+	m_Orchestra.LoadMusic(songToPlay);
 	DebugOutF("Loaded Music");
 	
 	musicPlayer.WhenPressed(PlayMusic());
@@ -63,26 +63,27 @@ void Music::Start() {
 	}, {}));
 }
 
-void Music::Stop() {
-
-}
-
-
-
 void Music::Selector() {
 
-	double selection = ohs2020::Robot::Get().GetOI().GetButtonBoard().GetRawAxis(1);
+	double selection = (int) //gets leading digit of choice
 
-	if(selection > (songCount - 2) / songCount ){ //scans 0 zone
+	((ohs2020::Robot::Get().GetOI().GetButtonBoard().GetRawAxis(1) + 1)/ 2 //converts scale to 0 - 1, from -1 - 1
 
-	} else if (selection < -(songCount - 2) / songCount && selection > songCount - 2){ //scans pos zone
+	* songCount);//gets scale from 0 - SongCount
 
-	} else if ( selection > -(songCount - 2) / songCount && selection < songCount - 2) { // scans neg zone
 
+
+	if(selection == songCount){
+		selection--;
+	}//removes extra option at end of slide (last digit)
+
+	for(int i = 0; i < songCount; i++){
+		if(selection = i){
+			songToPlay = std::string(songs[i]);
+			m_Orchestra.LoadMusic(songToPlay);
+			DebugOutF(songToPlay);
+		}
 	}
-
-
-
 }
 
-}
+}//namespace

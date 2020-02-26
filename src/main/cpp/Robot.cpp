@@ -91,6 +91,8 @@ void Robot::RobotPeriodic() {
 
 	}
 
+	ohs623::Music::Selector();
+	
     //Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
