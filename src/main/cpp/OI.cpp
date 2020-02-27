@@ -6,6 +6,7 @@
 #include "commands/EncoderDriveV.h"
 #include "commands/EncoderDriveM.h"
 #include "commands/TurnToPosPID.h"
+#include "commands/TurnToPosSlow.h"
 
 namespace ohs2020{
 
