@@ -36,7 +36,6 @@ void TurnToPosSlow::Execute() {
 
 bool TurnToPosSlow::IsFinished() {
     m_Angle = GetVisionAngle();
-    DebugOutF("Angle: " + std::to_string(m_Angle));
     if(m_StartNeg)
         return m_Angle >= -1.0;
     else 
