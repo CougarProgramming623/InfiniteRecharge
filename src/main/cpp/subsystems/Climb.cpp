@@ -142,7 +142,7 @@ void Climb::Deploy() {
 			DebugOutF("start deploy");
 			timer.Reset();
 			timer.Start();
-			climbMotorLeft.Set(ControlMode::PercentOutput, -1); //correct direction
+			climbMotorLeft.Set(ControlMode::PercentOutput, 1); //correct direction
 			climbMotorRight.Set(ControlMode::PercentOutput, -1);
 
 			frc2::CommandScheduler::GetInstance().Schedule(new frc2::SequentialCommandGroup(
