@@ -14,7 +14,6 @@ OI::OI() :
 
 m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}),
 m_Turn([&] { return m_DriverJoystick.GetRawButton(14);}),
-m_VModeToggle([&] { return m_DriverJoystick.GetRawButton(2);}),
 m_LimelightToggle([&] { return m_ButtonBoard.GetRawButton(3);}) // 1 off 3 on
 {
 
