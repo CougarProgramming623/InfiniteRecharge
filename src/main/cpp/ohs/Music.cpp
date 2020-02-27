@@ -40,7 +40,10 @@ char songs [16][27] = {
 
 	"CoconutMall.chrp", //Misc
 	"HomeDepotTheme.chrp",
-	"GiornoTheme.chrp"
+	"GiornoTheme.chrp",
+	"CampfireSongSong.chrp",
+
+	"SweetCaroline.chrp" //Robotics Songs
 	
 };
 
@@ -93,15 +96,8 @@ void Music::Selector() {
 	double selection = (int)((ohs2020::Robot::Get().GetOI().GetButtonBoard().GetRawAxis(1) + 1)/ 2 * songCount);
 
 	if(selection == songCount) selection--; //removes extra option at end of slide (last digit)
+	m_Orchestra.LoadMusic(songs[selection]);
 
-	for(int i = 0; i < songCount; i++){
-		if(selection == i){
-			DebugOutF(std::string(songs[i]));
-			songToPlay = std::string(songs[i]);
-			m_Orchestra.LoadMusic(songToPlay);
-			DebugOutF(songToPlay);
-		}
-	}
 }
 
 }//namespace
