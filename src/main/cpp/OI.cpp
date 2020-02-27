@@ -4,6 +4,7 @@
 #include "Robot.h"
 #include "commands/EncoderDrive.h"
 #include "commands/TurnToPosPID.h"
+#include "commands/TurnToPosSlow.h"
 
 namespace ohs2020{
 
@@ -36,7 +37,7 @@ void OI::Init(){
 		Cob::PushValue(CobKey::LIMELIGHT_TOGGLE, 1); 
 	}, {} ));
 
-	m_Turn.WhenPressed( new TurnToPosPID() );
+	m_Turn.WhenPressed( new TurnToPosSlow() );
 
 }
 
