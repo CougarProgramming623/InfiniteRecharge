@@ -36,6 +36,8 @@ void TurnToPosSlow::Execute() {
 
 bool TurnToPosSlow::IsFinished() {
     m_Angle = GetVisionAngle();
+    if(!frc::DriverStation::GetInstance().IsAutonomous() && !Robot::Get().GetOI().GetButtonBoard().GetRawButton(1)) 
+        return true;
     if(m_StartNeg)
         return m_Angle >= -1.0;
     else 
