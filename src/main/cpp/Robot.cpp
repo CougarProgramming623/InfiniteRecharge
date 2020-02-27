@@ -19,6 +19,7 @@
 #include "ohs/Log.h"
 
 
+
 namespace ohs2020 {
 
 	Robot* Robot::s_Instance = nullptr;
@@ -52,6 +53,18 @@ void Robot::RobotInit() {
 	navx->ZeroYaw();
 
 	m_Init = true;
+
+
+	m_led.SetLength(kLength);
+
+	for(int i = 0; i < kLength; i++){
+		m_ledBuffer[i].SetRGB(0, 255, 0);
+	}
+
+	m_led.SetData(m_ledBuffer);
+	m_led.Start();
+
+
 }
 
 /**
@@ -74,6 +87,8 @@ void Robot::RobotPeriodic() {
 	Cob::PushValue(CobKey::FLYWHEEL_STATUS, m_shooter.GetFlywheelState());
 	Cob::PushValue(CobKey::TIME_LEFT, frc2::Timer::GetMatchTime().to<double>());
 	Cob::PushValue(CobKey::CURRENT_DELAY, m_AutoManager.GetDelay());
+	Cob::PushValue(CobKey::COB_CHECK, m_CobCheck);
+	m_CobCheck++;
 	
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
 		Cob::PushValue(CobKey::IS_RED, true);
@@ -95,9 +110,22 @@ void Robot::RobotPeriodic() {
 
 	}
 
-	m_climb.LEDCanClimb();
+	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
+		for(int i = 0; i < kLength; i++){
+			m_ledBuffer[i].SetRGB(255, 0, 0);
+		}
+	} else if (frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kBlue){
+		for(int i = 0; i < kLength; i++){
+			m_ledBuffer[i].SetRGB(0, 0, 255);
+		}
+	} else {
+		for(int i = 0; i < kLength; i++){
+			m_ledBuffer[i].SetRGB(0, 255, 0);
+		}
+	}
+	
+	m_led.SetData(m_ledBuffer);
 
-	//Cob::PushValue(CobKey::MODE, isFodMode());
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
 
