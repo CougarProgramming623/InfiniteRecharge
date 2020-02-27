@@ -45,7 +45,13 @@ private:
 	std::unique_ptr<BaseTalon> m_BackLeft, m_BackRight;
 
 	frc2::PIDController* m_TurnController;
+	/*
+	frc2::PIDController m_XController;
+	frc2::PIDController m_YController;
+	frc::ProfiledPIDController<units::radians> m_ThetaController;
 
+	frc::MecanumDriveKinematics kinematics;
+*/
 };
 
 }//namespace

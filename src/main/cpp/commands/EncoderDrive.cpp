@@ -47,6 +47,11 @@ void EncoderDrive::Initialize() {
 	Robot::Get().GetDriveTrain().GetRFront()->ConfigPeakOutputReverse(-0.5,0);
 	Robot::Get().GetDriveTrain().GetLBack()->ConfigPeakOutputReverse(-0.5,0);
 	Robot::Get().GetDriveTrain().GetRBack()->ConfigPeakOutputReverse(-0.5,0);
+	
+	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(Coast);
+	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(Coast);
+	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(Coast);
+	Robot::Get().GetDriveTrain().GetRBack()->SetNeutralMode(Coast);
 
 	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::PercentOutput, 0 );
 	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::PercentOutput, 0 );

@@ -146,7 +146,7 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 	Normalize(wheelSpeeds);
 
 	if (Robot::Get().GetOI().GetVelocityMode()) {
-		DebugOutF("Using V");
+		// DebugOutF("Using V");
 		m_FrontLeft->Set(ControlMode::Velocity, wheelSpeeds[kFRONT_LEFT] * kMAX_VELOCITY);
 		m_BackLeft->Set(ControlMode::Velocity, wheelSpeeds[kBACK_LEFT] * kMAX_VELOCITY);
 		m_FrontRight->Set(ControlMode::Velocity, wheelSpeeds[kFRONT_RIGHT] * kMAX_VELOCITY);
@@ -177,10 +177,13 @@ frc2::PIDCommand* DriveTrain::TurnToPos(double angle) {
 	90 : 0.0175, 0, 0
 	180 : 0.0835, 0.0, 0.01
 	roughly accurate for greater than 10 : 0.085, 0.0, 0.011
-	*/
-	m_TurnController = new frc2::PIDController( 0.085, 0.0, 0.011, units::second_t(20_ms) ); 
 
-	m_TurnController->SetTolerance( 1.0, std::numeric_limits< double >::infinity() );
+	Saber PID Values:
+
+	*/
+	m_TurnController = new frc2::PIDController( 0.015, 0.0, 0.00, units::second_t(20_ms) ); 
+
+	m_TurnController->SetTolerance( 2.0, std::numeric_limits< double >::infinity() );
 	m_TurnController->SetSetpoint(angle);
 	m_TurnController->EnableContinuousInput(-180.0,180.0);
 

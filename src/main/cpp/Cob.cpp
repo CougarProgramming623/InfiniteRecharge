@@ -71,6 +71,12 @@ void Cob::Init() {
 	RegisterMessageIn(CobMessageIn::RECEIVE_DELAY, "delay", SetDelayMess);
 	RegisterKey(CobKey::FLYWHEEL_WU, "/cob/flywheel/wu");
 	RegisterKey(CobKey::FLYWHEEL_STATUS, "/cob/flywheel/image");
+
+	RegisterKey(CobKey::VISION_X, "/limelight/tx");
+	RegisterKey(CobKey::VISION_Y, "/limelight/ty");
+	
+	// RegisterKey(CobKey::VISION_X, "/vision/x");
+	// RegisterKey(CobKey::VISION_Y, "/vision/y");
 	RegisterKey(CobKey::IN_USE_AUTO, "/cob/auto/in-use");
 
 	RegisterKey(CobKey::LIMELIGHT_TOGGLE, "/limelight/ledMode");

@@ -5,6 +5,7 @@
 #include "commands/EncoderDrive.h"
 #include "commands/EncoderDriveV.h"
 #include "commands/EncoderDriveM.h"
+#include "commands/TurnToPosPID.h"
 
 namespace ohs2020{
 
@@ -39,7 +40,6 @@ void OI::Init(){
 
 	m_Turn.WhenPressed( new EncoderDriveV(0.0, 36.0, 0) );
 
-	m_VModeToggle.WhenPressed( []() {DebugOutF( "VMODE?: " + std::to_string( Robot::Get().GetOI().ToggleVMode()) ); } );
 }
 
 
