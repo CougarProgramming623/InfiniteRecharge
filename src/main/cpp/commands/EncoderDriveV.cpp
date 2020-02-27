@@ -24,7 +24,7 @@ EncoderDriveV::EncoderDriveV(int x, int y, int a){
 	AddRequirements(&Robot::Get().GetDriveTrain());
 } //base constructor
 
-EncoderDriveV::EncoderDriveV(double x, double y, int a) : EncoderDriveV(static_cast <int> (x*CPI*(12/13)), static_cast <int> (y*CPI*(12/13)), 0) {} 
+EncoderDriveV::EncoderDriveV(double x, double y, int a) : EncoderDriveV(static_cast <int> (x*CPI*(12/13)), static_cast <int> (y*CPI), 0) {} 
 //constructor for inches w/ angle
 
 EncoderDriveV::EncoderDriveV(int x, int y) : EncoderDriveV(x, y, 0) {}
@@ -40,6 +40,8 @@ void EncoderDriveV::Initialize() {
 
 	m_InitialTicks = Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition();
 
+	DebugOutF("Target: "+std::to_string(m_Y + m_A + m_InitialTicks + m_X));
+
 	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
 	Robot::Get().GetDriveTrain().GetRFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
 	Robot::Get().GetDriveTrain().GetLBack()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
@@ -49,8 +51,8 @@ void EncoderDriveV::Initialize() {
 
 bool EncoderDriveV::IsFinished() {
 
-	DebugOutF("DIFF:"+ std::to_string(m_Y + m_A + m_InitialTicks + m_X - Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
-	DebugOutF("MOTOR%: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetMotorOutputPercent()));
+	// DebugOutF("DIFF:"+ std::to_string(m_Y + m_A + m_InitialTicks + m_X - Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
+	// DebugOutF("MOTOR%: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetMotorOutputPercent()));
 
 	if( m_X + m_Y + m_A < 0 ){
 		return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() <= (m_Y + m_A + m_InitialTicks + m_X);
@@ -61,9 +63,9 @@ bool EncoderDriveV::IsFinished() {
 }//returns true when encoderTicks is equals to or greater than target
 
 void EncoderDriveV::Execute() {
-	
+	DebugOutF("MOVING: "+std::to_string( Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() - (m_Y + m_A + m_InitialTicks + m_X) ));
 	int max = abs(m_X)+abs(m_A)+abs(m_Y);
-	double maxSpeed = 0.4*(6380/60/10*2048);
+	double maxSpeed = 0.3*(6380/60/10*2048);
 
 	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::Velocity, (m_Y + m_X + m_A)/max*maxSpeed );
 	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::Velocity, (m_Y - m_X - m_A)/max*maxSpeed );
