@@ -62,7 +62,6 @@ bool EncoderDriveV::IsFinished() {
 
 void EncoderDriveV::Execute() {
 	
-
 	int max = abs(m_X)+abs(m_A)+abs(m_Y);
 	double maxSpeed = 0.4*(6380/60/10*2048);
 

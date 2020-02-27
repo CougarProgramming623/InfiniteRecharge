@@ -11,7 +11,7 @@
 namespace ohs2020 {
 
 	Drive::Drive(){// : m_subsystem{driveTrain} { //m_subsystem{ Robot::Get().GetDriveTrain() }  
-		AddRequirements(wpi::ArrayRef<frc2::Subsystem*>(&Robot::Get().GetDriveTrain()));
+		AddRequirements(&Robot::Get().GetDriveTrain());
 
 		frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand("Has Requirement: " + GetRequirements().size()));
 		frc2::CommandScheduler::GetInstance().Schedule(new frc2::PrintCommand("Ran Drive Contructor"));
@@ -23,6 +23,8 @@ namespace ohs2020 {
 	}
 	
 	void Drive::Execute() {
+		DebugOutF("JOYSTICK");
+
 		double y = Robot::Get().GetOI().GetDriverJoystick().GetY();
 		double x = Robot::Get().GetOI().GetDriverJoystick().GetX();
 		double rot = Robot::Get().GetOI().GetDriverJoystick().GetZ();

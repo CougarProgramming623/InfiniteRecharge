@@ -16,7 +16,7 @@ namespace ohs2020 {
 
 //EncoderDriveM
 
-//constructors
+//constructors	
 EncoderDriveM::EncoderDriveM(int x, int y, int a){
 	m_X = x*HORIZONTAL_CALIBRATION;
 	m_Y = y;
