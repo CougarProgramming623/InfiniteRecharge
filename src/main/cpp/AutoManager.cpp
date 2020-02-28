@@ -17,18 +17,16 @@ AutoManager::~AutoManager(){
 }
 
 void AutoManager::AutoInit(){
-	m_AutoMap["safe"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("Init"), frc2::WaitCommand(units::second_t(m_Delay)), frc2::PrintCommand("Move"), frc2::PrintCommand("Shoot"));
+	m_AutoMap["nop"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("nop"));
 	// m_AutoMap["fancy"] = new frc2::SequentialCommandGroup(frc2::WaitCommand(units::second_t(m_Delay)), frc2::PrintCommand("Move"), frc2::PrintCommand("Aligned"), frc2::PrintCommand("Shoot"));
 	// m_AutoMap["safe"] = new frc2::SequentialCommandGroup(frc2::WaitCommand(units::second_t(m_Delay)), EncoderDriveV(0.0, -24.0, 0));
 
 	//m_AutoMap["nop"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("Init"), frc2::WaitCommand(units::second_t(m_Delay)), frc2::PrintCommand("Did Nothing"));
 	frc2::SequentialCommandGroup* group = new frc2::SequentialCommandGroup();
 	group->AddCommands(frc2::PrintCommand("Init"));
-	// group->AddCommands(frc2::WaitCommand(units::second_t(m_Delay)));
 	group->AddCommands(TurnToPosSlow());
 	group->AddCommands(Robot::Get().GetShooter().Shoot());
 	group->AddCommands(EncoderDriveV(0.0, -5*12.0, 0));
-	
 	m_AutoMap["shoot&back-robot"] = group;
 	
 	//m_AutoMap["shoot-backward"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("Init"), frc2::WaitCommand(units::second_t(m_Delay)), TurnToPosSlow(), Robot::Get().GetShooter().Shoot(), EncoderDriveV(0.0, -24.0, 0));

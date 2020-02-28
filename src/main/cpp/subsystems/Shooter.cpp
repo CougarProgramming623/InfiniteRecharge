@@ -49,6 +49,11 @@ void Shooter::SetupShooterButtons() {
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
 
         double speed =  3000 + 500 * Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0);
+		if(abs(speed - 3000) < 100) {
+			Robot::Get().GetOI().GetButtonBoard().SetOutput(3, true);
+		} else {
+			Robot::Get().GetOI().GetButtonBoard().SetOutput(3, false);
+		}
 		Flywheel.Set(ControlMode::Velocity, speed);
 		DebugOutF("speed: " + std::to_string(speed));
 
