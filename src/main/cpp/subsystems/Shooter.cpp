@@ -24,7 +24,7 @@ highConveyor(RobotID::GetID(HIGH_TRANSPORT)),
 FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
 
 launcher( [&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); 	}),
-flyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11);	}), 
+flyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(4);	}), 
 conveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 	}),
 timer() {
 
@@ -41,27 +41,32 @@ void Shooter::Init() {
 
 void Shooter::SetupShooterButtons() {
 
-	flyWheelToggle.WhileHeld(frc2::FunctionalCommand([this]{}, [this] { //on execute
+	flyWheelToggle.WhenPressed(frc2::FunctionalCommand([this]{}, [this] { //on execute
 
 		isFlywheelOn = true;
 		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
-		DebugOutF(std::to_string(flywheelWU));
+		// DebugOutF(std::to_string(flywheelWU));
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
 
-		Flywheel.Set(ControlMode::PercentOutput, Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0) * .2 + .8);
+        double speed =  3000 + 500 * Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0);
+		Flywheel.Set(ControlMode::Velocity, speed);
+		DebugOutF("speed: " + std::to_string(speed));
 
 	}, [this] (bool f){//on end
+		DebugOutF("shooter end");
 
 		isFlywheelOn = false;
 
-		Flywheel.Set(ControlMode::PercentOutput, 0);
+		Flywheel.Set(ControlMode::Velocity, 0);
 
-	}, [this] { return false; }, {}));
+	}, [this] { return !flyWheelToggle.Get(); }, {}));
 
 	flyWheelToggle.WhenReleased(frc2::RunCommand([&] {
 
 		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
-		DebugOutF(std::to_string(flywheelWU));
+		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
+
+		// DebugOutF(std::to_string(flywheelWU));
 
 	}, {}));
 
@@ -103,7 +108,7 @@ void Shooter::ReverseConveyor() {
 
 		frc2::InstantCommand( [&] { 
 			highConveyor.Set(ControlMode::PercentOutput, -1);
-		 }, {}), 
+		}, {}), 
 
 		frc2::WaitCommand(units::second_t(1)),
 
@@ -114,7 +119,36 @@ void Shooter::ReverseConveyor() {
 	));
 }
 
+frc2::SequentialCommandGroup* Shooter::Shoot() {
+	frc2::SequentialCommandGroup* group = new frc2::SequentialCommandGroup();
 
+	frc2::InstantCommand startFlywheel = frc2::InstantCommand( [&] {
+		Flywheel.Set(ControlMode::Velocity, 3500);
+	}, {});
+
+	frc2::InstantCommand startFeeder = frc2::InstantCommand( [&] {
+		feeder.Set(ControlMode::PercentOutput, 1);
+	}, {});
+
+	frc2::InstantCommand stopShoot = frc2::InstantCommand( [&] {
+		Flywheel.Set(ControlMode::Velocity, 0);
+		feeder.Set(ControlMode::PercentOutput, 0);
+	}, {});
+
+	frc2::InstantCommand spinConveyers = frc2::InstantCommand( [&] { 
+		lowConveyor.Set(ControlMode::PercentOutput, 0.5);
+		highConveyor.Set(ControlMode::PercentOutput, 1.0); 
+	}, {});
+
+	frc2::InstantCommand stopConveyers = frc2::InstantCommand( [&] { 
+		lowConveyor.Set(ControlMode::PercentOutput, 0.0);
+		highConveyor.Set(ControlMode::PercentOutput, 0.0);
+	}, {});
+
+	group->AddCommands(startFlywheel, frc2::WaitCommand(units::second_t(1.0)), startFeeder, spinConveyers, frc2::WaitCommand(units::second_t(3.0)), stopConveyers, stopShoot);
+
+	return group;
+}
 
 
 

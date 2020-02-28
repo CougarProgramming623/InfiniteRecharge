@@ -13,8 +13,9 @@ namespace ohs2020{
 OI::OI() : 
 
 m_FodToggle([&] { return m_DriverJoystick.GetRawButton(1);}),
-m_Turn([&] { return m_ButtonBoard.GetRawButton(14);}),
-m_LimelightToggle([&] { return m_ButtonBoard.GetRawButton(3);}) // 1 off 3 on
+m_Turn([&] { return m_ButtonBoard.GetRawButton(1);}),
+m_LimelightToggle([&] { return m_ButtonBoard.GetRawButton(16);}), 
+m_TestShoot([&] { return m_ButtonBoard.GetRawButton(14);})
 {
 
 }
@@ -40,8 +41,8 @@ void OI::Init(){
 
 	m_Turn.WhenPressed( new EncoderDriveV(36.0, 0.0, 0) );
 
+	m_TestShoot.WhenPressed(Robot::Get().GetShooter().Shoot());
+
 }
-
-
 
 }//namespace
