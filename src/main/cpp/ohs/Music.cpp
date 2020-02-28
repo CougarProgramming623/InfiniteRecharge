@@ -33,6 +33,8 @@ char songs [16][27] = {
 
 	"Megalovania.chrp", //Nintendo
 	"BunnyTime.chrp", 
+	"ZeldaHyruleField.chrp",
+	"ZeldaMainTheme.chrp",
 
 	"RussianAnthem.chrp", //Anthems
 	"SovietAnthem.chrp",
