@@ -1,4 +1,6 @@
 #include "AutoManager.h"
+#include "commands/EncoderDriveV.h"
+#include "commands/TurnToPosSlow.h"
 
 #include <vector>
 #include <memory>
@@ -15,7 +17,11 @@ AutoManager::~AutoManager(){
 void AutoManager::AutoInit(){
 	m_AutoMap["default"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("Init"), frc2::WaitCommand(units::second_t(m_Delay)), frc2::PrintCommand("Move"), frc2::PrintCommand("Shoot"));
 	m_AutoMap["fancy"] = new frc2::SequentialCommandGroup(frc2::WaitCommand(units::second_t(m_Delay)), frc2::PrintCommand("Move"), frc2::PrintCommand("Aligned"), frc2::PrintCommand("Shoot"));
-	m_AutoMap["safe"] = new frc2::SequentialCommandGroup(frc2::WaitCommand(units::second_t(m_Delay)), frc2::PrintCommand("Moved Forward"));
+	m_AutoMap["safe"] = new frc2::SequentialCommandGroup(frc2::WaitCommand(units::second_t(m_Delay)), EncoderDriveV(0.0, -24.0, 0));
+
+	m_AutoMap["noop"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("Init"), frc2::WaitCommand(units::second_t(m_Delay)), frc2::PrintCommand("Did Nothing"));
+	m_AutoMap["shoot-forward"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("Init"), frc2::WaitCommand(units::second_t(m_Delay)), TurnToPosSlow(), frc2::PrintCommand("SHOOT"), frc2::PrintCommand("SHOOT"), frc2::PrintCommand("SHOOT"), EncoderDriveV(0.0, 24.0, 0) );
+	m_AutoMap["shoot-backward"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("Init"), frc2::WaitCommand(units::second_t(m_Delay)), TurnToPosSlow(), frc2::PrintCommand("SHOOT"), frc2::PrintCommand("SHOOT"), frc2::PrintCommand("SHOOT"), EncoderDriveV(0.0, -24.0, 0));
 	//m_AutoMap["debug"] = new frc2::SequentialCommandGroup(frc2::WaitCommand(units::second_t(m_Delay)), frc2::InstantCommand([&]{OHS_DEBUG([&](auto f){f << "Debugged";})}));
 }
 
