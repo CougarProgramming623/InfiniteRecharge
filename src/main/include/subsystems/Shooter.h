@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>	
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/SequentialCommandGroup.h>
 
 #include <frc2/Timer.h>
 
@@ -33,6 +34,8 @@ public:
 	bool GetFlywheelState() { return isFlywheelOn; }
 
 	double GetFlywheelWU() { return flywheelWU; }
+
+	frc2::SequentialCommandGroup* Shoot();
 
 private:
 
