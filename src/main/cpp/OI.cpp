@@ -38,7 +38,7 @@ void OI::Init(){
 		Cob::PushValue(CobKey::LIMELIGHT_TOGGLE, 1); 
 	}, {} ));
 
-	m_Turn.WhenPressed( new EncoderDriveV(36.0, 0.0, 0) );
+	m_Turn.WhenPressed( new EncoderDriveV(0.0, -36.0, 0) );
 
 }
 
