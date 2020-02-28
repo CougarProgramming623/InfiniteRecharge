@@ -123,7 +123,7 @@ frc2::SequentialCommandGroup* Shooter::Shoot() {
 	frc2::SequentialCommandGroup* group = new frc2::SequentialCommandGroup();
 
 	frc2::InstantCommand startFlywheel = frc2::InstantCommand( [&] {
-		Flywheel.Set(ControlMode::Velocity, 16000);
+		Flywheel.Set(ControlMode::Velocity, 3500);
 	}, {});
 
 	frc2::InstantCommand startFeeder = frc2::InstantCommand( [&] {
