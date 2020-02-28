@@ -53,12 +53,13 @@ bool EncoderDriveV::IsFinished() {
 
 	// DebugOutF("DIFF:"+ std::to_string(m_Y + m_A + m_InitialTicks + m_X - Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition()));
 	// DebugOutF("MOTOR%: "+ std::to_string(Robot::Get().GetDriveTrain().GetLFront()->GetMotorOutputPercent()));
-
+	if(!frc::DriverStation::GetInstance().IsAutonomous()) return true;
 	if( m_X + m_Y + m_A < 0 ){
 		return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() <= (m_Y + m_A + m_InitialTicks + m_X);
 	} else {
 		return Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() >= (m_Y + m_A + m_InitialTicks + m_X);
 	}
+
 
 }//returns true when encoderTicks is equals to or greater than target
 

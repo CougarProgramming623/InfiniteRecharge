@@ -20,7 +20,6 @@ m_TestShoot([&] { return m_ButtonBoard.GetRawButton(14);})
 
 }
 
-
 void OI::Init(){
 
 	m_FodToggle.WhenPressed(frc2::InstantCommand([&] { 
@@ -39,7 +38,7 @@ void OI::Init(){
 		Cob::PushValue(CobKey::LIMELIGHT_TOGGLE, 1); 
 	}, {} ));
 
-	m_Turn.WhenPressed( new EncoderDriveV(36.0, 0.0, 0) );
+	m_Turn.WhenPressed( new TurnToPosSlow() );
 
 	m_TestShoot.WhenPressed(Robot::Get().GetShooter().Shoot());
 

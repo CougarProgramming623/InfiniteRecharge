@@ -24,7 +24,7 @@ void AutoManager::AutoInit(){
 	//m_AutoMap["nop"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("Init"), frc2::WaitCommand(units::second_t(m_Delay)), frc2::PrintCommand("Did Nothing"));
 	frc2::SequentialCommandGroup* group = new frc2::SequentialCommandGroup();
 	group->AddCommands(frc2::PrintCommand("Init"));
-	group->AddCommands(frc2::WaitCommand(units::second_t(m_Delay)));
+	// group->AddCommands(frc2::WaitCommand(units::second_t(m_Delay)));
 	group->AddCommands(TurnToPosSlow());
 	group->AddCommands(Robot::Get().GetShooter().Shoot());
 	group->AddCommands(EncoderDriveV(0.0, -5*12.0, 0));
@@ -42,12 +42,12 @@ void AutoManager::SetInUse(std::string setAuto) {
 }
 
 frc2::Command* AutoManager::GetAuto() {
-	// std::vector<std::unique_ptr<frc2::Command>> steps;
-	// steps.emplace_back(new frc2::WaitCommand(units::second_t(m_Delay)));
-	// steps.emplace_back(m_AutoMap[m_InUse]);
+	std::vector<std::unique_ptr<frc2::Command>> steps;
+	steps.emplace_back(new frc2::WaitCommand(units::second_t(m_Delay)));
+	steps.emplace_back(m_AutoMap[m_InUse]);
 
-	// return new frc2::SequentialCommandGroup(std::move(steps));
-	return m_AutoMap[m_InUse];
+	return new frc2::SequentialCommandGroup(std::move(steps));
+	// return m_AutoMap[m_InUse];
 }
 
 void AutoManager::RunAuto(){
