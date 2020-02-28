@@ -17,8 +17,8 @@ const double GEAR_RATIO = 12.0/1.0; //gear ratio of the bot
 
 	//calculated variables
 const double CPI = (COUNTS_PER_ROTATION * GEAR_RATIO) / ((WHEEL_DIAMETER * (atan(1)*4) )/*PI*/ ); //counter per rotation of this wheel
-const double HORIZONTAL_CALIBRATION = 36.0/26.0; //intended/actual, because mechanim wheels skid a variable to change how many ticks are needed for horizontal traverse
-const double VERTICAL_CALIBRATION = 1.0/1.0;//position: 36.0/31.5 | Velocity: | Magic: 	
+const double HORIZONTAL_CALIBRATION = 36.0/31.0; //intended/actual, because mechanim wheels skid a variable to change how many ticks are needed for horizontal traverse
+const double VERTICAL_CALIBRATION = 36.0/43.0;//position: 36.0/31.5 | Velocity: 36.0/43.0 | Magic: 	
 	//end calculated variables
 
 const int COUNT_THRESHOLD = 1000;//accuracy threshold of counts

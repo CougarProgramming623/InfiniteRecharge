@@ -18,13 +18,13 @@ namespace ohs2020 {
 
 //constructors
 EncoderDriveV::EncoderDriveV(int x, int y, int a){
-	m_X = x*HORIZONTAL_CALIBRATION;
-	m_Y = y*VERTICAL_CALIBRATION;
+	m_X = static_cast <int> (x*HORIZONTAL_CALIBRATION);
+	m_Y = static_cast <int> (y*VERTICAL_CALIBRATION);
 	m_A = a;
 	AddRequirements(&Robot::Get().GetDriveTrain());
 } //base constructor
 
-EncoderDriveV::EncoderDriveV(double x, double y, int a) : EncoderDriveV(static_cast <int> (x*CPI*(12/13)), static_cast <int> (y*CPI), 0) {} 
+EncoderDriveV::EncoderDriveV(double x, double y, int a) : EncoderDriveV(static_cast <int> (x*CPI), static_cast <int> (y*CPI), a) {} 
 //constructor for inches w/ angle
 
 EncoderDriveV::EncoderDriveV(int x, int y) : EncoderDriveV(x, y, 0) {}
@@ -39,7 +39,7 @@ EncoderDriveV::EncoderDriveV(double x, double y) : EncoderDriveV(x, y, 0) {}
 void EncoderDriveV::Initialize() {
 
 	m_InitialTicks = Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition();
-
+	DebugOutF("ERROR: ENCODER DRIVE RUNNING");
 	DebugOutF("Target: "+std::to_string(m_Y + m_A + m_InitialTicks + m_X));
 
 	Robot::Get().GetDriveTrain().GetLFront()->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
@@ -66,6 +66,9 @@ void EncoderDriveV::Execute() {
 	DebugOutF("MOVING: "+std::to_string( Robot::Get().GetDriveTrain().GetLFront()->GetSelectedSensorPosition() - (m_Y + m_A + m_InitialTicks + m_X) ));
 	int max = abs(m_X)+abs(m_A)+abs(m_Y);
 	double maxSpeed = 0.3*(6380/60/10*2048);
+
+	DebugOutF("T: "+std::to_string( m_Y + m_X + m_A / max*maxSpeed  ));
+	DebugOutF("X: "+std::to_string(m_X));
 
 	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::Velocity, (m_Y + m_X + m_A)/max*maxSpeed );
 	Robot::Get().GetDriveTrain().GetRFront()->Set(ControlMode::Velocity, (m_Y - m_X - m_A)/max*maxSpeed );
