@@ -119,8 +119,8 @@ void Shooter::ReverseConveyor() {
 	));
 }
 
-frc2::SequentialCommandGroup* Shooter::Shoot() {
-	frc2::SequentialCommandGroup* group = new frc2::SequentialCommandGroup();
+frc2::SequentialCommandGroup Shooter::Shoot() {
+	frc2::SequentialCommandGroup group = frc2::SequentialCommandGroup();
 
 	frc2::InstantCommand startFlywheel = frc2::InstantCommand( [&] {
 		Flywheel.Set(ControlMode::Velocity, 3500);
@@ -145,7 +145,7 @@ frc2::SequentialCommandGroup* Shooter::Shoot() {
 		highConveyor.Set(ControlMode::PercentOutput, 0.0);
 	}, {});
 
-	group->AddCommands(startFlywheel, frc2::WaitCommand(units::second_t(1.0)), startFeeder, spinConveyers, frc2::WaitCommand(units::second_t(3.0)), stopConveyers, stopShoot);
+	group.AddCommands(startFlywheel, frc2::WaitCommand(units::second_t(1.0)), startFeeder, spinConveyers, frc2::WaitCommand(units::second_t(3.0)), stopConveyers, stopShoot);
 
 	return group;
 }

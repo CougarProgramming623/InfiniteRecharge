@@ -22,7 +22,7 @@ namespace ohs2020 {
 	}
 	
 	void Drive::Execute() {
-		DebugOutF("JOYSTICK");
+		// DebugOutF("JOYSTICK");
 
 		double y = Robot::Get().GetOI().GetDriverJoystick().GetY();
 		double x = Robot::Get().GetOI().GetDriverJoystick().GetX();

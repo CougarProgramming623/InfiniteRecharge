@@ -35,7 +35,7 @@ public:
 
 	double GetFlywheelWU() { return flywheelWU; }
 
-	frc2::SequentialCommandGroup* Shoot();
+	frc2::SequentialCommandGroup Shoot();
 
 private:
 

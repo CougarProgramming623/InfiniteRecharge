@@ -80,7 +80,19 @@
 			"cinttypes": "cpp",
 			"typeinfo": "cpp",
 			"xhash": "cpp",
-			"xstring": "cpp"
+			"xstring": "cpp",
+			"ios": "cpp",
+			"locale": "cpp",
+			"queue": "cpp",
+			"xfacet": "cpp",
+			"xiosbase": "cpp",
+			"xlocale": "cpp",
+			"xlocbuf": "cpp",
+			"xlocinfo": "cpp",
+			"xlocmes": "cpp",
+			"xlocmon": "cpp",
+			"xlocnum": "cpp",
+			"xloctime": "cpp"
 		},
 	}
 }
