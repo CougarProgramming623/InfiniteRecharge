@@ -53,6 +53,8 @@ private:
 	frc2::Button launcher;
 	frc2::Button conveyorToggle;
 
+	frc2::Button reverseFeeder;
+
 	CANCoder FlyWheelEncoder;
 
 	frc2::Timer timer;
