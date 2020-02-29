@@ -49,11 +49,8 @@ void Shooter::SetupShooterButtons() {
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
 
         double speed =  3000 + 500 * Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0);
-		if(abs(speed - 3000) < 100) {
-			Robot::Get().GetOI().GetButtonBoard().SetOutput(3, true);
-		} else {
-			Robot::Get().GetOI().GetButtonBoard().SetOutput(3, false);
-		}
+        Robot::Get().GetOI().GetButtonBoard().SetOutput(2, flywheelWU > 4400);
+		
 		Flywheel.Set(ControlMode::Velocity, speed);
 		DebugOutF("speed: " + std::to_string(speed));
 
@@ -70,6 +67,7 @@ void Shooter::SetupShooterButtons() {
 
 		flywheelWU = (int)((double)Flywheel.GetSelectedSensorVelocity() / 2048 * 600);
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
+        Robot::Get().GetOI().GetButtonBoard().SetOutput(2, false);
 
 		// DebugOutF(std::to_string(flywheelWU));
 
@@ -96,6 +94,9 @@ conveyorToggle.WhenHeld(frc2::RunCommand([&] {
 
 	lowConveyor.Set(ControlMode::PercentOutput, .5);
 	highConveyor.Set(ControlMode::PercentOutput, 1);
+	
+	Robot::Get().GetOI().GetButtonBoard().SetOutput(1, highConveyor.IsFwdLimitSwitchClosed());
+
 
 }, {}));
 
@@ -103,6 +104,7 @@ conveyorToggle.WhenReleased(frc2::InstantCommand([&] {
 	
 	lowConveyor.Set(ControlMode::PercentOutput, 0);
 	highConveyor.Set(ControlMode::PercentOutput, 0);
+	Robot::Get().GetOI().GetButtonBoard().SetOutput(1, false);
 
 }, {}));
 
