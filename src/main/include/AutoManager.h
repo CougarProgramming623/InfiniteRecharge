@@ -36,7 +36,7 @@ public:
 
 private:
 	std::map<std::string, frc2::Command*> m_AutoMap;
-	std::string m_InUse = "default";
+	std::string m_InUse = "shoot&back";
 	double m_Delay = 0;
 };
 }
