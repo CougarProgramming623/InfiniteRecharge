@@ -37,6 +37,8 @@ public:
 
 	frc2::SequentialCommandGroup Shoot();
 
+	bool CheckVolt();
+
 private:
 
 	bool isLoaded = false;
@@ -58,6 +60,9 @@ private:
 	CANCoder FlyWheelEncoder;
 
 	frc2::Timer timer;
+	
+	std::array<double, 10> volt; 
+	int index;
 };
 
 }//namespace

@@ -76,6 +76,8 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
+	
+	m_shooter.CheckVolt();
 
 	Cob::InMesUpdate();
 

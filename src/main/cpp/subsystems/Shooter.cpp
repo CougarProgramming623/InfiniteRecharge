@@ -38,6 +38,12 @@ void Shooter::Init() {
 
 	SetupShooterButtons();
 	SetupConveyorButtons();
+	volt = std::array<double, 10>();
+	index = 0;
+
+	for(unsigned int i = 0; i < volt.size(); i++){
+		volt[i] = 0.0;
+	}//set vals for volt
 
 }
 
@@ -173,6 +179,31 @@ frc2::SequentialCommandGroup Shooter::Shoot() {
 	return group;
 }
 
+bool Shooter::CheckVolt(){//(!)(!)(!) NOT VOLTAGE IS AMPS
+	volt[index % volt.size()] = highConveyor.GetStatorCurrent();
+	index++;
 
+	if(volt[volt.size()] > 0.0){
+	
+		double avg  = 0;
+
+		for(unsigned int i = 0; i < volt.size(); i++){
+			avg += volt[i];
+		}
+
+		avg /= volt.size();
+
+		if(avg >= 1.0){
+
+			ReverseConveyor();
+
+			return true;
+		}
+
+	}
+
+	return false;
+
+}
 
 }//namespace
