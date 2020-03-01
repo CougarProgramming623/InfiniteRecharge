@@ -66,7 +66,7 @@ private:
 	Climb m_climb;
 	int m_CobCheck;
 
-	static const int kLength = 70; // **test**
+	static const int kLength = 140; // **test**
 	frc::AddressableLED m_led{9};
 	std::array<frc::AddressableLED::LEDData, kLength> m_ledBuffer;
 	int ledOffset = 0;

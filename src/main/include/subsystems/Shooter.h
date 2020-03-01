@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>	
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/SequentialCommandGroup.h>
 
 #include <frc2/Timer.h>
 
@@ -34,6 +35,8 @@ public:
 
 	double GetFlywheelWU() { return flywheelWU; }
 
+	frc2::SequentialCommandGroup Shoot();
+
 private:
 
 	bool isLoaded = false;
@@ -49,6 +52,8 @@ private:
 	frc2::Button FlyWheelTuner;
 	frc2::Button launcher;
 	frc2::Button conveyorToggle;
+
+	frc2::Button reverseFeeder;
 
 	CANCoder FlyWheelEncoder;
 
