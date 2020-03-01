@@ -15,6 +15,18 @@ namespace ohs2020{
 
 const double DefaultShooterPower = 1;
 
+
+class HighShooterSubsystem : public frc2::SubsystemBase {
+
+};
+
+class LowShooterSubsystem : public frc2::SubsystemBase {
+
+};
+
+static HighShooterSubsystem s_HighShooterSubsystem;
+static LowShooterSubsystem s_LowShooterSubsystem;
+
 Shooter::Shooter() : 
 
 Flywheel(RobotID::GetID(FLYWHEEL)),
@@ -91,9 +103,9 @@ void Shooter::SetupShooterButtons() {
 	reverseFeeder.WhenHeld(frc2::RunCommand([&] {
 
 		highConveyor.Set(ControlMode::PercentOutput, -1);
-		lowConveyor.Set(ControlMode::PercentOutput, -1);
+		lowConveyor.Set(ControlMode::PercentOutput, -.5);
 
-	}, {} ));
+	}, { &s_HighShooterSubsystem, &s_LowShooterSubsystem } ));
 
 	reverseFeeder.WhenReleased(frc2::InstantCommand([&] {
 
@@ -113,8 +125,9 @@ conveyorToggle.WhenHeld(frc2::RunCommand([&] {
 	
 	Robot::Get().GetOI().GetButtonBoard().SetOutput(1, highConveyor.IsFwdLimitSwitchClosed());
 
-
-}, {}));
+	CheckHighCurrent();
+	CheckLowCurrent();
+}, { &s_HighShooterSubsystem, &s_LowShooterSubsystem }));
 
 conveyorToggle.WhenReleased(frc2::InstantCommand([&] {
 	
@@ -131,7 +144,7 @@ void Shooter::ReverseConveyor() {
 
 		frc2::InstantCommand( [&] { 
 			highConveyor.Set(ControlMode::PercentOutput, -1);
-		}, {}), 
+		},  &s_HighShooterSubsystem), 
 
 		frc2::WaitCommand(units::second_t(1)),
 
@@ -161,7 +174,7 @@ frc2::SequentialCommandGroup Shooter::Shoot() {
 	frc2::InstantCommand spinConveyers = frc2::InstantCommand( [&] { 
 		lowConveyor.Set(ControlMode::PercentOutput, 0.5);
 		highConveyor.Set(ControlMode::PercentOutput, 1.0); 
-	}, {});
+	}, { &s_HighShooterSubsystem, &s_LowShooterSubsystem });
 
 	frc2::InstantCommand stopConveyers = frc2::InstantCommand( [&] { 
 		lowConveyor.Set(ControlMode::PercentOutput, 0.0);
@@ -174,5 +187,62 @@ frc2::SequentialCommandGroup Shooter::Shoot() {
 }
 
 
+bool Shooter::CheckHighCurrent() {
+
+	if (highCurrentCount >= 4) { 
+		highCurrentCount = 0;
+
+	static frc2::SequentialCommandGroup* group = nullptr;
+	if (!group) {
+		group = new frc2::SequentialCommandGroup(
+
+			frc2::InstantCommand([&] {
+				highConveyor.Set(ControlMode::PercentOutput, -1);
+			}, { &s_HighShooterSubsystem }),
+
+			frc2::WaitCommand(units::second_t(2)),
+
+			frc2::InstantCommand([&] {
+				highConveyor.Set(ControlMode::PercentOutput, 1);
+			}, {})
+		);
+	}
+	frc2::CommandScheduler::GetInstance().Schedule(group);
+
+		highConveyor.Set(ControlMode::PercentOutput, 1);
+
+		return true;
+	}
+
+	return false;
+}
+
+bool Shooter::CheckLowCurrent() {
+
+	if (lowCurrentCount >= 4) { 
+		lowCurrentCount = 0;
+
+		
+
+		frc2::CommandScheduler::GetInstance().Schedule( new frc2::SequentialCommandGroup(
+
+			frc2::InstantCommand([&] {
+				lowConveyor.Set(ControlMode::PercentOutput, -1);
+			}, {&s_LowShooterSubsystem}),
+
+			frc2::WaitCommand(units::second_t(1)),
+
+			frc2::InstantCommand([&] {
+				lowConveyor.Set(ControlMode::PercentOutput, .5);
+			}, {})
+		));
+
+
+
+		return true;
+	}
+
+	return false;
+}
 
 }//namespace

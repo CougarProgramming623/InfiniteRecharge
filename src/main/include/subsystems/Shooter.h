@@ -29,13 +29,29 @@ public:
 
 	void ReverseConveyor();
 
+	bool CheckHighCurrent();
+
+	void SetHighCurrentCount(int newCurrentCount) { highCurrentCount = newCurrentCount; }
+
+	int GetHighCurrentCount() { return highCurrentCount; }
+
+	bool CheckLowCurrent();
+
+	void SetLowCurrentCount(int newCurrentCount) { lowCurrentCount = newCurrentCount; }
+
+	int GetLowCurrentCount() { return lowCurrentCount; }
+
 	bool FlyWheelMode = false;
 
 	bool GetFlywheelState() { return isFlywheelOn; }
 
 	double GetFlywheelWU() { return flywheelWU; }
 
+	WPI_TalonSRX* GetHighConveyor() { return &highConveyor; }
+	WPI_TalonSRX* GetLowConveyor() { return &lowConveyor; }
+
 	frc2::SequentialCommandGroup Shoot();
+
 
 private:
 
@@ -57,7 +73,14 @@ private:
 
 	CANCoder FlyWheelEncoder;
 
+	frc2::RunCommand m_ConveyorToggle;
+
 	frc2::Timer timer;
+
+	int highCurrentCount = 0;
+	int lowCurrentCount = 0;
+
+	
 };
 
 }//namespace

@@ -76,6 +76,7 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
+	
 
 	Cob::InMesUpdate();
 
@@ -125,6 +126,19 @@ void Robot::RobotPeriodic() {
 	}
 	
 	m_led.SetData(m_ledBuffer);
+
+	if (m_shooter.GetHighConveyor()->GetSupplyCurrent() > 7.0) { 
+		m_shooter.SetHighCurrentCount(m_shooter.GetHighCurrentCount() + 1);
+	} else {
+		m_shooter.SetHighCurrentCount(0);
+	}
+
+	if (m_shooter.GetLowConveyor()->GetSupplyCurrent() > 1.5) { 
+		m_shooter.SetLowCurrentCount(m_shooter.GetLowCurrentCount() + 1);
+	} else {
+		m_shooter.SetLowCurrentCount(0);
+	}
+
 
 	//DebugOutF("FOD: " + std::to_string(GetOI().IsFOD()));
 }
