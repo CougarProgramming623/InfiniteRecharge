@@ -90,13 +90,15 @@ void Shooter::SetupShooterButtons() {
 
 	reverseFeeder.WhenHeld(frc2::RunCommand([&] {
 
-		highConveyor.Set(ControlMode::PercentOutput, -0.5);
+		highConveyor.Set(ControlMode::PercentOutput, -1);
+		lowConveyor.Set(ControlMode::PercentOutput, -1);
 
 	}, {} ));
 
 	reverseFeeder.WhenReleased(frc2::InstantCommand([&] {
 
 		highConveyor.Set(ControlMode::PercentOutput, 0);
+		lowConveyor.Set(ControlMode::PercentOutput, 0);
 
 	}, {} ));
 } 
