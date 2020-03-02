@@ -34,7 +34,7 @@ void GyroResetConfirm(const nt::NetworkTableEntry& entry) {
 
 
 void ReverseConveyor(const nt::NetworkTableEntry& entry) {
-		Robot::Get().GetShooter().ReverseConveyor();
+	//Robot::Get().GetShooter().ReverseConveyor();
 }
 
 void SetDelayMess(const nt::NetworkTableEntry& entry){

@@ -27,8 +27,6 @@ public:
 	void SetupShooterButtons();
 	void SetupConveyorButtons();
 
-	void ReverseConveyor();
-
 	bool CheckHighCurrent();
 
 	void SetHighCurrentCount(int newCurrentCount) { highCurrentCount = newCurrentCount; }
@@ -73,9 +71,10 @@ private:
 
 	CANCoder FlyWheelEncoder;
 
-	frc2::RunCommand m_ConveyorToggle;
-
 	frc2::Timer timer;
+
+	frc2::SequentialCommandGroup highGroup;
+	frc2::SequentialCommandGroup lowGroup;
 
 	int highCurrentCount = 0;
 	int lowCurrentCount = 0;
