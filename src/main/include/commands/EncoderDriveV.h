@@ -3,33 +3,20 @@
 //includes
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc2/command/SequentialCommandGroup.h>
-#include <math.h>
 #include <wpi/SmallSet.h>
 //end includes 
 
 namespace ohs2020 {
 
-//robot information variables
-//const unsigned short int COUNTS_PER_ROTATION = 2048; //encoder counts per rotation, falcon500 integrated = 2048CPR
-//const float WHEEL_DIAMETER = 8.0f; //diameter in inches
-//const double GEAR_RATIO = 12.0/1.0; //gear ratio of the bot
-
-	//calculated variables
-//const double CPI = (COUNTS_PER_ROTATION * GEAR_RATIO) / ((WHEEL_DIAMETER * (atan(1)*4))/*PI*/ ); //counter per rotation of this wheel
-//const double HORIZONTAL_CALIBRATION = 1/1; //intended/actual, because mechanim wheels skid a variable to change how many ticks are needed for horizontal traverse
-	//end calculated variables
-
-//end robot information variables
-
-class EncoderDriveV : public frc2::CommandHelper<frc2::CommandBase, EncoderDriveV> /*frc2::CommandHelper<frc2::CommandBase, EncoderDriveV> */{
+class EncoderDriveV : public frc2::CommandHelper<frc2::CommandBase, EncoderDriveV>{
 	
 public:
+
 	//constructors
-	EncoderDriveV(int x, int y, int a);//using ticks
-	EncoderDriveV(double x, double y, int a);//using inches
-	EncoderDriveV(int x, int y);//ticks w/o rot
-	EncoderDriveV(double x, double y);//inches w/o rot
+	EncoderDriveV(int x, int y, int a);//passes # of encoder ticks travelled
+	EncoderDriveV(double x, double y, int a);//pass in distance in inches and converts to # of encoder ticks
+	EncoderDriveV(int x, int y);//passes # of encoder ticks travelled without a rotation value
+	EncoderDriveV(double x, double y);//pass in distance in inches and converts to # of encoder ticks without a rotation value
 	//end constructors
 
 	//overrides
@@ -44,14 +31,19 @@ public:
 	virtual std::unique_ptr<frc2::Command> TransferOwnership() && override{
 		return std::unique_ptr<frc2::Command>(this);
 	}
-	
 	//end of overrides
 
 private:
 
 	//movement variables
-	int m_X, m_Y, m_A;//x and y traverse (horizontal(x) & vertical(y)) in encoder ticks, EncoderTurnTicks(A)
+	int m_X, m_Y, m_A;
+	//m_X:# of ticks to move left and right, negative being left, positive being right
+	//m_Y:# of ticks to move forward and back, negative being reverse, positive being forward
+	//m_A:# of ticks to turn, negative being left, and positive being right (relative to 'forward' on wheels)
+	
 	int m_InitialTicks;
+	//the starting number of ticks of the 'front left' wheel, uses this number to track relative progress in driving
+	
 	//end movement variables
 
 };//end class
