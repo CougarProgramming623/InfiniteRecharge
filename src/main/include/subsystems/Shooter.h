@@ -48,13 +48,12 @@ private:
 	WPI_TalonSRX m_LowConveyor;
 	WPI_TalonSRX m_HighConveyor;
 
-	frc2::Button m_FlyWheelToggle;
-	frc2::Button m_FlyWheelTuner;
+	CANCoder m_FlyWheelEncoder;
+
 	frc2::Button m_Launcher;
+	frc2::Button m_FlyWheelToggle;
 	frc2::Button m_ConveyorToggle;
 	frc2::Button m_ReverseFeeder;
-
-	CANCoder m_FlyWheelEncoder;
 
 	frc2::Timer m_Timer;
 };

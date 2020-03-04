@@ -41,8 +41,8 @@ private:
 	frc2::Button m_ClimbLeft;
 	frc2::Button m_ClimbRight;
 
-	frc2::Button m_EndgameOverride;
 	frc2::Button m_Deployer;
+	frc2::Button m_EndgameOverride;
 
 	frc2::Timer m_Timer;
 };

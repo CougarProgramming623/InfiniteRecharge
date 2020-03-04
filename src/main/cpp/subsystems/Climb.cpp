@@ -18,12 +18,12 @@ Climb::Climb() :
 m_ClimbMotorLeft		( RobotID::GetID(CLIMB_LEFT)),
 m_ClimbMotorRight		( RobotID::GetID(CLIMB_RIGHT)), 
 
-m_ClimbUp([&]         { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(19);  }),
-m_ClimbDown([&]		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(20);  }),
-m_ClimbLeft([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(21);  }),
-m_ClimbRight([&]      { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(22);  }),
-m_Deployer([&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(17);  }),
-m_EndgameOverride([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(18);  }),
+m_ClimbUp([&]        	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(19);  }),
+m_ClimbDown([&]			{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(20);  }),
+m_ClimbLeft([&]       	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(21);  }),
+m_ClimbRight([&]      	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(22);  }),
+m_Deployer([&] 			{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(17);  }),
+m_EndgameOverride([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(18);  }),
 
 m_Timer()
 {
