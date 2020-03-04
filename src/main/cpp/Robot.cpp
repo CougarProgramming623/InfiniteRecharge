@@ -18,8 +18,6 @@
 #include "ohs/RobotID.h"
 #include "ohs/Log.h"
 
-
-
 namespace ohs2020 {
 
 	Robot* Robot::s_Instance = nullptr;
@@ -111,16 +109,25 @@ void Robot::RobotPeriodic() {
 	}
 
 	if(frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kRed){
-		for(int i = 0; i < kLength; i++){
-			m_ledBuffer[i].SetRGB(255, 0, 0);
-		}
+
+		for(int i = 0; i < kLength; i++) m_ledBuffer[i].SetRGB(255, 0, 0);
+
+		if(abs(Cob::GetValue<double>(CobKey::VISION_X) < 1)) 
+			for(int i = 0; i < 10; i++) m_ledBuffer[i].SetRGB(0, 255, 0);
+
 	} else if (frc::DriverStation::GetInstance().GetAlliance() == frc::DriverStation::Alliance::kBlue){
-		for(int i = 0; i < kLength; i++){
-			m_ledBuffer[i].SetRGB(0, 0, 255);
-		}
+
+		for(int i = 0; i < kLength; i++) m_ledBuffer[i].SetRGB(0, 0, 255);
+
+		if(abs(Cob::GetValue<double>(CobKey::VISION_X) < 1)) 
+			for(int i = 0; i < 10; i++) m_ledBuffer[i].SetRGB(0, 255, 0);
+
 	} else {
+		int speed = 0;
 		for(int i = 0; i < kLength; i++){
-			m_ledBuffer[i].SetRGB(0, 255, 0);
+			m_ledBuffer[i].SetRGB(0, (speed + (i * 180 / kLength) % 180) * 10, 0); //rainbow effect hopefully
+			speed +=3;
+			speed %= 180;
 		}
 	}
 	
