@@ -33,17 +33,17 @@ public:
 	
 private:
 
-	WPI_TalonSRX climbMotorLeft;
-	WPI_TalonSRX climbMotorRight;
+	WPI_TalonSRX m_ClimbMotorLeft;
+	WPI_TalonSRX m_ClimbMotorRight;
 
-	frc2::Button climbUp;
-	frc2::Button climbDown;
-	frc2::Button climbLeft;
-	frc2::Button climbRight;
+	frc2::Button m_ClimbUp;
+	frc2::Button m_ClimbDown;
+	frc2::Button m_ClimbLeft;
+	frc2::Button m_ClimbRight;
 
-	frc2::Button endgameOverride;
-	frc2::Button deployer;
+	frc2::Button m_Deployer;
+	frc2::Button m_EndgameOverride;
 
-	frc2::Timer timer;
+	frc2::Timer m_Timer;
 };
 }//namespace
