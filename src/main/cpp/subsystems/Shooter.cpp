@@ -54,7 +54,7 @@ void Shooter::SetupShooterButtons() {
         Robot::Get().GetOI().GetButtonBoard().SetOutput(2, flywheelWU > 4400);
 		
 		Flywheel.Set(ControlMode::Velocity, speed);
-		DebugOutF("speed: " + std::to_string(speed));
+		Cob::PushValue(CobKey )
 
 	}, [this] (bool f){//on end
 		DebugOutF("shooter end");
