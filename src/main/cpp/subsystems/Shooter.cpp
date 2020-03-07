@@ -50,11 +50,11 @@ void Shooter::SetupShooterButtons() {
 		// DebugOutF(std::to_string(flywheelWU));
 		frc::SmartDashboard::PutNumber("Flywheel Speed", flywheelWU);
 
-        double speed = 3000 + 500 * Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0);
+        double speed = 3000 + 1000 * Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0);
         Robot::Get().GetOI().GetButtonBoard().SetOutput(2, flywheelWU > 4400);
 		
 		Flywheel.Set(ControlMode::Velocity, speed);
-		Cob::PushValue(CobKey )
+		Cob::PushValue(CobKey::FLYWHEEL_SPEED, speed );
 
 	}, [this] (bool f){//on end
 		DebugOutF("shooter end");
