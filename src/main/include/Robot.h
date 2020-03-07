@@ -11,6 +11,7 @@
 #include "subsystems/DriveTrain.h"
 #include "subsystems/Shooter.h"
 #include "subsystems/Climb.h"
+#include "subsystems/Intake.h"
 
 #include "Util.h"
 
@@ -63,6 +64,7 @@ private:
 	DriveTrain m_DriveTrain;
 	AHRS* navx;
 	Shooter m_shooter;
+	// ohsIntake m_intake;
 	Climb m_climb;
 	int m_CobCheck;
 
