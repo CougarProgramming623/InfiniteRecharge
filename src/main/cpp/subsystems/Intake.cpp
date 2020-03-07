@@ -16,9 +16,9 @@ m_IntakeDown([&]		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(10
 m_IntakeStowed([&]   	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(9);}),
 m_IntakeUp([&]			{ return !Robot::Get().GetOI().GetButtonBoard().GetRawButton(10) && !Robot::Get().GetOI().GetButtonBoard().GetRawButton(9);}),
 
-m_IntakeOn([&] 			{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(14);}),
+m_IntakeOn([&] 			{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11);}),
 m_IntakeOff([&] 		{ return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2);}),
-m_IntakeReverse([&] 	{ return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2);}),
+m_IntakeReverse([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6);}),
 
 m_IntakePositioner	(RobotID::GetID(INTAKE_POSITIONER)),
 m_MainIntakeMotor	(RobotID::GetID(INTAKE_SPIN)),
