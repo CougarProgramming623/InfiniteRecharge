@@ -55,6 +55,8 @@ private:
 
 	frc2::Button reverseFeeder;
 
+	frc2::Button m_BloopFeeder; 
+
 	CANCoder FlyWheelEncoder;
 
 	frc2::Timer timer;

@@ -2,6 +2,7 @@
 
 #include <ctre/Phoenix.h>
 #include <frc2/command/button/Button.h>
+#include <frc/DigitalInput.h>
 
 #include "Robot.h"
 
@@ -11,6 +12,7 @@ class Intake {
 
 public:
 	Intake();
+
 
 	void Init();
 	void SetPositionButton();
@@ -29,7 +31,8 @@ frc2::Button m_IntakeReverse;
 WPI_TalonSRX m_IntakePositioner;
 WPI_TalonSRX m_MainIntakeMotor;
 
-frc::DigitalInput input;
+frc::DigitalInput m_MiddleLimit;
+bool lastSwitch = false;
 
 };
 }//namespace
