@@ -166,9 +166,9 @@ void DriveTrain::CartesianDrive(double y, double x, double rotation, double angl
 
 frc2::PIDCommand* DriveTrain::TurnToPos(double angle) {
 
-	std::function<double()> measurement = []()->double{return (double)(Robot::Get().GetNavX()->GetYaw());};
+	std::function<double()> measurement = []()->double{return (double)(Robot::Get().GetNavXYaw());};
 	std::function<void(double)> output = [this](double measure) { 
-		CartesianDrive(0, 0, measure/2, Robot::Get().GetNavX()->GetYaw());
+		CartesianDrive(0, 0, measure/2, Robot::Get().GetNavXYaw());
 		//DebugOutF(std::to_string(measure/2)); 
 	};
 

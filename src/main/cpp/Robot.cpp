@@ -39,8 +39,7 @@ void Robot::RobotInit() {
 	m_oi.Init();
 	m_shooter.Init();
 	m_climb.Init();
-	Intake* intake = new Intake();
-	intake->Init();
+	m_intake.Init();
 
 	RemoveRegistry(navx);
 
@@ -157,6 +156,7 @@ void Robot::DisabledPeriodic() {
  */
 void Robot::AutonomousInit() {
 	navx->ZeroYaw();
+	m_NavXOffset = 0;
 	m_autonomousCommand = m_AutoManager.GetAuto();
 	frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand);
 }

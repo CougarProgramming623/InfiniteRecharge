@@ -27,7 +27,7 @@ namespace ohs2020 {
 		double y = Robot::Get().GetOI().GetDriverJoystick().GetY();
 		double x = Robot::Get().GetOI().GetDriverJoystick().GetX();
 		double rot = Robot::Get().GetOI().GetDriverJoystick().GetZ();
-		double gyro = Robot::Get().GetNavX()->GetYaw();
+		double gyro = Robot::Get().GetNavXYaw();
 
 		x = abs(x) <= 0.05f ? 0 : x;
 		y = abs(y) <= 0.05f ? 0 : y;

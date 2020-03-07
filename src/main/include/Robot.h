@@ -47,9 +47,12 @@ public:
 	inline OI& GetOI() { return m_oi; }
 	inline DriveTrain& GetDriveTrain() { return m_DriveTrain; }
 	inline Shooter& GetShooter() { return m_shooter; }
+	inline Intake& GetIntake() { return m_intake; }
 	inline AHRS* GetNavX() const { return navx; }
 	inline bool IsInitComplete() const { return m_Init; }
 	inline AutoManager& GetAutoMan() { return m_AutoManager; }
+	inline double GetNavXYaw() { return navx->GetYaw() + m_NavXOffset; }
+	inline void SetNavXOffset(double offset) { m_NavXOffset = offset; }
 
 
 private:
@@ -64,7 +67,7 @@ private:
 	DriveTrain m_DriveTrain;
 	AHRS* navx;
 	Shooter m_shooter;
-	// ohsIntake m_intake;
+	Intake m_intake;
 	Climb m_climb;
 	int m_CobCheck;
 
@@ -74,6 +77,8 @@ private:
 	int ledOffset = 0;
 
 	bool m_Init = false;
+
+	double m_NavXOffset;
 
 private:
 	static Robot* s_Instance;

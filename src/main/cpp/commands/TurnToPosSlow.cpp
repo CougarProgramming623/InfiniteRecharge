@@ -5,7 +5,6 @@ namespace ohs2020 {
 
 TurnToPosSlow::TurnToPosSlow() {
 	AddRequirements(&Robot::Get().GetDriveTrain());
-
 }
 
 void TurnToPosSlow::Initialize() {

@@ -1,6 +1,7 @@
 #include "AutoManager.h"
 #include "commands/EncoderDriveV.h"
 #include "commands/TurnToPosSlow.h"
+#include "commands/TurnToPosPID.h"
 #include "subsystems/Shooter.h"
 #include "Robot.h"
 
@@ -22,30 +23,44 @@ void AutoManager::AutoInit(){
 	// m_AutoMap["safe"] = new frc2::SequentialCommandGroup(frc2::WaitCommand(units::second_t(m_Delay)), EncoderDriveV(0.0, -24.0, 0));
 
 	//m_AutoMap["nop"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("Init"), frc2::WaitCommand(units::second_t(m_Delay)), frc2::PrintCommand("Did Nothing"));
+
+	frc2::SequentialCommandGroup* IntakeAuto = new frc2::SequentialCommandGroup();
+	IntakeAuto->AddCommands(frc2::InstantCommand([&] { Robot::Get().SetNavXOffset(180.0); }, {}));
+	IntakeAuto->AddCommands(frc2::InstantCommand([&] {Robot::Get().GetIntake().GetPositioner().Set(ControlMode::PercentOutput, -1); }, {}));
+	IntakeAuto->AddCommands(frc2::InstantCommand([&] {Robot::Get().GetIntake().GetSpinner().Set(ControlMode::PercentOutput, 1); }, {}));
+	IntakeAuto->AddCommands(EncoderDriveV(0.0, 76.63));//Move to trench **86.63**
+	IntakeAuto->AddCommands(EncoderDriveV(0.0, 36.0));//Move to first ball
+	IntakeAuto->AddCommands(EncoderDriveV(0.0, 36.0));//Move to second ball
+	IntakeAuto->AddCommands(frc2::InstantCommand([&] {Robot::Get().GetIntake().GetSpinner().Set(ControlMode::PercentOutput, 0);}, {}));//Stop intake
+	IntakeAuto->AddCommands(TurnToPosPID(179.0));//Turn around (facing target)
+	IntakeAuto->AddCommands(EncoderDriveV(0.0, 72.0)); //Move to end of trench
+	IntakeAuto->AddCommands(TurnToPosSlow());//Aim
+	IntakeAuto->AddCommands(Robot::Get().GetShooter().Shoot(7.0));//Shoot all 5 balls
 	
+	m_AutoMap["5ballauto"] = IntakeAuto;
 
 	frc2::SequentialCommandGroup* shootAndBackwards = new frc2::SequentialCommandGroup();
 	shootAndBackwards->AddCommands(TurnToPosSlow());
-	shootAndBackwards->AddCommands(Robot::Get().GetShooter().Shoot());
+	shootAndBackwards->AddCommands(Robot::Get().GetShooter().Shoot(4.0));
 	shootAndBackwards->AddCommands(EncoderDriveV(0.0, -5*12.0, 0));
 	m_AutoMap["shoot&back"] = shootAndBackwards;
 
 
 	frc2::SequentialCommandGroup* shootAndForwards = new frc2::SequentialCommandGroup();
 	shootAndForwards->AddCommands(TurnToPosSlow());
-	shootAndForwards->AddCommands(Robot::Get().GetShooter().Shoot());
+	shootAndForwards->AddCommands(Robot::Get().GetShooter().Shoot(4.0));
 	shootAndForwards->AddCommands(EncoderDriveV(0.0, 5*12.0, 0));
 	m_AutoMap["shoot&forwards"] = shootAndForwards;
 
 	frc2::SequentialCommandGroup* onlyShoot = new frc2::SequentialCommandGroup();
 	onlyShoot->AddCommands(frc2::PrintCommand("Init"));
 	onlyShoot->AddCommands(TurnToPosSlow());
-	onlyShoot->AddCommands(Robot::Get().GetShooter().Shoot());
+	onlyShoot->AddCommands(Robot::Get().GetShooter().Shoot(4.0));
 	m_AutoMap["onlyShoot"] = onlyShoot;
 
 	frc2::SequentialCommandGroup* onlyShootNoAlign = new frc2::SequentialCommandGroup();
 	onlyShootNoAlign->AddCommands(frc2::PrintCommand("Init"));
-	onlyShootNoAlign->AddCommands(Robot::Get().GetShooter().Shoot());
+	onlyShootNoAlign->AddCommands(Robot::Get().GetShooter().Shoot(4.0));
 	m_AutoMap["onlyShootNoAlign"] = onlyShootNoAlign;
 
 
@@ -53,6 +68,9 @@ void AutoManager::AutoInit(){
 	onlyBackwards->AddCommands(frc2::PrintCommand("Init"));
 	m_AutoMap["onlyBackwards"] = onlyBackwards;
 	
+	
+	//m_AutoMap["shoot-backward"] = new frc2::SequentialCommandGroup(frc2::PrintCommand("Init"), frc2::WaitCommand(units::second_t(m_Delay)), TurnToPosSlow(), Robot::Get().GetShooter().Shoot(), EncoderDriveV(0.0, -24.0, 0));
+	//m_AutoMap["debug"] = new frc2::SequentialCommandGroup(frc2::WaitCommand(units::second_t(m_Delay)), frc2::InstantCommand([&]{OHS_DEBUG([&](auto f){f << "Debugged";})}));
 }
 
 void AutoManager::SetInUse(std::string setAuto) {

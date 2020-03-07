@@ -1,6 +1,7 @@
 #include "subsystems/Intake.h"
 
 #include "ohs/RobotID.h"
+#include "Robot.h"
 
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/FunctionalCommand.h>
@@ -20,7 +21,7 @@ m_IntakeOn([&] 			{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6)
 m_IntakeReverse([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11);}),
 
 m_IntakePositioner	(RobotID::GetID(INTAKE_POSITIONER)),
-m_MainIntakeMotor	(RobotID::GetID(INTAKE_SPIN)),
+m_Spinner			(RobotID::GetID(INTAKE_SPIN)),
 
 m_MiddleLimit(0){
 
@@ -70,11 +71,12 @@ void Intake::SetPositionButton() {
 
 void Intake::SetToggleIntakeButtons() {
 
-	m_IntakeOn.WhileHeld(frc2::RunCommand([&] 				{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, -1);}, {}));
-	m_IntakeOn.WhenReleased(frc2::InstantCommand([&] 		{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, 0);	}, {}));
+	m_IntakeOn.WhileHeld(frc2::RunCommand([&] 				{ m_Spinner.Set(ControlMode::PercentOutput, -1);}, {}));
+	m_IntakeOn.WhenReleased(frc2::InstantCommand([&] 		{ m_Spinner.Set(ControlMode::PercentOutput, 0);	}, {}));
 
-	m_IntakeReverse.WhenPressed(frc2::InstantCommand([&]	{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, 1); }, {}));
-	m_IntakeReverse.WhenReleased(frc2::InstantCommand([&] 	{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, 0); }, {}));
+	m_IntakeReverse.WhenPressed(frc2::InstantCommand([&]	{ m_Spinner.Set(ControlMode::PercentOutput, 1); }, {}));
+	m_IntakeReverse.WhenReleased(frc2::InstantCommand([&] 	{ m_Spinner.Set(ControlMode::PercentOutput, 0); }, {}));
 
 }
+
 }//namespace
