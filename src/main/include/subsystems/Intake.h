@@ -25,7 +25,6 @@ frc2::Button m_IntakeStowed;
 frc2::Button m_IntakeUp;
 
 frc2::Button m_IntakeOn;
-frc2::Button m_IntakeOff;
 frc2::Button m_IntakeReverse;
 
 WPI_TalonSRX m_IntakePositioner;

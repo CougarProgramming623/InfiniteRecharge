@@ -16,9 +16,8 @@ m_IntakeDown([&]		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(10
 m_IntakeStowed([&]   	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(9);}),
 m_IntakeUp([&]			{ return !Robot::Get().GetOI().GetButtonBoard().GetRawButton(10) && !Robot::Get().GetOI().GetButtonBoard().GetRawButton(9);}),
 
-m_IntakeOn([&] 			{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(14);}),
-m_IntakeOff([&] 		{ return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2);}),
-m_IntakeReverse([&] 	{ return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2);}),
+m_IntakeOn([&] 			{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(6);}),
+m_IntakeReverse([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(11);}),
 
 m_IntakePositioner	(RobotID::GetID(INTAKE_POSITIONER)),
 m_MainIntakeMotor	(RobotID::GetID(INTAKE_SPIN)),
@@ -71,11 +70,11 @@ void Intake::SetPositionButton() {
 
 void Intake::SetToggleIntakeButtons() {
 
-	m_IntakeOn.WhileHeld(frc2::RunCommand([&] 		{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, 1);	}, {}));
+	m_IntakeOn.WhileHeld(frc2::RunCommand([&] 				{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, -1);}, {}));
 	m_IntakeOn.WhenReleased(frc2::InstantCommand([&] 		{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, 0);	}, {}));
-	
-	// m_IntakeOff.WhenPressed(frc2::InstantCommand([&] 		{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, 0);				}, {}));
-	// m_IntakeReverse.WhenPressed(frc2::InstantCommand([&] 	{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, .5);}, {}));
+
+	m_IntakeReverse.WhenPressed(frc2::InstantCommand([&]	{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, 1); }, {}));
+	m_IntakeReverse.WhenReleased(frc2::InstantCommand([&] 	{ m_MainIntakeMotor.Set(ControlMode::PercentOutput, 0); }, {}));
 
 }
 }//namespace
