@@ -55,7 +55,13 @@ private:
 	frc2::Button m_ConveyorToggle;
 	frc2::Button m_ReverseFeeder;
 
-	frc2::Timer m_Timer;
+
+	frc2::Button m_BloopFeeder; 
+
+	CANCoder FlyWheelEncoder;
+
+	frc2::Timer timer;
+
 };
 
 }//namespace

@@ -71,6 +71,8 @@ namespace ohs623 {
 			IDs[BotType::SABER][Motor::FEEDER] = { 3, MotorControllerType::TALON_SRX };     
 			IDs[BotType::SABER][Motor::LOW_TRANSPORT] = { 7 , MotorControllerType::TALON_SRX };     
 			IDs[BotType::SABER][Motor::HIGH_TRANSPORT] = { 15 , MotorControllerType::TALON_SRX };     
+			IDs[BotType::SABER][Motor::INTAKE_POSITIONER] = { 11 , MotorControllerType::TALON_SRX };     
+			IDs[BotType::SABER][Motor::INTAKE_SPIN] = { 14 , MotorControllerType::TALON_SRX };     
 
 			//Default to saber if the bot type cant be found
 			s_CurrentBot = BotType::SABER;

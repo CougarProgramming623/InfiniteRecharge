@@ -23,10 +23,13 @@ m_LowConveyor(RobotID::GetID(LOW_TRANSPORT)),
 m_HighConveyor(RobotID::GetID(HIGH_TRANSPORT)),
 m_FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
 
+
 m_Launcher( [&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); 	}),
 m_FlyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(4);	}), 
 m_ConveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 	}),
 m_ReverseFeeder( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(14); 	}),
+
+m_BloopFeeder([&]  { return highConveyor.IsFwdLimitSwitchClosed();} ),
 
 m_Timer() {
 
@@ -123,6 +126,14 @@ m_ConveyorToggle.WhenReleased(frc2::InstantCommand([&] {
 	Robot::Get().GetOI().GetButtonBoard().SetOutput(1, false);
 
 }, {}));
+
+m_BloopFeeder.WhenPressed(frc2::SequentialCommandGroup(
+
+frc2::InstantCommand([&] { feeder.Set(ControlMode::PercentOutput, 1); }, {}),
+frc2::WaitCommand(units::second_t(.25)),
+frc2::InstantCommand([&] { feeder.Set(ControlMode::PercentOutput, 0); }, {})
+
+));
 
 }
 
