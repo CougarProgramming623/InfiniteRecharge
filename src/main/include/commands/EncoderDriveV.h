@@ -13,10 +13,10 @@ class EncoderDriveV : public frc2::CommandHelper<frc2::CommandBase, EncoderDrive
 public:
 
 	//constructors
-	EncoderDriveV(int x, int y, int a);//passes # of encoder ticks travelled
-	EncoderDriveV(double x, double y, int a);//pass in distance in inches and converts to # of encoder ticks
-	EncoderDriveV(int x, int y);//passes # of encoder ticks travelled without a rotation value
-	EncoderDriveV(double x, double y);//pass in distance in inches and converts to # of encoder ticks without a rotation value
+	EncoderDriveV(int x, int y, int a, double max);//passes # of encoder ticks travelled
+	EncoderDriveV(double x, double y, int a, double max);//pass in distance in inches and converts to # of encoder ticks
+	EncoderDriveV(int x, int y, double max);//passes # of encoder ticks travelled without a rotation value
+	EncoderDriveV(double x, double y, double max);//pass in distance in inches and converts to # of encoder ticks without a rotation value
 	//end constructors
 
 	//overrides
@@ -35,6 +35,13 @@ public:
 
 private:
 
+	const double HORIZONTAL_CALIBRATION = 36.0/31.0; 
+	const double VERTICAL_CALIBRATION = 36.0/43.0;
+	/*current known calibration values for 'saber'
+	Vertical Traverse [position: 36.0/31.5 | Velocity: 36.0/43.0 | Magic: ?/?]
+	Horizontal Traverse [position: ?/? | Velocity: 36.0/31.0 | Magic: ?/?]
+	Calculation: (intended/actual) */
+
 	//movement variables
 	int m_X, m_Y, m_A;
 	//m_X:# of ticks to move left and right, negative being left, positive being right
@@ -44,6 +51,9 @@ private:
 	int m_InitialTicks;
 	//the starting number of ticks of the 'front left' wheel, uses this number to track relative progress in driving
 	
+	double m_Max;
+	//maximum speed to run motors at
+
 	//end movement variables
 
 };//end class

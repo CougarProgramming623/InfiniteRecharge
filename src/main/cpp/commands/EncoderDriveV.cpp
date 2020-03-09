@@ -12,20 +12,21 @@ namespace ohs2020 {
 //EncoderDriveV
 
 //constructors
-EncoderDriveV::EncoderDriveV(int x, int y, int a){
+EncoderDriveV::EncoderDriveV(int x, int y, int a, double max){
 	m_X = static_cast <int> (x*HORIZONTAL_CALIBRATION);
 	m_Y = static_cast <int> (y*VERTICAL_CALIBRATION);
 	m_A = a;
+	m_Max = max;
 	AddRequirements(&Robot::Get().GetDriveTrain());//prevents other commands that require drivetrain from running (!)DOES NOT WORK(!)
 } //base constructor
 
-EncoderDriveV::EncoderDriveV(double x, double y, int a) : EncoderDriveV(static_cast <int> (x*CPI), static_cast <int> (y*CPI), a) {} 
+EncoderDriveV::EncoderDriveV(double x, double y, int a, double max) : EncoderDriveV(static_cast <int> (x*CPI), static_cast <int> (y*CPI), a, max) {} 
 //constructor for inches w/ angle
 
-EncoderDriveV::EncoderDriveV(int x, int y) : EncoderDriveV(x, y, 0) {}
+EncoderDriveV::EncoderDriveV(int x, int y, double max) : EncoderDriveV(x, y, 0, max) {}
 //constructor for tick movement w/o angle
 
-EncoderDriveV::EncoderDriveV(double x, double y) : EncoderDriveV(x, y, 0) {}
+EncoderDriveV::EncoderDriveV(double x, double y, double max) : EncoderDriveV(x, y, 0, max) {}
 //constructor for inch movement w/o angle
 
 //end constructors
@@ -54,7 +55,7 @@ bool EncoderDriveV::IsFinished() {
 void EncoderDriveV::Execute() {
 	
 	int max = abs(m_X)+abs(m_A)+abs(m_Y);//used to convert a speed to a number between -1 and 1 to be multiplied by maxSpeed so target velcity are always within max speed
-	double maxSpeed = 0.3*(6380/60/10*2048);//% of allowable max speed to run the bot at
+	double maxSpeed = m_Max*(6380/60/10*2048);//% of allowable max speed to run the bot at
 
 	//sets motor velocities
 	Robot::Get().GetDriveTrain().GetLFront()->Set(ControlMode::Velocity, (m_Y + m_X + m_A)/max*maxSpeed );
