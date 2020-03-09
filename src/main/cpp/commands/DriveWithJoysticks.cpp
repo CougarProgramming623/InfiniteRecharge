@@ -23,7 +23,7 @@ namespace ohs2020 {
 	
 	void Drive::Execute() {
 		// DebugOutF("JOYSTICK");
-
+		/*
 		double y = Robot::Get().GetOI().GetDriverJoystick().GetY();
 		double x = Robot::Get().GetOI().GetDriverJoystick().GetX();
 		double rot = Robot::Get().GetOI().GetDriverJoystick().GetZ();
@@ -37,12 +37,12 @@ namespace ohs2020 {
 		formatter << "Drive values: stick: [" << x << ", " << y << ", " << rot << "] Is FOD " << Robot::Get().GetOI().IsFOD();
 		//frc::DriverStation::ReportError(formatter.c_str());
 
-
 		if (Robot::Get().GetOI().IsFOD()) {
 			Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, gyro);//Add in gyro later once the navax code is in
 		} else {
 			Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, 0.0);
 		}
+		*/
 	}
 
 	

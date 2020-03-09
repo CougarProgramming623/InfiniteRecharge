@@ -16,18 +16,9 @@ const double GEAR_RATIO = 12.0/1.0; //gear ratio of the bot
 
 	//calculated variables
 const double CPI = (COUNTS_PER_ROTATION * GEAR_RATIO) / ((WHEEL_DIAMETER * (atan(1)*4) )/*PI*/ ); //counter per rotation of this wheel
-
-//wheel calibration numbers due to mechanim wheel skidding or calculation inaccuracies
-const double HORIZONTAL_CALIBRATION = 36.0/31.0; 
-const double VERTICAL_CALIBRATION = 36.0/43.0;
-/*current known calibration values for 'saber'
-Vertical Traverse [position: 36.0/31.5 | Velocity: 36.0/43.0 | Magic: ?/?]
-Horizontal Traverse [position: ?/? | Velocity: 36.0/31.0 | Magic: ?/?]
-Calculation: (intended/actual) */
-
 	//end calculated variables
 
-const int COUNT_THRESHOLD = 1000;//accuracy threshold of counts
+const int COUNT_THRESHOLD = 100;//accuracy threshold of counts
 
 //end drivetrain information variables
 
@@ -57,6 +48,14 @@ public:
 	//end of overrides
 
 private:
+
+	//wheel calibration numbers due to mechanim wheel skidding or calculation inaccuracies
+	const double HORIZONTAL_CALIBRATION = 36.0/31.0; 
+	const double VERTICAL_CALIBRATION = 36.0/43.0;
+	/*current known calibration values for 'saber'
+	Vertical Traverse [position: 36.0/31.5 | Velocity: 36.0/43.0 | Magic: ?/?]
+	Horizontal Traverse [position: ?/? | Velocity: 36.0/31.0 | Magic: ?/?]
+	Calculation: (intended/actual) */
 
 	//movement variables
 	int m_X, m_Y, m_A;
