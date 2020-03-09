@@ -22,6 +22,13 @@ public:
 	//virtual void InitDefaultCommand() override;  
 
 	frc2::PIDCommand* TurnToPos(double angle);
+
+	void SetBrakeMode();
+	void UseVelocityPID();
+	void UsePositionPID();
+	void UseMagicPID();
+	void SetPID(double, double, double, double, double);
+	void SetBrakeMode(bool);
 	
 	//getters for direct access to motors
 	BaseTalon* GetLFront() { return m_FrontLeft.get(); }

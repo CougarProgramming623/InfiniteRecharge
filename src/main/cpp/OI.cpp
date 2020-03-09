@@ -3,6 +3,8 @@
 #include "Cob.h"
 #include "Robot.h"
 #include "commands/EncoderDrive.h"
+#include "commands/EncoderDriveV.h"
+#include "commands/EncoderDriveM.h"
 #include "commands/TurnToPosPID.h"
 #include "commands/TurnToPosSlow.h"
 
@@ -17,7 +19,6 @@ m_TestShoot([&] { return m_ButtonBoard.GetRawButton(14);})
 {
 
 }
-
 
 void OI::Init(){
 
@@ -39,7 +40,7 @@ void OI::Init(){
 
 	m_Turn.WhenPressed( new TurnToPosSlow() );
 
-	m_TestShoot.WhenPressed(Robot::Get().GetShooter().Shoot());
+//	m_TestShoot.WhenPressed(Robot::Get().GetShooter().Shoot());
 
 }
 

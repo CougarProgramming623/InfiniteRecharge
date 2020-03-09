@@ -35,7 +35,7 @@ public:
 
 	double GetFlywheelWU() { return flywheelWU; }
 
-	frc2::SequentialCommandGroup* Shoot();
+	frc2::SequentialCommandGroup Shoot();
 
 private:
 
@@ -52,6 +52,8 @@ private:
 	frc2::Button FlyWheelTuner;
 	frc2::Button launcher;
 	frc2::Button conveyorToggle;
+
+	frc2::Button reverseFeeder;
 
 	CANCoder FlyWheelEncoder;
 
