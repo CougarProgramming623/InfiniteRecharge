@@ -3,6 +3,7 @@
 #include "ohs/RobotID.h"
 #include "ohs/Log.h"
 #include "Util.h"
+#include "commands/TurnToPosSlow.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/SendableRegistry.h>
@@ -23,10 +24,13 @@ lowConveyor(RobotID::GetID(LOW_TRANSPORT)),
 highConveyor(RobotID::GetID(HIGH_TRANSPORT)),
 FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
 
-launcher( [&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); 	}),
-flyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(4);	}), 
-conveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 	}),
-reverseFeeder( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(14); 	}),
+launcher([&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(2); 	}),
+flyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(4); 	}), 
+conveyorToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 	}),
+reverseFeeder([&]	{ return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2); 	}),
+m_TurnShoot([&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(3); 	}),
+
+m_BloopFeeder([&]  { return highConveyor.IsFwdLimitSwitchClosed(); }),
 
 timer() {
 
@@ -38,6 +42,12 @@ void Shooter::Init() {
 
 	SetupShooterButtons();
 	SetupConveyorButtons();
+	volt = std::array<double, 10>();
+	index = 0;
+
+	for(unsigned int i = 0; i < volt.size(); i++){
+		volt[i] = 0.0;
+	}//set vals for volt
 
 }
 
@@ -101,8 +111,31 @@ void Shooter::SetupShooterButtons() {
 		lowConveyor.Set(ControlMode::PercentOutput, 0);
 
 	}, {} ));
-} 
 
+	m_TurnShoot.WhenHeld(frc2::InstantCommand([&]{
+
+		TurnToPosSlow();
+		frc2::WaitCommand(units::second_t(3));
+		
+		Flywheel.Set(ControlMode::PercentOutput, 1);
+		feeder.Set(ControlMode::PercentOutput, 1);
+
+		lowConveyor.Set(ControlMode::PercentOutput, .5);
+		highConveyor.Set(ControlMode::PercentOutput, 1);
+
+	}, {}));
+
+	m_TurnShoot.WhenReleased(frc2::InstantCommand([&] {
+
+		Flywheel.Set(ControlMode::PercentOutput, 0);
+		feeder.Set(ControlMode::PercentOutput, 0);
+
+		lowConveyor.Set(ControlMode::PercentOutput, 0);
+		highConveyor.Set(ControlMode::PercentOutput, 0);
+
+
+	}, {}));
+}
 
 void Shooter::SetupConveyorButtons() {
 
@@ -124,6 +157,14 @@ conveyorToggle.WhenReleased(frc2::InstantCommand([&] {
 
 }, {}));
 
+m_BloopFeeder.WhenPressed(frc2::SequentialCommandGroup(
+
+frc2::InstantCommand([&] { feeder.Set(ControlMode::PercentOutput, 1); }, {}),
+frc2::WaitCommand(units::second_t(.25)),
+frc2::InstantCommand([&] { feeder.Set(ControlMode::PercentOutput, 0); }, {})
+
+));
+
 }
 
 void Shooter::ReverseConveyor() {
@@ -142,11 +183,11 @@ void Shooter::ReverseConveyor() {
 	));
 }
 
-frc2::SequentialCommandGroup Shooter::Shoot() {
+frc2::SequentialCommandGroup Shooter::Shoot(double wait) {
 	frc2::SequentialCommandGroup group = frc2::SequentialCommandGroup();
 
 	frc2::InstantCommand startFlywheel = frc2::InstantCommand( [&] {
-		Flywheel.Set(ControlMode::Velocity, 3145);
+		Flywheel.Set(ControlMode::Velocity, 3145 / 600 * 2048);
 	}, {});
 
 	frc2::InstantCommand startFeeder = frc2::InstantCommand( [&] {
@@ -168,11 +209,36 @@ frc2::SequentialCommandGroup Shooter::Shoot() {
 		highConveyor.Set(ControlMode::PercentOutput, 0.0);
 	}, {});
 
-	group.AddCommands(startFlywheel, frc2::WaitCommand(units::second_t(1.0)), startFeeder, spinConveyers, frc2::WaitCommand(units::second_t(4.0)), stopConveyers, stopShoot);
+	group.AddCommands(startFlywheel, frc2::WaitCommand(units::second_t(1.0)), startFeeder, spinConveyers, frc2::WaitCommand(units::second_t(wait)), stopConveyers, stopShoot);
 
 	return group;
 }
 
+bool Shooter::CheckVolt(){//(!)(!)(!) NOT VOLTAGE IS AMPS
+	volt[index % volt.size()] = highConveyor.GetStatorCurrent();
+	index++;
 
+	if(volt[volt.size()] > 0.0){
+	
+		double avg  = 0;
+
+		for(unsigned int i = 0; i < volt.size(); i++){
+			avg += volt[i];
+		}
+
+		avg /= volt.size();
+
+		if(avg >= 1.0){
+
+			ReverseConveyor();
+
+			return true;
+		}
+
+	}
+
+	return false;
+
+}
 
 }//namespace

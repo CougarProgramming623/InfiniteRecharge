@@ -13,6 +13,9 @@
 #include <frc2/command/CommandScheduler.h>
 #include <frc2/command/WaitCommand.h>
 #include "ohs/Log.h"
+#include "commands/TurnToPosPID.h"
+#include "commands/TurnToPosSlow.h"
+#include "commands/EncoderDrive.h"
 
 #include "CobConstants.h"
 #include "Cob.h"

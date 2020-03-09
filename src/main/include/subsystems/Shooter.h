@@ -35,7 +35,9 @@ public:
 
 	double GetFlywheelWU() { return flywheelWU; }
 
-	frc2::SequentialCommandGroup Shoot();
+	frc2::SequentialCommandGroup Shoot(double);
+
+	bool CheckVolt();
 
 private:
 
@@ -52,12 +54,18 @@ private:
 	frc2::Button FlyWheelTuner;
 	frc2::Button launcher;
 	frc2::Button conveyorToggle;
+	frc2::Button m_TurnShoot;
 
 	frc2::Button reverseFeeder;
+
+	frc2::Button m_BloopFeeder; 
 
 	CANCoder FlyWheelEncoder;
 
 	frc2::Timer timer;
+	
+	std::array<double, 10> volt; 
+	int index;
 };
 
 }//namespace
