@@ -40,7 +40,7 @@ void OI::Init(){
 
 	m_Turn.WhenPressed( new TurnToPosSlow() );
 
-	m_TestShoot.WhenPressed(new EncoderDriveM(36.0, 0.0, 0.5));
+	m_TestShoot.WhenPressed(Robot::Get().GetShooter().Shoot());
 
 }
 
