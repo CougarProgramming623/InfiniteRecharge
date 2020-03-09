@@ -45,7 +45,7 @@ highGroup(
 		highConveyor.Set(ControlMode::PercentOutput, -1);
 	}, { &s_HighShooterSubsystem }),
 
-	frc2::WaitCommand(units::second_t(2)),
+	frc2::WaitCommand(units::second_t(1)),
 
 	frc2::InstantCommand([&] {
 		highConveyor.Set(ControlMode::PercentOutput, 1);
@@ -57,7 +57,7 @@ lowGroup(
 		lowConveyor.Set(ControlMode::PercentOutput, -1);
 	}, {&s_LowShooterSubsystem}),
 
-	frc2::WaitCommand(units::second_t(1)),
+	frc2::WaitCommand(units::second_t(0.5)),
 
 	frc2::InstantCommand([&] {
 		lowConveyor.Set(ControlMode::PercentOutput, .5);
@@ -141,7 +141,7 @@ void Shooter::SetupShooterButtons() {
 
 void Shooter::SetupConveyorButtons() {
 
-conveyorToggle.WhenHeld(frc2::RunCommand([&] {
+conveyorToggle.WhileHeld(frc2::RunCommand([&] {
 
 	lowConveyor.Set(ControlMode::PercentOutput, .5);
 	highConveyor.Set(ControlMode::PercentOutput, 1);
@@ -195,8 +195,11 @@ frc2::SequentialCommandGroup Shooter::Shoot() {
 
 
 bool Shooter::CheckHighCurrent() {
-
+	
 	if (highCurrentCount >= 4) { 
+
+		DebugOutF("High Conveyer Jammed");
+
 		highCurrentCount = 0;
 
 		frc2::CommandScheduler::GetInstance().Schedule(&highGroup);
@@ -210,6 +213,9 @@ bool Shooter::CheckHighCurrent() {
 bool Shooter::CheckLowCurrent() {
 
 	if (lowCurrentCount >= 4) { 
+
+		DebugOutF("Low Conveyer Jammed");
+
 		lowCurrentCount = 0;
 
 		frc2::CommandScheduler::GetInstance().Schedule(&lowGroup);

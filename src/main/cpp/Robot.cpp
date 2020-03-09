@@ -154,6 +154,7 @@ void Robot::DisabledInit() {
 	m_climb.isDeployed = false;
 	m_climb.isDeployFinished = false;
 
+	m_DriveTrain.SetBrakeMode(false);
 }
 
 void Robot::DisabledPeriodic() {
@@ -169,6 +170,7 @@ void Robot::AutonomousInit() {
 	navx->ZeroYaw();
 	m_autonomousCommand = m_AutoManager.GetAuto();
 	frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand);
+	m_DriveTrain.SetBrakeMode(true);
 }
 
 void Robot::AutonomousPeriodic() {
@@ -184,6 +186,7 @@ void Robot::TeleopInit() {
 		m_autonomousCommand->Cancel();
 		m_autonomousCommand = nullptr;
 	}
+	m_DriveTrain.SetBrakeMode(true);
 }
 
 /**
