@@ -15,27 +15,27 @@ double BASIC_CLIMB_SPEED = 1;
 Climb::Climb() : 
 
 
-climbMotorLeft		( RobotID::GetID(CLIMB_LEFT)),
-climbMotorRight		( RobotID::GetID(CLIMB_RIGHT)), 
+m_ClimbMotorLeft		( RobotID::GetID(CLIMB_LEFT)),
+m_ClimbMotorRight		( RobotID::GetID(CLIMB_RIGHT)), 
 
-climbUp([&]         { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(19);  }),
-climbDown([&]		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(20);  }),
-climbLeft([&]       { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(21);  }),
-climbRight([&]      { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(22);  }),
-deployer([&] 		{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(17);  }),
-endgameOverride([&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(18);  }),
+m_ClimbUp([&]        	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(19);  }),
+m_ClimbDown([&]			{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(20);  }),
+m_ClimbLeft([&]       	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(21);  }),
+m_ClimbRight([&]      	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(22);  }),
+m_Deployer([&] 			{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(17);  }),
+m_EndgameOverride([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(18);  }),
 
-timer()
+m_Timer()
 {
 
 
-	climbMotorLeft.SetInverted(true);
-	climbMotorRight.SetInverted(false);
+	m_ClimbMotorLeft.SetInverted(true);
+	m_ClimbMotorRight.SetInverted(false);
 
-	climbMotorLeft.SetNeutralMode(Brake);
-	climbMotorRight.SetNeutralMode(Brake);
+	m_ClimbMotorLeft.SetNeutralMode(Brake);
+	m_ClimbMotorRight.SetNeutralMode(Brake);
 
-	RemoveRegistry(&climbMotorLeft, &climbMotorRight);
+	RemoveRegistry(&m_ClimbMotorLeft, &m_ClimbMotorRight);
   
 }
 
@@ -52,39 +52,39 @@ Deploy();
 
 void Climb::VerticalClimb() {
 
-climbUp.WhileHeld(frc2::RunCommand([&] {
+m_ClimbUp.WhileHeld(frc2::RunCommand([&] {
 
 	if(CanClimb()){
-		climbMotorLeft.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);//correct direction
-		climbMotorRight.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);
+		m_ClimbMotorLeft.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);//correct direction
+		m_ClimbMotorRight.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);
 
 		DebugOutF("Climbing Up");
 	}
 
  }, {} ));
 
- climbUp.WhenReleased(frc2::InstantCommand([&] {
+ m_ClimbUp.WhenReleased(frc2::InstantCommand([&] {
 
-	climbMotorLeft.Set(ControlMode::PercentOutput, 0);
-	climbMotorRight.Set(ControlMode::PercentOutput, 0);
+	m_ClimbMotorLeft.Set(ControlMode::PercentOutput, 0);
+	m_ClimbMotorRight.Set(ControlMode::PercentOutput, 0);
 
  }, {} ));
 
- climbDown.WhenHeld(frc2::RunCommand([&] {
+ m_ClimbDown.WhenHeld(frc2::RunCommand([&] {
 
 	if(CanClimb()){
-		climbMotorLeft.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
-		climbMotorRight.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);//correct direction
+		m_ClimbMotorLeft.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
+		m_ClimbMotorRight.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);//correct direction
 
 		DebugOutF("Climbing Down");
 	}
 
  }, {} ));
 
- climbDown.WhenReleased(frc2::InstantCommand([&] {
+ m_ClimbDown.WhenReleased(frc2::InstantCommand([&] {
 
-	climbMotorLeft.Set(ControlMode::PercentOutput, 0);
-	climbMotorRight.Set(ControlMode::PercentOutput, 0);
+	m_ClimbMotorLeft.Set(ControlMode::PercentOutput, 0);
+	m_ClimbMotorRight.Set(ControlMode::PercentOutput, 0);
 
  }, {} ));
 }
@@ -92,11 +92,11 @@ climbUp.WhileHeld(frc2::RunCommand([&] {
 
 void Climb::SideClimb() {
 
-climbLeft.WhenHeld(frc2::RunCommand([&] {
+m_ClimbLeft.WhenHeld(frc2::RunCommand([&] {
 
 	if(CanClimb()){
-		climbMotorLeft.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
-		climbMotorRight.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);
+		m_ClimbMotorLeft.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
+		m_ClimbMotorRight.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);
 
 		DebugOutF("Climbing Left");
 
@@ -104,20 +104,20 @@ climbLeft.WhenHeld(frc2::RunCommand([&] {
 
 }, {} ));
 
-climbLeft.WhenReleased(frc2::InstantCommand([&] {
+m_ClimbLeft.WhenReleased(frc2::InstantCommand([&] {
 
-	climbMotorLeft.Set(ControlMode::PercentOutput, 0);
-	climbMotorRight.Set(ControlMode::PercentOutput, 0);
+	m_ClimbMotorLeft.Set(ControlMode::PercentOutput, 0);
+	m_ClimbMotorRight.Set(ControlMode::PercentOutput, 0);
 
 }, {} ));
 
 
-climbRight.WhenHeld(frc2::RunCommand([&] {
+m_ClimbRight.WhenHeld(frc2::RunCommand([&] {
 	
 	if(CanClimb()){
 		
-		climbMotorLeft.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);
-		climbMotorRight.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
+		m_ClimbMotorLeft.Set(ControlMode::PercentOutput, -BASIC_CLIMB_SPEED);
+		m_ClimbMotorRight.Set(ControlMode::PercentOutput, BASIC_CLIMB_SPEED);
 
 		DebugOutF("Climbing Right");
 	}
@@ -125,10 +125,10 @@ climbRight.WhenHeld(frc2::RunCommand([&] {
  }, {} ));
 
 
-climbRight.WhenReleased(frc2::InstantCommand([&] {
+m_ClimbRight.WhenReleased(frc2::InstantCommand([&] {
 
-	climbMotorLeft.Set(ControlMode::PercentOutput, 0);
-	climbMotorRight.Set(ControlMode::PercentOutput, 0);
+	m_ClimbMotorLeft.Set(ControlMode::PercentOutput, 0);
+	m_ClimbMotorRight.Set(ControlMode::PercentOutput, 0);
 
 }, {} ));
 
@@ -136,14 +136,14 @@ climbRight.WhenReleased(frc2::InstantCommand([&] {
 
 void Climb::Deploy() {
 
-	deployer.WhenPressed(frc2::FunctionalCommand( [this] { //on init
+	m_Deployer.WhenPressed(frc2::FunctionalCommand( [this] { //on init
      
 		if(!isDeployed && IsEndgame()){
 			DebugOutF("start deploy");
-			timer.Reset();
-			timer.Start();
-			climbMotorLeft.Set(ControlMode::PercentOutput, 1); //correct direction
-			climbMotorRight.Set(ControlMode::PercentOutput, -1);
+			m_Timer.Reset();
+			m_Timer.Start();
+			m_ClimbMotorLeft.Set(ControlMode::PercentOutput, 1); //correct direction
+			m_ClimbMotorRight.Set(ControlMode::PercentOutput, -1);
 
 			frc2::CommandScheduler::GetInstance().Schedule(new frc2::SequentialCommandGroup(
 				frc2::WaitCommand(units::second_t(5)),
@@ -156,8 +156,8 @@ void Climb::Deploy() {
 	}, [this] {}, [this] (bool f) { //on end
 
 		if(IsEndgame()){
-			climbMotorLeft.Set(ControlMode::PercentOutput, 0);
-			climbMotorRight.Set(ControlMode::PercentOutput, 0);
+			m_ClimbMotorLeft.Set(ControlMode::PercentOutput, 0);
+			m_ClimbMotorRight.Set(ControlMode::PercentOutput, 0);
 			isDeployed = true;
 		}
 			
@@ -171,7 +171,7 @@ void Climb::Deploy() {
 
 		DebugOutF("Deploying");
 
-		return timer.Get() > units::second_t(.2); //Time to trigger gas spring
+		return m_Timer.Get() > units::second_t(.2); //Time to trigger gas spring
 
 	}, {}));
 
@@ -187,11 +187,11 @@ void Climb::LEDCanClimb() {
 }
 
 inline bool Climb::IsEndgame() {
-	return (Timer::GetMatchTime() < 30 && Timer::GetMatchTime() != -1) ||  endgameOverride.Get();
+	return (Timer::GetMatchTime() < 30 && Timer::GetMatchTime() != -1) ||  m_EndgameOverride.Get();
 }
 
 inline bool Climb::CanClimb() {
-	return ((Timer::GetMatchTime() < 30 && Timer::GetMatchTime() != -1 ) && isDeployFinished) || endgameOverride.Get();
+	return ((Timer::GetMatchTime() < 30 && Timer::GetMatchTime() != -1 ) && isDeployFinished) || m_EndgameOverride.Get();
 }
 
 }//namespace

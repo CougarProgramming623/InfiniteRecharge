@@ -60,6 +60,7 @@ void Cob::Init() {
     RegisterKey(CobKey::IS_RED, "/FMSInfo/IsRedAlliance");
     RegisterKey(CobKey::MODE, "/cob/mode");
 	RegisterKey(CobKey::CURRENT_DELAY, "/cob/auto/current-delay");
+	RegisterKey(CobKey::FLYWHEEL_SPEED, "/cob/flywheel/set");
 
 	RegisterMessageOut(CobMessageOut::PING, "ping");
 	RegisterMessageIn(CobMessageIn::GNIP, "gnip", Handshake);

@@ -39,6 +39,8 @@ void Robot::RobotInit() {
 	m_oi.Init();
 	m_shooter.Init();
 	m_climb.Init();
+	Intake* intake = new Intake();
+	intake->Init();
 
 	RemoveRegistry(navx);
 
