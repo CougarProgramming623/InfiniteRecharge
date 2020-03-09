@@ -23,7 +23,7 @@ namespace ohs2020 {
 	
 	void Drive::Execute() {
 		// DebugOutF("JOYSTICK");
-		/*
+		
 		double y = Robot::Get().GetOI().GetDriverJoystick().GetY();
 		double x = Robot::Get().GetOI().GetDriverJoystick().GetX();
 		double rot = Robot::Get().GetOI().GetDriverJoystick().GetZ();
@@ -42,7 +42,7 @@ namespace ohs2020 {
 		} else {
 			Robot::Get().GetDriveTrain().CartesianDrive(-y, x, rot / 2, 0.0);
 		}
-		*/
+		
 	}
 
 	
