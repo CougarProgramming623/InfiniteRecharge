@@ -112,11 +112,12 @@ void Shooter::SetupShooterButtons() {
 
 	}, {} ));
 
-	m_TurnShoot.WhenHeld(frc2::InstantCommand([&]{
+	frc2::SequentialCommandGroup* shootandturn = new frc2::SequentialCommandGroup();
 
-		TurnToPosSlow();
-		frc2::WaitCommand(units::second_t(3));
-		
+	shootandturn->AddCommands(TurnToPosSlow());
+	shootandturn->AddCommands(frc2::WaitCommand(units::second_t(3)));
+	shootandturn->AddCommands(frc2::InstantCommand([&] {
+
 		Flywheel.Set(ControlMode::PercentOutput, 1);
 		feeder.Set(ControlMode::PercentOutput, 1);
 
@@ -124,6 +125,8 @@ void Shooter::SetupShooterButtons() {
 		highConveyor.Set(ControlMode::PercentOutput, 1);
 
 	}, {}));
+
+	m_TurnShoot.WhenPressed(shootandturn);
 
 	m_TurnShoot.WhenReleased(frc2::InstantCommand([&] {
 

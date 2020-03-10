@@ -27,26 +27,26 @@ void AutoManager::AutoInit(){
 
 	frc2::SequentialCommandGroup* shootAndBackwards = new frc2::SequentialCommandGroup();
 	shootAndBackwards->AddCommands(TurnToPosSlow());
-	shootAndBackwards->AddCommands(Robot::Get().GetShooter().Shoot());
+	// shootAndBackwards->AddCommands(Robot::Get().GetShooter().Shoot());
 	shootAndBackwards->AddCommands(EncoderDriveV(0.0, -5*12.0, 0));
 	m_AutoMap["shoot&back"] = shootAndBackwards;
 
 
 	frc2::SequentialCommandGroup* shootAndForwards = new frc2::SequentialCommandGroup();
 	shootAndForwards->AddCommands(TurnToPosSlow());
-	shootAndForwards->AddCommands(Robot::Get().GetShooter().Shoot());
+	// shootAndForwards->AddCommands(Robot::Get().GetShooter().Shoot());
 	shootAndForwards->AddCommands(EncoderDriveV(0.0, 5*12.0, 0));
 	m_AutoMap["shoot&forwards"] = shootAndForwards;
 
 	frc2::SequentialCommandGroup* onlyShoot = new frc2::SequentialCommandGroup();
 	onlyShoot->AddCommands(frc2::PrintCommand("Init"));
 	onlyShoot->AddCommands(TurnToPosSlow());
-	onlyShoot->AddCommands(Robot::Get().GetShooter().Shoot());
+	// onlyShoot->AddCommands(Robot::Get().GetShooter().Shoot());
 	m_AutoMap["onlyShoot"] = onlyShoot;
 
 	frc2::SequentialCommandGroup* onlyShootNoAlign = new frc2::SequentialCommandGroup();
 	onlyShootNoAlign->AddCommands(frc2::PrintCommand("Init"));
-	onlyShootNoAlign->AddCommands(Robot::Get().GetShooter().Shoot());
+	// onlyShootNoAlign->AddCommands(Robot::Get().GetShooter().Shoot());
 	m_AutoMap["onlyShootNoAlign"] = onlyShootNoAlign;
 
 

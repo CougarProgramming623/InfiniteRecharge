@@ -14,6 +14,8 @@ void TurnToPosSlow::Initialize() {
 }
 
 void TurnToPosSlow::Execute() {
+	DebugOutF("Turning");
+
     m_Angle = GetVisionAngle();
     
     int velocity = 2000;
