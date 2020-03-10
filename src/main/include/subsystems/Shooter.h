@@ -31,9 +31,9 @@ public:
 
 	bool FlyWheelMode = false;
 
-	bool GetFlywheelState() { return isFlywheelOn; }
+	bool GetFlywheelState() { return m_IsFlywheelOn; }
 
-	double GetFlywheelWU() { return flywheelWU; }
+	double GetFlywheelWU() { return m_FlywheelWU; }
 
 	frc2::SequentialCommandGroup Shoot(double);
 
@@ -41,14 +41,14 @@ public:
 
 private:
 
-	bool isLoaded = false;
-	bool isFlywheelOn;
-	double flywheelWU;
+	bool m_IsLoaded = false;
+	bool m_IsFlywheelOn = false;
+	double m_FlywheelWU = 0.0;
 
-	WPI_TalonSRX Flywheel;
-	WPI_TalonSRX feeder;
-	WPI_TalonSRX lowConveyor;
-	WPI_TalonSRX highConveyor;
+	WPI_TalonSRX m_Flywheel;
+	WPI_TalonSRX m_Feeder;
+	WPI_TalonSRX m_LowConveyor;
+	WPI_TalonSRX m_HighConveyor;
 
 	frc2::Button flyWheelToggle;
 	frc2::Button FlyWheelTuner;
@@ -56,11 +56,16 @@ private:
 	frc2::Button conveyorToggle;
 	frc2::Button m_TurnShoot;
 
-	frc2::Button reverseFeeder;
+	frc2::Button m_Launcher;
+	frc2::Button m_FlyWheelToggle;
+	frc2::Button m_ConveyorToggle;
+	frc2::Button m_ReverseFeeder;
 
 	frc2::Button m_BloopFeeder; 
 
 	CANCoder FlyWheelEncoder;
+
+	frc2::Button m_BloopFeeder; 
 
 	frc2::Timer timer;
 	
