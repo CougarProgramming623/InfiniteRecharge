@@ -27,17 +27,19 @@ public:
 	void SetupShooterButtons();
 	void SetupConveyorButtons();
 
+	void ReverseConveyor();
+
 	bool CheckHighCurrent();
 
-	void SetHighCurrentCount(int newCurrentCount) { highCurrentCount = newCurrentCount; }
+	void SetHighCurrentCount(int newCurrentCount) { m_HighCurrentCount = newCurrentCount; }
 
-	int GetHighCurrentCount() { return highCurrentCount; }
+	int GetHighCurrentCount() { return m_HighCurrentCount; }
 
 	bool CheckLowCurrent();
 
-	void SetLowCurrentCount(int newCurrentCount) { lowCurrentCount = newCurrentCount; }
+	void SetLowCurrentCount(int newCurrentCount) { m_LowCurrentCount = newCurrentCount; }
 
-	int GetLowCurrentCount() { return lowCurrentCount; }
+	int GetLowCurrentCount() { return m_LowCurrentCount; }
 
 	bool FlyWheelMode = false;
 
@@ -45,8 +47,8 @@ public:
 
 	double GetFlywheelWU() { return m_FlywheelWU; }
 
-	WPI_TalonSRX* GetHighConveyor() { return &highConveyor; }
-	WPI_TalonSRX* GetLowConveyor() { return &lowConveyor; }
+	WPI_TalonSRX* GetHighConveyor() { return &m_HighConveyor; }
+	WPI_TalonSRX* GetLowConveyor() { return &m_LowConveyor; }
 
 	frc2::SequentialCommandGroup Shoot();
 
@@ -77,8 +79,8 @@ private:
 	frc2::SequentialCommandGroup highGroup;
 	frc2::SequentialCommandGroup lowGroup;
 
-	int highCurrentCount = 0;
-	int lowCurrentCount = 0;
+	int m_HighCurrentCount = 0;
+	int m_LowCurrentCount = 0;
 
 };
 
