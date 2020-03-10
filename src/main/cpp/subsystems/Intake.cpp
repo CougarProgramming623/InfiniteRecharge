@@ -39,6 +39,7 @@ void Intake::Init() {
 	// m_IntakePositioner.Set(ControlMode::PercentOutput, POS_FORWARD);
     SetToggleIntakeButtons();
 	SetPositionButton();
+	m_IntakePositioner.SetInverted(true);
 }
 
 void Intake::SetPositionButton() {
