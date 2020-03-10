@@ -1,5 +1,6 @@
 #include "AutoManager.h"
 #include "commands/EncoderDriveV.h"
+#include "commands/EncoderDriveM.h"
 #include "commands/TurnToPosSlow.h"
 #include "subsystems/Shooter.h"
 #include "Robot.h"

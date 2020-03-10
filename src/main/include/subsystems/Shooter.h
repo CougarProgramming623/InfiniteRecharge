@@ -50,24 +50,18 @@ private:
 	WPI_TalonSRX m_LowConveyor;
 	WPI_TalonSRX m_HighConveyor;
 
-	frc2::Button flyWheelToggle;
-	frc2::Button FlyWheelTuner;
-	frc2::Button launcher;
-	frc2::Button conveyorToggle;
-	frc2::Button m_TurnShoot;
-
-	frc2::Button m_Launcher;
 	frc2::Button m_FlyWheelToggle;
+	frc2::Button m_FlyWheelTuner;
+	frc2::Button m_Launcher;
 	frc2::Button m_ConveyorToggle;
+	frc2::Button m_TurnShoot;
 	frc2::Button m_ReverseFeeder;
 
 	frc2::Button m_BloopFeeder; 
 
-	CANCoder FlyWheelEncoder;
+	CANCoder m_FlyWheelEncoder;
 
-	frc2::Button m_BloopFeeder; 
-
-	frc2::Timer timer;
+	frc2::Timer m_Timer;
 	
 	std::array<double, 10> volt; 
 	int index;
