@@ -1,5 +1,6 @@
 #include "AutoManager.h"
 #include "commands/EncoderDriveV.h"
+#include "commands/EncoderDriveM.h"
 #include "commands/TurnToPosSlow.h"
 #include "commands/TurnToPosPID.h"
 #include "subsystems/Shooter.h"
@@ -28,14 +29,21 @@ void AutoManager::AutoInit(){
 	IntakeAuto->AddCommands(frc2::InstantCommand([&] { Robot::Get().SetNavXOffset(180.0); }, {}));
 	IntakeAuto->AddCommands(frc2::InstantCommand([&] {Robot::Get().GetIntake().GetPositioner().Set(ControlMode::PercentOutput, -1); }, {}));
 	IntakeAuto->AddCommands(frc2::InstantCommand([&] {Robot::Get().GetIntake().GetSpinner().Set(ControlMode::PercentOutput, 1); }, {}));
-	IntakeAuto->AddCommands(EncoderDriveV(0.0, 76.63));//Move to trench **86.63**
-	IntakeAuto->AddCommands(EncoderDriveV(0.0, 36.0));//Move to first ball
-	IntakeAuto->AddCommands(EncoderDriveV(0.0, 36.0));//Move to second ball
+	IntakeAuto->AddCommands(EncoderDriveM(0.0, 148.63, 0.5));//Move to trench
 	IntakeAuto->AddCommands(frc2::InstantCommand([&] {Robot::Get().GetIntake().GetSpinner().Set(ControlMode::PercentOutput, 0);}, {}));//Stop intake
-	IntakeAuto->AddCommands(TurnToPosPID(179.0));//Turn around (facing target)
-	IntakeAuto->AddCommands(EncoderDriveV(0.0, 72.0)); //Move to end of trench
+	IntakeAuto->AddCommands(TurnToPosPID(180.0));//Turn around (facing target)
+	IntakeAuto->AddCommands(EncoderDriveM(0.0, 72.0, 0.5)); //Move to end of trench
 	IntakeAuto->AddCommands(TurnToPosSlow());//Aim
-	IntakeAuto->AddCommands(Robot::Get().GetShooter().Shoot(7.0));//Shoot all 5 balls
+	IntakeAuto->AddCommands(Robot::Get().GetShooter().Shoot(10.0));
+
+
+	// IntakeAuto->AddCommands(frc2::InstantCommand( [&] { Robot::Get().GetShooter().GetFlywheel().Set(ControlMode::Velocity, 3145 / 600 * 2048); }, {}));
+	// IntakeAuto->AddCommands(frc2::InstantCommand([&] {
+	// 	 Robot::Get().GetShooter().GetLowConveyor().Set(ControlMode::PercentOutput, 0.5);
+	// 	 Robot::Get().GetShooter().GetHighConveyor().Set(ControlMode::PercentOutput, 1);
+	// }, {}));
+	// IntakeAuto->AddCommands(frc2::WaitCommand(units::second_t(1)));
+	// IntakeAuto->AddCommands(frc2::RunCommand([&] { Robot::Get().GetShooter().GetFeeder().Set(ControlMode::PercentOutput, 1); }, {}));//Shoot all 5 balls
 	
 	m_AutoMap["5ballauto"] = IntakeAuto;
 

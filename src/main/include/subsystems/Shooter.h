@@ -15,8 +15,6 @@
 
 namespace ohs2020{
 
-const double FlyWheelDefaultSpeed = 0;
-
 class Shooter : public frc2::SubsystemBase {
 
 public:
@@ -34,6 +32,11 @@ public:
 	bool GetFlywheelState() { return isFlywheelOn; }
 
 	double GetFlywheelWU() { return flywheelWU; }
+
+	WPI_TalonSRX& GetFeeder() { return feeder; }
+	WPI_TalonSRX& GetFlywheel() { return Flywheel; }
+	WPI_TalonSRX& GetLowConveyor() { return lowConveyor; }
+	WPI_TalonSRX& GetHighConveyor() { return highConveyor; }
 
 	frc2::SequentialCommandGroup Shoot(double);
 

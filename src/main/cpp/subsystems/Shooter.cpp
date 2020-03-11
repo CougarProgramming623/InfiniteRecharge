@@ -28,7 +28,7 @@ flyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButton(
 conveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 	}),
 reverseFeeder( [&] { return Robot::Get().GetOI().GetDriverJoystick().GetRawButton(2); 	}),
 
-m_BloopFeeder([&]  { return highConveyor.IsFwdLimitSwitchClosed();} ),
+m_BloopFeeder([&]  { return highConveyor.IsFwdLimitSwitchClosed() && !Robot::Get().IsAutonomous(); } ),
 
 timer() {
 

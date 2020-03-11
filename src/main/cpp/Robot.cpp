@@ -156,7 +156,7 @@ void Robot::DisabledPeriodic() {
  */
 void Robot::AutonomousInit() {
 	navx->ZeroYaw();
-	m_NavXOffset = 0;
+	m_NavXOffset = 180;
 	m_autonomousCommand = m_AutoManager.GetAuto();
 	frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand);
 }
