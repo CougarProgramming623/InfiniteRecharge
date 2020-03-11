@@ -6,8 +6,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/SendableRegistry.h>
-
-#include "frc2/command/FunctionalCommand.h"
+#include <frc2/command/FunctionalCommand.h>
 
 using namespace ohs623;
 
@@ -23,10 +22,8 @@ m_LowConveyor(RobotID::GetID(LOW_TRANSPORT)),
 m_HighConveyor(RobotID::GetID(HIGH_TRANSPORT)),
 m_FlyWheelEncoder(RobotID::GetID(FLYWHEEL)),
 
-
-m_BloopFeeder([&]  { return highConveyor.IsFwdLimitSwitchClosed() && !Robot::Get().IsAutonomous(); } ),
-
-m_BloopFeeder([&]  { return m_HighConveyor.IsFwdLimitSwitchClosed();} ) {
+m_BloopFeeder([&]  { return m_HighConveyor.IsFwdLimitSwitchClosed() && !Robot::Get().IsAutonomous(); } ) 
+{
 
 	RemoveRegistry(this, &m_Flywheel, &m_Feeder, &m_LowConveyor, &m_HighConveyor);
 
@@ -158,7 +155,7 @@ frc2::SequentialCommandGroup Shooter::Shoot(double wait) {
 	frc2::SequentialCommandGroup group = frc2::SequentialCommandGroup();
 
 	frc2::InstantCommand startFlywheel = frc2::InstantCommand( [&] {
-		Flywheel.Set(ControlMode::Velocity, 3145 / 600 * 2048);
+		m_Flywheel.Set(ControlMode::Velocity, 3145 / 600 * 2048);
 	}, {});
 
 	frc2::InstantCommand startFeeder = frc2::InstantCommand( [&] {
@@ -186,7 +183,7 @@ frc2::SequentialCommandGroup Shooter::Shoot(double wait) {
 }
 
 bool Shooter::CheckVolt(){//(!)(!)(!) NOT VOLTAGE IS AMPS
-	volt[index % volt.size()] = highConveyor.GetStatorCurrent();
+	volt[index % volt.size()] = m_HighConveyor.GetStatorCurrent();
 	index++;
 
 	if(volt[volt.size()] > 0.0){
@@ -200,6 +197,7 @@ bool Shooter::CheckVolt(){//(!)(!)(!) NOT VOLTAGE IS AMPS
 		avg /= volt.size();
 
 		if(avg >= 1.0){
+
 
 			ReverseConveyor();
 

@@ -27,7 +27,8 @@ void AutoManager::AutoInit(){
 
 	frc2::SequentialCommandGroup* IntakeAuto = new frc2::SequentialCommandGroup();
 	IntakeAuto->AddCommands(frc2::InstantCommand([&] { Robot::Get().SetNavXOffset(180.0); }, {}));
-	IntakeAuto->AddCommands(frc2::InstantCommand([&] {Robot::Get().GetIntake().GetPositioner().Set(ControlMode::PercentOutput, -1); }, {}));
+	IntakeAuto->AddCommands(frc2::InstantCommand([&] {Robot::Get().GetIntake().GetPositioner().Set(ControlMode::PercentOutput, -.2); }, {}));
+	IntakeAuto->AddCommands(frc2::WaitCommand(units::second_t(3)));
 	IntakeAuto->AddCommands(frc2::InstantCommand([&] {Robot::Get().GetIntake().GetSpinner().Set(ControlMode::PercentOutput, 1); }, {}));
 	IntakeAuto->AddCommands(EncoderDriveM(0.0, 148.63, 0.5));//Move to trench
 	IntakeAuto->AddCommands(frc2::InstantCommand([&] {Robot::Get().GetIntake().GetSpinner().Set(ControlMode::PercentOutput, 0);}, {}));//Stop intake

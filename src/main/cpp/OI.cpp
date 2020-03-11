@@ -40,8 +40,6 @@ void OI::Init(){
 
 	m_Turn.WhenPressed( new TurnToPosSlow() );
 
-	m_TestShoot.WhenPressed(Robot::Get().GetShooter().Shoot());
-
 }
 
 }//namespace

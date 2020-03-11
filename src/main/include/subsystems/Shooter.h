@@ -33,10 +33,10 @@ public:
 
 	double GetFlywheelWU() { return m_FlywheelWU; }
 
-	WPI_TalonSRX& GetFeeder() { return feeder; }
-	WPI_TalonSRX& GetFlywheel() { return Flywheel; }
-	WPI_TalonSRX& GetLowConveyor() { return lowConveyor; }
-	WPI_TalonSRX& GetHighConveyor() { return highConveyor; }
+	WPI_TalonSRX& GetFeeder() { return m_Feeder; }
+	WPI_TalonSRX& GetFlywheel() { return m_Flywheel; }
+	WPI_TalonSRX& GetLowConveyor() { return m_LowConveyor; }
+	WPI_TalonSRX& GetHighConveyor() { return m_HighConveyor; }
 
 	frc2::SequentialCommandGroup Shoot(double);
 
@@ -59,7 +59,6 @@ private:
 	frc2::Button m_FlyWheelToggle;
 	frc2::Button m_ConveyorToggle;
 	frc2::Button m_ReverseFeeder;
-
 
 	frc2::Button m_BloopFeeder; 
 
