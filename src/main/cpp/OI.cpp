@@ -2,7 +2,7 @@
 #include "Util.h"
 #include "Cob.h"
 #include "Robot.h"
-#include "commands/EncoderDrive.h"
+#include "commands/EncoderDriveP.h"
 #include "commands/EncoderDriveV.h"
 #include "commands/EncoderDriveM.h"
 #include "commands/TurnToPosPID.h"
@@ -40,7 +40,7 @@ void OI::Init(){
 
 	m_Turn.WhenPressed( new TurnToPosSlow() );
 
-//	m_TestShoot.WhenPressed(Robot::Get().GetShooter().Shoot());
+	m_TestShoot.WhenPressed(Robot::Get().GetShooter().Shoot());
 
 }
 

@@ -69,11 +69,11 @@ void DriveTrain::UseVelocityPID(){
 	DriveTrain::SetPID(50, 0.0, 0.0, 0.0, 0.05);
 }
 
-void DriveTrain::UseMagicPID(){
+void DriveTrain::UseMagicPID(double max){
 	DebugOutF("WARNING:USING Magic PID");
-	DriveTrain::SetPID(50, 0.05, 0.0, 0.5, 0.0);
+	DriveTrain::SetPID(0, 0.9, 0.0, 0.0, 0.0);
 	
-	double cruiseP = 0.5*kMAX_VELOCITY;
+	double cruiseP = max*kMAX_VELOCITY;
 
 	GetLFront()->ConfigMotionCruiseVelocity(cruiseP, 0);
 	GetRFront()->ConfigMotionCruiseVelocity(cruiseP, 0);
@@ -88,7 +88,7 @@ void DriveTrain::UseMagicPID(){
 
 void DriveTrain::SetPID(double E, double P, double I, double D, double F){
 
-	DebugOutF("ERROR:SET EPIDF TO: "+ std::to_string(E) + "/"+ std::to_string(P) + "/"+ std::to_string(I) + "/"+ std::to_string(D) + "/"+ std::to_string(F)  );
+	DebugOutF("WARNING:SET EPIDF TO: "+ std::to_string(E) + "/"+ std::to_string(P) + "/"+ std::to_string(I) + "/"+ std::to_string(D) + "/"+ std::to_string(F)  );
 
 	GetLFront()->ConfigAllowableClosedloopError(0,E,0);
 	GetRFront()->ConfigAllowableClosedloopError(0,E,0);
