@@ -29,7 +29,7 @@ m_FlyWheelToggle([&] 	{ return Robot::Get().GetOI().GetButtonBoard().GetRawButto
 m_ConveyorToggle( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(15); 	}),
 m_ReverseFeeder( [&] { return Robot::Get().GetOI().GetButtonBoard().GetRawButton(14); 	}),
 
-m_BloopFeeder([&]  { return m_HighConveyor.IsFwdLimitSwitchClosed();} ) {
+m_BloopFeeder([&]  { return m_HighConveyor.IsFwdLimitSwitchClosed() && !Robot::Get().IsAutonomous();} ) {
 
 	RemoveRegistry(this, &m_Flywheel, &m_Feeder, &m_LowConveyor, &m_HighConveyor);
 
@@ -51,8 +51,8 @@ void Shooter::SetupShooterButtons() {
 		// DebugOutF(std::to_string(m_FlywheelWU));
 		frc::SmartDashboard::PutNumber("Flywheel Speed", m_FlywheelWU);
 
-    double speed = 3000 + 1000 * Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0);
-    Robot::Get().GetOI().GetButtonBoard().SetOutput(2, m_FlywheelWU > 4400);
+    double speed = 5600 + 4000 * Robot::Get().GetOI().GetButtonBoard().GetRawAxis(0);
+    Robot::Get().GetOI().GetButtonBoard().SetOutput(2, m_FlywheelWU > 5200);
 		
 		m_Flywheel.Set(ControlMode::Velocity, speed);
 		Cob::PushValue(CobKey::FLYWHEEL_SPEED, speed );
@@ -155,7 +155,7 @@ frc2::SequentialCommandGroup Shooter::Shoot() {
 	frc2::SequentialCommandGroup group = frc2::SequentialCommandGroup();
 
 	frc2::InstantCommand startFlywheel = frc2::InstantCommand( [&] {
-		m_Flywheel.Set(ControlMode::Velocity, 3145);
+		m_Flywheel.Set(ControlMode::Velocity, 5800);
 	}, {});
 
 	frc2::InstantCommand startFeeder = frc2::InstantCommand( [&] {
